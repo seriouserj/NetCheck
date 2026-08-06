@@ -1,13 +1,16 @@
 """
-Version: 0.1.0
+Version: 0.6.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Initial application entry point.
+Changelog: Enforce the supported Python 3.13 runtime before loading Qt.
 """
 
 from __future__ import annotations
 
 import sys
+
+if sys.version_info < (3, 13):
+    raise SystemExit("NetCheck requires Python 3.13 or newer.")
 
 from PySide6.QtWidgets import QApplication
 
