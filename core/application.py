@@ -1,8 +1,8 @@
 """
-Version: 0.1.0
+Version: 0.7.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Configure application identity and visual defaults.
+Changelog: Load and apply the persisted theme preference.
 """
 
 from __future__ import annotations
@@ -12,7 +12,8 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication
 
 from core.metadata import APP_NAME, APP_VERSION, ORGANIZATION_NAME
-from ui.theme import apply_system_theme
+from core.settings_store import SettingsStore
+from ui.theme import apply_theme
 
 
 def configure_application(application: QApplication) -> None:
@@ -21,4 +22,4 @@ def configure_application(application: QApplication) -> None:
     QCoreApplication.setApplicationVersion(APP_VERSION)
     QCoreApplication.setOrganizationName(ORGANIZATION_NAME)
     application.setFont(QFont("SF Pro Text", 13))
-    apply_system_theme(application)
+    apply_theme(application, SettingsStore().load().theme.value)

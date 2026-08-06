@@ -1,8 +1,8 @@
 """
-Version: 0.6.0
+Version: 0.7.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add the network Tools tab.
+Changelog: Add persistent Settings tab.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ from core.metadata import APP_NAME, APP_VERSION
 from ui.dashboard_tab import DashboardTab
 from ui.discovery_tab import DiscoveryTab
 from ui.ports_tab import PortsTab
+from ui.settings_tab import SettingsTab
 from ui.tools_tab import ToolsTab
 from ui.vlan_tab import VlanTab
 
@@ -32,4 +33,5 @@ class MainWindow(QMainWindow):
         tabs.addTab(DiscoveryTab(), "Discovery")
         tabs.addTab(PortsTab(), "Ports")
         tabs.addTab(ToolsTab(), "Tools")
+        tabs.addTab(SettingsTab(), "Settings")
         self.setCentralWidget(tabs)
