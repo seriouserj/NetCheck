@@ -1,19 +1,20 @@
 """
-Version: 0.7.0
+Version: 0.8.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add persistent network and appearance settings interface.
+Changelog: Integrate General settings and Profiles panels.
 """
 
 from __future__ import annotations
 
 import psutil
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QApplication, QComboBox, QDoubleSpinBox, QFormLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QComboBox, QDoubleSpinBox, QFormLayout, QLabel, QLineEdit, QPushButton, QTabWidget, QVBoxLayout, QWidget
 
 from core.settings_models import AppSettings, ThemePreference
 from core.settings_store import SettingsStore
 from ui.theme import apply_theme
+from ui.profiles_panel import ProfilesPanel
 
 
 class SettingsTab(QWidget):
@@ -24,7 +25,11 @@ class SettingsTab(QWidget):
     def __init__(self, store: SettingsStore | None = None) -> None:
         super().__init__()
         self._store = store or SettingsStore()
-        layout = QVBoxLayout(self)
+        root_layout = QVBoxLayout(self)
+        root_layout.setContentsMargins(24, 24, 24, 24)
+        tabs = QTabWidget()
+        general = QWidget()
+        layout = QVBoxLayout(general)
         layout.setContentsMargins(24, 24, 24, 24)
         form = QFormLayout()
         self._timeout = QDoubleSpinBox()
@@ -53,6 +58,9 @@ class SettingsTab(QWidget):
         layout.addWidget(save)
         layout.addWidget(self._status)
         layout.addStretch()
+        tabs.addTab(general, "General")
+        tabs.addTab(ProfilesPanel(), "Profiles")
+        root_layout.addWidget(tabs)
         self._load()
 
     def _load(self) -> None:
