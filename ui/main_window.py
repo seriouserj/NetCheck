@@ -1,8 +1,8 @@
 """
-Version: 0.3.0
+Version: 0.4.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add the VLAN Tester tab.
+Changelog: Add the network Discovery tab.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QMainWindow, QTabWidget
 
 from core.metadata import APP_NAME, APP_VERSION
 from ui.dashboard_tab import DashboardTab
+from ui.discovery_tab import DiscoveryTab
 from ui.vlan_tab import VlanTab
 
 
@@ -26,4 +27,5 @@ class MainWindow(QMainWindow):
         tabs.setDocumentMode(True)
         tabs.addTab(DashboardTab(), "Dashboard")
         tabs.addTab(VlanTab(), "VLAN")
+        tabs.addTab(DiscoveryTab(), "Discovery")
         self.setCentralWidget(tabs)
