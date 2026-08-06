@@ -1,10 +1,10 @@
 """
-Version: 0.8.0
+Version: 0.9.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Bump version for network profiles.
+Changelog: Bump version for Smart Diagnostics.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "0.8.0"
+APP_VERSION = "0.9.0"
 ORGANIZATION_NAME = "tubbeTEC"

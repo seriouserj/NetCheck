@@ -1,8 +1,8 @@
 """
-Version: 0.3.0
+Version: 0.9.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add VLAN range testing user interface.
+Changelog: Add Smart Diagnostics inference after VLAN tests.
 """
 
 from __future__ import annotations
@@ -12,9 +12,11 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QComboBox, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
 
 from core.vlan_models import CheckState, VlanTestResult
+from core.diagnostic_engine import DiagnosticEngine
 from core.vlan_parser import parse_vlan_ids
 from core.vlan_service import VlanService
 from ui.async_task import BackgroundTask
+from ui.diagnostics_widget import DiagnosticsWidget
 
 
 class VlanTab(QWidget):
@@ -26,6 +28,7 @@ class VlanTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self._service = VlanService()
+        self._diagnostic_engine = DiagnosticEngine()
         self._task: BackgroundTask | None = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
@@ -50,6 +53,8 @@ class VlanTab(QWidget):
         layout.addLayout(form)
         layout.addLayout(controls)
         layout.addWidget(self._table)
+        self._diagnostics = DiagnosticsWidget()
+        layout.addWidget(self._diagnostics)
 
     def _start_tests(self) -> None:
         try:
@@ -76,6 +81,8 @@ class VlanTab(QWidget):
             if isinstance(result, VlanTestResult):
                 self._populate(row, result)
         self._status.setText(f"Completed {len(results)} VLAN test(s)")
+        typed_results = [item for item in results if isinstance(item, VlanTestResult)]
+        self._diagnostics.set_findings(self._diagnostic_engine.analyze_vlans(typed_results))
         self._finish()
 
     def _populate(self, row: int, result: VlanTestResult) -> None:

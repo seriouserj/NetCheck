@@ -1,8 +1,8 @@
 """
-Version: 0.2.0
+Version: 0.9.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add non-blocking Ethernet diagnostics dashboard.
+Changelog: Add Smart Diagnostics inference after refresh.
 """
 
 from __future__ import annotations
@@ -21,7 +21,9 @@ from PySide6.QtWidgets import (
 
 from core.interface_models import InterfaceDiagnostics
 from core.interface_service import InterfaceService
+from core.diagnostic_engine import DiagnosticEngine
 from ui.async_task import BackgroundTask
+from ui.diagnostics_widget import DiagnosticsWidget
 
 
 class DashboardTab(QWidget):
@@ -32,6 +34,7 @@ class DashboardTab(QWidget):
     def __init__(self, service: InterfaceService | None = None) -> None:
         super().__init__()
         self._service = service or InterfaceService()
+        self._diagnostic_engine = DiagnosticEngine()
         self._pool = QThreadPool.globalInstance()
         self._active_task: BackgroundTask | None = None
         self._build_ui()
@@ -65,6 +68,8 @@ class DashboardTab(QWidget):
 
         layout.addLayout(header)
         layout.addWidget(self._table)
+        self._diagnostics = DiagnosticsWidget()
+        layout.addWidget(self._diagnostics)
 
     def refresh(self) -> None:
         """Refresh interface data in a worker thread."""
@@ -88,6 +93,8 @@ class DashboardTab(QWidget):
         self._table.resizeColumnsToContents()
         self._table.setSortingEnabled(True)
         self._status.setText(f"{len(rows)} Ethernet adapter{'s' if len(rows) != 1 else ''}")
+        typed_rows = [item for item in rows if isinstance(item, InterfaceDiagnostics)]
+        self._diagnostics.set_findings(self._diagnostic_engine.analyze_interfaces(typed_rows))
         self._finish_refresh()
 
     def _populate_row(self, row: int, interface: InterfaceDiagnostics) -> None:
