@@ -1,8 +1,8 @@
 """
-Version: 0.10.0
+Version: 0.11.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add passive LLDP/CDP neighbor discovery panel.
+Changelog: Add read-only SNMP v2c diagnostics panel.
 """
 
 from __future__ import annotations
@@ -18,6 +18,7 @@ from core.traceroute_tool import traceroute
 from core.wake_on_lan import send_magic_packet
 from ui.async_task import BackgroundTask
 from ui.neighbors_panel import NeighborsPanel
+from ui.snmp_panel import SnmpPanel
 
 
 class CommandPanel(QWidget):
@@ -113,4 +114,5 @@ class ToolsTab(QWidget):
         tabs.addTab(DnsPanel(), "DNS Lookup")
         tabs.addTab(WolPanel(), "Wake-on-LAN")
         tabs.addTab(NeighborsPanel(), "LLDP/CDP")
+        tabs.addTab(SnmpPanel(), "SNMP")
         layout.addWidget(tabs)

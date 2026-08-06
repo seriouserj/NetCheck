@@ -1,8 +1,9 @@
-# Version: 0.4.0
+# Version: 0.11.0
 # Date: 2026-08-06
 # Author: NetCheck Contributors
-# Changelog: Add offline MAC vendor database dependency.
+# Changelog: Add Python 3.13-compatible PySNMP dependency.
 PySide6>=6.9,<7
 psutil>=7.0,<8
 manuf>=1.1.5,<2
+pysnmp>=7.1.27,<8
 pytest>=8.4,<9
