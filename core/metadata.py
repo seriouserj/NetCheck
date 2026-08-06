@@ -1,10 +1,10 @@
 """
-Version: 0.1.0
+Version: 0.2.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Define application metadata.
+Changelog: Bump version for the network dashboard.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.2.0"
 ORGANIZATION_NAME = "tubbeTEC"
