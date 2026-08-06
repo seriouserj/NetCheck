@@ -1,8 +1,8 @@
 """
-Version: 0.6.0
+Version: 0.10.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add Ping, Traceroute, DNS Lookup, and Wake-on-LAN panels.
+Changelog: Add passive LLDP/CDP neighbor discovery panel.
 """
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ from core.ping_tool import ping
 from core.traceroute_tool import traceroute
 from core.wake_on_lan import send_magic_packet
 from ui.async_task import BackgroundTask
+from ui.neighbors_panel import NeighborsPanel
 
 
 class CommandPanel(QWidget):
@@ -111,4 +112,5 @@ class ToolsTab(QWidget):
         tabs.addTab(CommandPanel("Target", "hostname or IP address", traceroute), "Traceroute")
         tabs.addTab(DnsPanel(), "DNS Lookup")
         tabs.addTab(WolPanel(), "Wake-on-LAN")
+        tabs.addTab(NeighborsPanel(), "LLDP/CDP")
         layout.addWidget(tabs)
