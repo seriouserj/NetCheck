@@ -1,14 +1,13 @@
 """
-Version: 0.7.0
+Version: 1.0.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Load and apply the persisted theme preference.
+Changelog: Use the platform-native font for stable cross-platform rendering.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication
 
 from core.metadata import APP_NAME, APP_VERSION, ORGANIZATION_NAME
@@ -21,5 +20,7 @@ def configure_application(application: QApplication) -> None:
     QCoreApplication.setApplicationName(APP_NAME)
     QCoreApplication.setApplicationVersion(APP_VERSION)
     QCoreApplication.setOrganizationName(ORGANIZATION_NAME)
-    application.setFont(QFont("SF Pro Text", 13))
+    font = application.font()
+    font.setPointSize(13)
+    application.setFont(font)
     apply_theme(application, SettingsStore().load().theme.value)

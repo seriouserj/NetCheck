@@ -1,10 +1,11 @@
-# Version: 0.1.0
+# Version: 1.0.0
 # Date: 2026-08-06
 # Author: NetCheck Contributors
-# Changelog: Initial Python, Qt, and runtime exclusions.
+# Changelog: Exclude project-local Python distributions and environments.
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+.python/
 .DS_Store
 logs/*.log

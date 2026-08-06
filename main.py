@@ -1,8 +1,8 @@
 """
-Version: 0.6.0
+Version: 1.0.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Enforce the supported Python 3.13 runtime before loading Qt.
+Changelog: First stable application entry point.
 """
 
 from __future__ import annotations

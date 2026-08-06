@@ -1,10 +1,10 @@
 """
-Version: 0.11.0
+Version: 1.0.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Bump version for read-only SNMP diagnostics.
+Changelog: First stable NetCheck release.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "0.11.0"
+APP_VERSION = "1.0.0"
 ORGANIZATION_NAME = "tubbeTEC"
