@@ -1,0 +1,7 @@
+# Version: 0.1.0
+# Date: 2026-08-06
+# Author: NetCheck Contributors
+# Changelog: Initial runtime and test dependencies.
+PySide6>=6.9,<7
+psutil>=7.0,<8
+pytest>=8.4,<9
