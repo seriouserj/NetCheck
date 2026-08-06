@@ -1,8 +1,8 @@
 """
-Version: 0.2.0
+Version: 0.3.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add the Ethernet diagnostics Dashboard tab.
+Changelog: Add the VLAN Tester tab.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QMainWindow, QTabWidget
 
 from core.metadata import APP_NAME, APP_VERSION
 from ui.dashboard_tab import DashboardTab
+from ui.vlan_tab import VlanTab
 
 
 class MainWindow(QMainWindow):
@@ -24,4 +25,5 @@ class MainWindow(QMainWindow):
         tabs = QTabWidget()
         tabs.setDocumentMode(True)
         tabs.addTab(DashboardTab(), "Dashboard")
+        tabs.addTab(VlanTab(), "VLAN")
         self.setCentralWidget(tabs)

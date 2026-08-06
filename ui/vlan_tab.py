@@ -1,0 +1,96 @@
+"""
+Version: 0.3.0
+Date: 2026-08-06
+Author: NetCheck Contributors
+Changelog: Add VLAN range testing user interface.
+"""
+
+from __future__ import annotations
+
+import psutil
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QComboBox, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
+
+from core.vlan_models import CheckState, VlanTestResult
+from core.vlan_parser import parse_vlan_ids
+from core.vlan_service import VlanService
+from ui.async_task import BackgroundTask
+
+
+class VlanTab(QWidget):
+    """Run temporary VLAN tests without blocking the GUI."""
+
+    HEADERS = ("VLAN", "Link", "DHCP", "Gateway", "DNS", "Internet", "Ping", "LLDP", "Address", "Detail")
+    COLORS = {CheckState.PASS: QColor("#34c759"), CheckState.WARNING: QColor("#ffcc00"), CheckState.FAIL: QColor("#ff3b30"), CheckState.UNAVAILABLE: QColor("#8e8e93")}
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._service = VlanService()
+        self._task: BackgroundTask | None = None
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(24, 24, 24, 24)
+        form = QFormLayout()
+        self._parent = QComboBox()
+        self._parent.addItems(sorted(name for name in psutil.net_if_addrs() if name.startswith("en")))
+        self._vlans = QLineEdit()
+        self._vlans.setPlaceholderText("Examples: 20, 30-35, 100")
+        form.addRow("Parent interface", self._parent)
+        form.addRow("VLAN IDs", self._vlans)
+        controls = QHBoxLayout()
+        self._status = QLabel("Ready")
+        self._start = QPushButton("Start tests")
+        self._start.clicked.connect(self._start_tests)
+        controls.addWidget(self._status)
+        controls.addStretch()
+        controls.addWidget(self._start)
+        self._table = QTableWidget(0, len(self.HEADERS))
+        self._table.setHorizontalHeaderLabels(self.HEADERS)
+        self._table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self._table.horizontalHeader().setStretchLastSection(True)
+        layout.addLayout(form)
+        layout.addLayout(controls)
+        layout.addWidget(self._table)
+
+    def _start_tests(self) -> None:
+        try:
+            vlan_ids = parse_vlan_ids(self._vlans.text())
+        except ValueError as error:
+            QMessageBox.warning(self, "Invalid VLAN IDs", str(error))
+            return
+        parent = self._parent.currentText()
+        if not parent:
+            QMessageBox.warning(self, "No interface", "Connect or select an Ethernet interface.")
+            return
+        self._start.setEnabled(False)
+        self._status.setText(f"Testing {len(vlan_ids)} VLAN(s)…")
+        self._task = BackgroundTask(lambda: [self._service.test(parent, vlan_id) for vlan_id in vlan_ids])
+        self._task.signals.completed.connect(self._show_results)
+        self._task.signals.failed.connect(self._show_error)
+        from PySide6.QtCore import QThreadPool
+        QThreadPool.globalInstance().start(self._task)
+
+    def _show_results(self, value: object) -> None:
+        results = value if isinstance(value, list) else []
+        self._table.setRowCount(len(results))
+        for row, result in enumerate(results):
+            if isinstance(result, VlanTestResult):
+                self._populate(row, result)
+        self._status.setText(f"Completed {len(results)} VLAN test(s)")
+        self._finish()
+
+    def _populate(self, row: int, result: VlanTestResult) -> None:
+        states = (result.link, result.dhcp, result.gateway, result.dns, result.internet, result.ping, result.lldp)
+        values = (str(result.vlan_id), *(state.value.title() for state in states), result.address or "—", result.detail)
+        for column, value in enumerate(values):
+            item = QTableWidgetItem(value)
+            if 1 <= column <= 7:
+                item.setForeground(self.COLORS[states[column - 1]])
+            self._table.setItem(row, column, item)
+
+    def _show_error(self, message: str) -> None:
+        self._status.setText(f"Test failed: {message}")
+        self._finish()
+
+    def _finish(self) -> None:
+        self._task = None
+        self._start.setEnabled(True)
