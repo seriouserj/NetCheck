@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add a branded About dialog with author and contact information.
+Changelog: Load a plugin-independent raster copy of the official DITIS logo.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ class AboutDialog(QDialog):
 
         logo = QLabel()
         logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        pixmap = QPixmap(str(resource_path("icons/ditis-logo.svg")))
+        pixmap = QPixmap(str(resource_path("icons/ditis-logo.png")))
         if not pixmap.isNull():
             logo.setPixmap(pixmap.scaled(340, 90, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         layout.addWidget(logo)

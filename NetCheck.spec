@@ -13,6 +13,7 @@ project_root = Path(SPECPATH)
 manuf_data = collect_data_files("manuf")
 brand_data = [
     (str(project_root / "icons" / "ditis-logo.svg"), "icons"),
+    (str(project_root / "icons" / "ditis-logo.png"), "icons"),
     (str(project_root / "icons" / "netcheck-1024.png"), "icons"),
 ]
 

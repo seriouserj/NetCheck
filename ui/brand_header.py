@@ -30,7 +30,7 @@ class BrandHeader(QFrame):
         logo.setObjectName("brandLogo")
         logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
         logo.setFixedSize(250, 52)
-        pixmap = QPixmap(str(resource_path("icons/ditis-logo.svg")))
+        pixmap = QPixmap(str(resource_path("icons/ditis-logo.png")))
         if not pixmap.isNull():
             logo.setPixmap(
                 pixmap.scaled(

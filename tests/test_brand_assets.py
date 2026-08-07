@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify official logo availability and transparent application icon corners.
+Changelog: Verify vector and raster DITIS assets plus transparent app icon corners.
 """
 
 from xml.etree import ElementTree
@@ -25,3 +25,11 @@ def test_official_ditis_logo_is_valid_svg() -> None:
 
     assert logo.is_file()
     assert ElementTree.parse(logo).getroot().tag.endswith("svg")
+
+
+def test_raster_ditis_logo_is_transparent_and_visible() -> None:
+    logo = Image.open(resource_path("icons/ditis-logo.png"))
+    assert logo.mode == "RGBA"
+    assert logo.size == (1000, 216)
+    assert logo.getbbox() is not None
+    assert logo.getpixel((999, 0))[3] == 0
