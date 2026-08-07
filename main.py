@@ -1,8 +1,8 @@
 """
-Version: 1.0.0
-Date: 2026-08-06
-Author: NetCheck Contributors
-Changelog: Add bundle-safe version and smoke-test command-line modes.
+Version: 1.1.0
+Date: 2026-08-07
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Add the internal privileged VLAN batch worker mode.
 """
 
 from __future__ import annotations
@@ -24,6 +24,11 @@ def main() -> int:
     if "--version" in sys.argv:
         print(APP_VERSION)
         return 0
+    if "--vlan-worker" in sys.argv:
+        from core.vlan_worker import run_vlan_worker
+
+        index = sys.argv.index("--vlan-worker")
+        return run_vlan_worker(sys.argv[index + 1 :])
     application = QApplication(sys.argv)
     if "--smoke-test" in sys.argv:
         from ui.smoke import run_smoke_test

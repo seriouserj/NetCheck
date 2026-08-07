@@ -1,15 +1,19 @@
 """
-Version: 0.3.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add temporary macOS VLAN lifecycle and diagnostic checks.
+Changelog: Run multi-VLAN diagnostics through one administrator authorization.
 """
 
 from __future__ import annotations
 
+import json
 import re
+import sys
+import tempfile
 import time
 from collections.abc import Callable
+from pathlib import Path
 
 from core.command_runner import CommandResult, run_command
 from core.network_parsers import parse_default_gateway
@@ -43,6 +47,52 @@ class VlanService:
             self._run_privileged(
                 ("/usr/sbin/networksetup", "-deleteVLAN", name, parent, str(vlan_id)), 60.0
             )
+
+    def test_many(
+        self, parent: str, vlan_ids: list[int], timeout: float = 5.0
+    ) -> list[VlanTestResult]:
+        """Run a complete VLAN batch in one authorized worker process."""
+        if not vlan_ids:
+            return []
+        with tempfile.NamedTemporaryFile(prefix="netcheck-vlan-", suffix=".json") as output:
+            command = self._worker_command(parent, vlan_ids, timeout, output.name)
+            batch_timeout = max(120.0, len(vlan_ids) * (timeout * 6.0 + 30.0))
+            completed = self._run_privileged(command, batch_timeout)
+            if completed.return_code != 0:
+                detail = completed.stderr or completed.stdout or "Administrator authorization failed"
+                if "-128" in detail or "canceled" in detail.casefold() or "abgebrochen" in detail.casefold():
+                    detail = "Administrator authorization was canceled; no further VLANs were tested."
+                return [self._failed(vlan_id, detail) for vlan_id in vlan_ids]
+            output.seek(0)
+            response = output.read()
+        try:
+            payload = json.loads(response)
+            if not isinstance(payload, list):
+                raise ValueError("worker response is not a list")
+            results = [VlanTestResult.from_payload(item) for item in payload if isinstance(item, dict)]
+        except (KeyError, TypeError, ValueError) as error:
+            detail = f"Invalid response from the VLAN worker: {error}"
+            return [self._failed(vlan_id, detail) for vlan_id in vlan_ids]
+        if len(results) != len(vlan_ids):
+            detail = "The VLAN worker returned an incomplete result set."
+            return [self._failed(vlan_id, detail) for vlan_id in vlan_ids]
+        return results
+
+    @staticmethod
+    def _worker_command(
+        parent: str, vlan_ids: list[int], timeout: float, output_path: str
+    ) -> tuple[str, ...]:
+        arguments = (
+            "--vlan-worker",
+            parent,
+            ",".join(str(item) for item in vlan_ids),
+            str(timeout),
+            output_path,
+        )
+        if getattr(sys, "frozen", False):
+            return (sys.executable, *arguments)
+        main_script = Path(__file__).resolve().parents[1] / "main.py"
+        return (sys.executable, str(main_script), *arguments)
 
     def _find_device(self, parent: str, vlan_id: int, timeout: float) -> str:
         devices = self._run(("ifconfig", "-l"), timeout)

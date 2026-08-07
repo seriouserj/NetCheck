@@ -1,8 +1,8 @@
 """
-Version: 0.9.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add Smart Diagnostics inference after VLAN tests.
+Changelog: Test each VLAN batch with one macOS administrator authorization.
 """
 
 from __future__ import annotations
@@ -80,7 +80,7 @@ class VlanTab(QWidget):
             return
         self._start.setEnabled(False)
         self._status.setText(f"Testing {len(vlan_ids)} VLAN(s)…")
-        self._task = BackgroundTask(lambda: [self._service.test(parent, vlan_id) for vlan_id in vlan_ids])
+        self._task = BackgroundTask(lambda: self._service.test_many(parent, vlan_ids))
         self._task.signals.completed.connect(self._show_results)
         self._task.signals.failed.connect(self._show_error)
         from PySide6.QtCore import QThreadPool
