@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Keep version and privileged VLAN worker modes independent from Qt GUI imports.
+Changelog: Add a GUI-independent privileged worker for passive VLAN discovery.
 """
 
 from __future__ import annotations
@@ -25,6 +25,11 @@ def main() -> int:
 
         index = sys.argv.index("--vlan-worker")
         return run_vlan_worker(sys.argv[index + 1 :])
+    if "--vlan-discovery-worker" in sys.argv:
+        from core.vlan_discovery_service import run_vlan_discovery_worker
+
+        index = sys.argv.index("--vlan-discovery-worker")
+        return run_vlan_discovery_worker(sys.argv[index + 1 :])
     from PySide6.QtWidgets import QApplication
 
     from core.application import configure_application

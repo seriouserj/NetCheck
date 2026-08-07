@@ -7,6 +7,8 @@ Changelog: Show live VLAN progress and refresh newly connected interfaces.
 
 from __future__ import annotations
 
+import re
+
 import psutil
 from PySide6.QtCore import QThreadPool, QTimer, Signal
 from PySide6.QtGui import QColor
@@ -26,6 +28,7 @@ from PySide6.QtWidgets import (
 
 from core.diagnostic_engine import DiagnosticEngine
 from core.i18n import tr
+from core.vlan_discovery_service import VlanDiscoveryService
 from core.vlan_models import CheckState, VlanTestResult
 from core.vlan_parser import parse_vlan_ids
 from core.vlan_service import VlanService
@@ -44,6 +47,7 @@ class VlanTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self._service = VlanService()
+        self._discovery_service = VlanDiscoveryService()
         self._diagnostic_engine = DiagnosticEngine()
         self._task: BackgroundTask | None = None
         self._results: dict[int, VlanTestResult] = {}
@@ -67,8 +71,12 @@ class VlanTab(QWidget):
         self._start = QPushButton(tr("Start tests"))
         self._start.setProperty("primary", True)
         self._start.clicked.connect(self._start_tests)
+        self._discover = QPushButton(tr("Discover VLANs"))
+        self._discover.setToolTip(tr("Observe tagged traffic for 8 seconds; silent VLANs cannot be detected passively."))
+        self._discover.clicked.connect(self._start_discovery)
         controls.addWidget(self._status)
         controls.addStretch()
+        controls.addWidget(self._discover)
         controls.addWidget(self._start)
         self._table = QTableWidget(0, len(self.HEADERS))
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in self.HEADERS))
@@ -127,6 +135,29 @@ class VlanTab(QWidget):
         self._task.signals.failed.connect(self._show_error)
         QThreadPool.globalInstance().start(self._task)
 
+    def _start_discovery(self) -> None:
+        parent = self._parent.currentText()
+        if not parent:
+            QMessageBox.warning(self, tr("No interface"), tr("Connect or select an Ethernet interface."))
+            return
+        self._start.setEnabled(False)
+        self._discover.setEnabled(False)
+        self._interface_refresh.setEnabled(False)
+        self._status.setText(tr("Listening for tagged VLAN traffic for 8 seconds…"))
+        self._task = BackgroundTask(lambda: self._discovery_service.discover(parent, 8.0))
+        self._task.signals.completed.connect(self._show_discovered)
+        self._task.signals.failed.connect(self._show_error)
+        QThreadPool.globalInstance().start(self._task)
+
+    def _show_discovered(self, value: object) -> None:
+        vlan_ids = [item for item in value if isinstance(item, int)] if isinstance(value, list) else []
+        if vlan_ids:
+            self._vlans.setText(",".join(str(item) for item in vlan_ids))
+            self._status.setText(tr("Observed {count} active VLAN(s)", count=len(vlan_ids)))
+        else:
+            self._status.setText(tr("No tagged traffic observed; silent VLANs may still be available."))
+        self._finish()
+
     def _show_progress(self, value: object) -> None:
         if not isinstance(value, VlanTestResult) or value.vlan_id not in self._row_for_vlan:
             return
@@ -152,12 +183,24 @@ class VlanTab(QWidget):
 
     def _populate(self, row: int, result: VlanTestResult) -> None:
         states = (result.link, result.dhcp, result.gateway, result.dns, result.internet, result.ping, result.lldp)
-        values = (str(result.vlan_id), *(tr(state.value.title()) for state in states), result.address or "—", tr(result.detail))
+        values = (
+            str(result.vlan_id),
+            *(tr(state.value.title()) for state in states),
+            result.address or "—",
+            self._translated_detail(result.detail),
+        )
         for column, value in enumerate(values):
             item = QTableWidgetItem(value)
             if 1 <= column <= 7:
                 item.setForeground(self.COLORS[states[column - 1]])
             self._table.setItem(row, column, item)
+
+    @staticmethod
+    def _translated_detail(detail: str) -> str:
+        failure_count = re.fullmatch(r"(\d+) core check\(s\) failed", detail)
+        if failure_count:
+            return tr("{count} core check(s) failed", count=failure_count.group(1))
+        return tr(detail)
 
     def _show_error(self, message: str) -> None:
         self._status.setText(tr("Test failed: {message}", message=message))
@@ -166,5 +209,6 @@ class VlanTab(QWidget):
     def _finish(self) -> None:
         self._task = None
         self._start.setEnabled(True)
+        self._discover.setEnabled(True)
         self._interface_refresh.setEnabled(True)
         self._refresh_interfaces()
