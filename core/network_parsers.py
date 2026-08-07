@@ -1,8 +1,8 @@
 """
-Version: 0.2.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add parsers for macOS interface, route, and DNS command output.
+Changelog: Exclude Thunderbolt bridges and other virtual ports from Ethernet detection.
 """
 
 from __future__ import annotations
@@ -27,9 +27,10 @@ def parse_hardware_ports(output: str) -> dict[str, str]:
 def is_ethernet_port(label: str) -> bool:
     """Identify wired network services while excluding wireless devices."""
     normalized = label.casefold()
+    if "bridge" in normalized:
+        return False
     return (
         "ethernet" in normalized
-        or "thunderbolt" in normalized
         or "usb lan" in normalized
         or normalized.endswith(" lan")
     )

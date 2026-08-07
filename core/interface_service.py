@@ -1,8 +1,8 @@
 """
-Version: 0.2.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add macOS Ethernet adapter and connectivity diagnostics.
+Changelog: Avoid treating known non-Ethernet hardware ports as fallback adapters.
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ class InterfaceService:
         internet = self._probe_internet(timeout)
 
         devices = [name for name, label in port_labels.items() if is_ethernet_port(label)]
-        if not devices:
+        if not devices and not port_labels:
             devices = [name for name in addresses if name.startswith("en") and name != "en0"]
 
         return [

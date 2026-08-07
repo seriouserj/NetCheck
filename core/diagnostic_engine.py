@@ -1,8 +1,8 @@
 """
-Version: 0.9.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add evidence-based interface and VLAN diagnostic inference.
+Changelog: Report one inactive-link warning instead of errors for unused adapters.
 """
 
 from __future__ import annotations
@@ -22,11 +22,11 @@ class DiagnosticEngine:
         findings: list[DiagnosticFinding] = []
         if not interfaces:
             return [self._finding(DiagnosticSeverity.ERROR, "No Ethernet adapter detected", "No supported wired interface is visible to macOS.", "Reconnect the USB adapter and verify it appears in Network settings.", "Dashboard")]
-        for interface in interfaces:
+        connected_interfaces = [interface for interface in interfaces if interface.status == "Connected"]
+        if not connected_interfaces:
+            return [self._finding(DiagnosticSeverity.WARNING, "No active Ethernet link", "The detected Ethernet adapters currently have no active carrier.", "Connect a cable or select the adapter you want to test.", "Dashboard")]
+        for interface in connected_interfaces:
             source = f"Interface {interface.name}"
-            if interface.status != "Connected":
-                findings.append(self._finding(DiagnosticSeverity.ERROR, "Physical link is down", "The cable, remote switch port, or adapter has no active carrier.", "Reseat the cable, test another switch port, and verify the adapter LEDs.", source))
-                continue
             speed = self._speed_mbps(interface.speed)
             if speed is not None and speed <= 100:
                 findings.append(self._finding(DiagnosticSeverity.WARNING, f"Link negotiated at {interface.speed}", "Cable pair damage, a 100 Mbps switch port, or negotiation mismatch may be limiting speed.", "Test a known-good Cat5e-or-better cable and confirm both endpoints use auto-negotiation.", source))

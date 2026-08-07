@@ -1,8 +1,8 @@
 """
-Version: 0.2.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Verify macOS network command parsing.
+Changelog: Verify virtual Thunderbolt bridges are not Ethernet adapters.
 """
 
 from core.network_parsers import (
@@ -25,6 +25,8 @@ Ethernet Address: 00:11:22:33:44:55"""
     assert parse_hardware_ports(output) == {"en7": "USB 10/100/1000 LAN", "en0": "Wi-Fi"}
     assert is_ethernet_port("USB 10/100/1000 LAN")
     assert not is_ethernet_port("Wi-Fi")
+    assert not is_ethernet_port("Thunderbolt Bridge")
+    assert is_ethernet_port("Thunderbolt Ethernet")
 
 
 def test_parse_media_and_status() -> None:
