@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify a VLAN batch performs exactly one privileged invocation.
+Changelog: Verify one authorization and incremental VLAN batch progress.
 """
 
 from core.command_runner import CommandResult
@@ -39,6 +39,27 @@ def test_batch_maps_authorization_cancel_to_all_results() -> None:
 
     assert len(results) == 2
     assert all("authorization was canceled" in item.detail for item in results)
+
+
+def test_batch_reports_each_completed_result() -> None:
+    expected = [
+        VlanTestResult(7, *(CheckState.PASS for _ in range(7)), address="10.0.7.2"),
+        VlanTestResult(20, *(CheckState.PASS for _ in range(7)), address="10.0.20.2"),
+    ]
+
+    def privileged(command: tuple[str, ...], timeout: float) -> CommandResult:
+        from pathlib import Path
+
+        Path(command[-1]).write_text(json_payload(expected), encoding="utf-8")
+        return CommandResult(0, "", "")
+
+    progress: list[VlanTestResult] = []
+    results = VlanService(privileged_runner=privileged).test_many(
+        "en7", [7, 20], progress=progress.append
+    )
+
+    assert results == expected
+    assert progress == expected
 
 
 def json_payload(results: list[VlanTestResult]) -> str:

@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add a single-process privileged worker for complete VLAN batches.
+Changelog: Publish completed VLAN results incrementally for live UI progress.
 """
 
 from __future__ import annotations
@@ -43,9 +43,11 @@ def run_vlan_worker(arguments: list[str]) -> int:
         return 64
 
     service = VlanService(runner=run_command, privileged_runner=run_command)
-    results = [service.test(parent, vlan_id, timeout) for vlan_id in vlan_ids]
-    output_path.write_text(
-        json.dumps([result.to_payload() for result in results], separators=(",", ":")),
-        encoding="utf-8",
-    )
+    results = []
+    for vlan_id in vlan_ids:
+        results.append(service.test(parent, vlan_id, timeout))
+        output_path.write_text(
+            json.dumps([result.to_payload() for result in results], separators=(",", ":")),
+            encoding="utf-8",
+        )
     return 0
