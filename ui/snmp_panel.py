@@ -8,7 +8,18 @@ Changelog: Add read-only SNMP v2c GET and WALK interface.
 from __future__ import annotations
 
 from PySide6.QtCore import QThreadPool
-from PySide6.QtWidgets import QAbstractItemView, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from core.snmp_service import SnmpService, SnmpValue
 from ui.async_task import BackgroundTask

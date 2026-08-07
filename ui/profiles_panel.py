@@ -7,7 +7,17 @@ Changelog: Add profile creation, editing, and deletion interface.
 
 from __future__ import annotations
 
-from PySide6.QtWidgets import QComboBox, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
 from profiles.models import NetworkProfile
 from profiles.repository import ProfileRepository

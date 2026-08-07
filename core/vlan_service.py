@@ -16,7 +16,6 @@ from core.network_parsers import parse_default_gateway
 from core.privileged_runner import run_privileged
 from core.vlan_models import CheckState, VlanTestResult
 
-
 Runner = Callable[[tuple[str, ...], float], CommandResult]
 
 

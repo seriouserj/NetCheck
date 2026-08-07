@@ -7,8 +7,8 @@ Changelog: Add safe macOS administrator command execution.
 
 from __future__ import annotations
 
-import shlex
 import json
+import shlex
 from collections.abc import Sequence
 
 from core.command_runner import CommandResult, run_command

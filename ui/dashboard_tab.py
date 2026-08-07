@@ -7,7 +7,7 @@ Changelog: Add Smart Diagnostics inference after refresh.
 
 from __future__ import annotations
 
-from PySide6.QtCore import QThreadPool, Qt
+from PySide6.QtCore import Qt, QThreadPool
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHBoxLayout,
@@ -19,9 +19,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from core.diagnostic_engine import DiagnosticEngine
 from core.interface_models import InterfaceDiagnostics
 from core.interface_service import InterfaceService
-from core.diagnostic_engine import DiagnosticEngine
 from ui.async_task import BackgroundTask
 from ui.diagnostics_widget import DiagnosticsWidget
 

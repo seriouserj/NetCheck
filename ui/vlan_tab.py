@@ -9,10 +9,22 @@ from __future__ import annotations
 
 import psutil
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QComboBox, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
-from core.vlan_models import CheckState, VlanTestResult
 from core.diagnostic_engine import DiagnosticEngine
+from core.vlan_models import CheckState, VlanTestResult
 from core.vlan_parser import parse_vlan_ids
 from core.vlan_service import VlanService
 from ui.async_task import BackgroundTask

@@ -10,7 +10,6 @@ from __future__ import annotations
 import ipaddress
 import re
 
-
 _HARDWARE_PORT_PATTERN = re.compile(
     r"Hardware Port:\s*(?P<port>.+?)\nDevice:\s*(?P<device>\S+)", re.MULTILINE
 )

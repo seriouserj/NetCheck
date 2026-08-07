@@ -10,7 +10,18 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from PySide6.QtCore import QThreadPool
-from PySide6.QtWidgets import QComboBox, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QTabWidget, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QComboBox,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPlainTextEdit,
+    QPushButton,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from core.dns_tool import RECORD_TYPES, dns_lookup
 from core.ping_tool import ping

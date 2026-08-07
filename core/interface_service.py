@@ -22,7 +22,6 @@ from core.network_parsers import (
     parse_media,
 )
 
-
 CommandRunner = Callable[[tuple[str, ...], float], CommandResult]
 
 

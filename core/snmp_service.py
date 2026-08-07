@@ -46,7 +46,15 @@ class SnmpService:
 
     @staticmethod
     async def _get(target: str, community: str, oid: str, timeout: float) -> list[SnmpValue]:
-        from pysnmp.hlapi.v3arch.asyncio import CommunityData, ContextData, ObjectIdentity, ObjectType, SnmpEngine, UdpTransportTarget, get_cmd
+        from pysnmp.hlapi.v3arch.asyncio import (
+            CommunityData,
+            ContextData,
+            ObjectIdentity,
+            ObjectType,
+            SnmpEngine,
+            UdpTransportTarget,
+            get_cmd,
+        )
 
         engine = SnmpEngine()
         try:
@@ -64,7 +72,15 @@ class SnmpService:
 
     @staticmethod
     async def _walk(target: str, community: str, oid: str, timeout: float, maximum_rows: int) -> list[SnmpValue]:
-        from pysnmp.hlapi.v3arch.asyncio import CommunityData, ContextData, ObjectIdentity, ObjectType, SnmpEngine, UdpTransportTarget, walk_cmd
+        from pysnmp.hlapi.v3arch.asyncio import (
+            CommunityData,
+            ContextData,
+            ObjectIdentity,
+            ObjectType,
+            SnmpEngine,
+            UdpTransportTarget,
+            walk_cmd,
+        )
 
         engine = SnmpEngine()
         values: list[SnmpValue] = []

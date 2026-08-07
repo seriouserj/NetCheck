@@ -1,0 +1,55 @@
+# Version: 1.0.0
+# Date: 2026-08-07
+# Author: NetCheck Contributors
+# Changelog: Add Python 3.13 lint, test, and Qt smoke-test CI for macOS.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Python 3.13 / macOS Intel
+    runs-on: macos-15-intel
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint source
+        run: python -m ruff check .
+
+      - name: Compile source
+        run: python -m compileall -q main.py core ui profiles scripts tests
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Smoke-test Qt application
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python scripts/smoke_test.py

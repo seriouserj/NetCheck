@@ -9,7 +9,17 @@ from __future__ import annotations
 
 import psutil
 from PySide6.QtCore import QThreadPool
-from PySide6.QtWidgets import QAbstractItemView, QComboBox, QHBoxLayout, QLabel, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from core.neighbor_models import NetworkNeighbor
 from core.neighbor_service import NeighborService

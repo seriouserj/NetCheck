@@ -1,0 +1,6 @@
+# Version: 1.0.0
+# Date: 2026-08-07
+# Author: NetCheck Contributors
+# Changelog: Add pinned development, lint, and macOS packaging tools.
+PyInstaller>=6.21,<7
+ruff>=0.16,<0.17

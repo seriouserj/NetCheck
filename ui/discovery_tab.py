@@ -8,7 +8,18 @@ Changelog: Add asynchronous local network discovery interface.
 from __future__ import annotations
 
 from PySide6.QtCore import QThreadPool
-from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from core.discovery_models import DiscoveredHost
 from core.discovery_parser import parse_scan_network

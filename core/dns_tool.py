@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from core.command_runner import run_command
 
-
 RECORD_TYPES = ("A", "AAAA", "CNAME", "MX", "NS", "PTR", "SOA", "TXT")
 
 

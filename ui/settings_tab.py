@@ -9,12 +9,23 @@ from __future__ import annotations
 
 import psutil
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QApplication, QComboBox, QDoubleSpinBox, QFormLayout, QLabel, QLineEdit, QPushButton, QTabWidget, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QDoubleSpinBox,
+    QFormLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from core.settings_models import AppSettings, ThemePreference
 from core.settings_store import SettingsStore
-from ui.theme import apply_theme
 from ui.profiles_panel import ProfilesPanel
+from ui.theme import apply_theme
 
 
 class SettingsTab(QWidget):
