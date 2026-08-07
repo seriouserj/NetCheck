@@ -2,7 +2,7 @@
 # Version: 1.0.0
 # Date: 2026-08-07
 # Author: NetCheck Contributors
-# Changelog: Resolve configured Python commands through PATH for CI builds.
+# Changelog: Produce portable checksums and resolve Python commands through PATH.
 
 set -euo pipefail
 
@@ -60,7 +60,10 @@ ditto --noextattr --norsrc "${app_path}" "${output_app_path}"
 rm -f "${archive_path}" "${checksum_path}"
 ditto -c -k --sequesterRsrc --keepParent "${app_path}" "${staging_archive}"
 cp "${staging_archive}" "${archive_path}"
-shasum -a 256 "${archive_path}" >"${checksum_path}"
+(
+    cd "${output_directory}"
+    shasum -a 256 "$(basename "${archive_path}")"
+) >"${checksum_path}"
 
 echo "Built ${output_app_path}"
 echo "Archive ${archive_path}"

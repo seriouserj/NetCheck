@@ -1,7 +1,7 @@
 # Version: 1.0.0
 # Date: 2026-08-07
 # Author: NetCheck Contributors
-# Changelog: Add tagged macOS app build and GitHub Release publication.
+# Changelog: Support repeatable release publication with replaceable assets.
 
 name: Release
 
@@ -58,6 +58,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || \
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" --clobber \
+              dist/NetCheck-*-macos-*.zip dist/NetCheck-*-macos-*.sha256
+          else
             gh release create "${GITHUB_REF_NAME}" --verify-tag --generate-notes \
               dist/NetCheck-*-macos-*.zip dist/NetCheck-*-macos-*.sha256
+          fi
