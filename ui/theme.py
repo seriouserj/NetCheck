@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Apply the DITIS navy and cyan brand palette to native Qt themes.
+Changelog: Make primary actions and visible branding unmistakable in every theme.
 """
 
 from __future__ import annotations
@@ -36,8 +36,14 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#pageSubtitle {{ color: {muted}; font-size: 16px; }}
         QLabel#sectionTitle {{ font-size: 24px; font-weight: 650; }}
         QLabel#mutedLabel {{ color: {muted}; }}
-        QPushButton {{ padding: 6px 14px; min-height: 24px; border-radius: 6px; }}
-        QPushButton:hover {{ color: {accent_hover}; }}
+        QPushButton {{ padding: 6px 14px; min-height: 24px; border: 1px solid palette(mid); border-radius: 6px; background: palette(button); }}
+        QPushButton:hover {{ color: {accent_hover}; border-color: {accent_hover}; }}
+        QPushButton[primary="true"] {{ color: white; background: {accent}; border-color: {accent}; font-weight: 650; }}
+        QPushButton[primary="true"]:hover {{ color: white; background: {accent_hover}; border-color: {accent_hover}; }}
+        QFrame#brandHeader {{ background: #05285a; border-bottom: 3px solid #009fe3; }}
+        QLabel#brandLogo {{ background: white; border-radius: 7px; }}
+        QLabel#brandProduct {{ color: white; font-size: 20px; font-weight: 700; }}
+        QLabel#brandAuthor {{ color: #b8e8fa; font-size: 12px; }}
         QTabBar::tab:selected {{ color: {accent}; font-weight: 650; border-bottom: 2px solid {accent}; }}
         QTableWidget {{ border: 1px solid palette(mid); border-radius: 6px; gridline-color: palette(midlight); }}
         QHeaderView::section {{ font-weight: 600; padding: 6px; }}

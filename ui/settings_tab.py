@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-06
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add live interface language selection for four supported languages.
+Changelog: Present settings save as a clear primary action button.
 """
 
 from __future__ import annotations
@@ -71,6 +71,7 @@ class SettingsTab(QWidget):
         self._status = QLabel("")
         self._status.setObjectName("mutedLabel")
         save = QPushButton(tr("Save settings"))
+        save.setProperty("primary", True)
         save.clicked.connect(self._save)
         layout.addLayout(form)
         layout.addWidget(save)

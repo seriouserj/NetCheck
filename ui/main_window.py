@@ -1,18 +1,19 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-06
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add branded author information through the native Help menu.
+Changelog: Keep DITIS logo and author visible above every application tab.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QMainWindow, QTabWidget
+from PySide6.QtWidgets import QMainWindow, QTabWidget, QVBoxLayout, QWidget
 
 from core.i18n import tr
 from core.metadata import APP_NAME, APP_VERSION
 from ui.about_dialog import AboutDialog
+from ui.brand_header import BrandHeader
 from ui.dashboard_tab import DashboardTab
 from ui.discovery_tab import DiscoveryTab
 from ui.ports_tab import PortsTab
@@ -49,4 +50,10 @@ class MainWindow(QMainWindow):
         settings = SettingsTab()
         settings.settings_saved.connect(lambda _: QTimer.singleShot(0, self._build_tabs))
         tabs.addTab(settings, tr("Settings"))
-        self.setCentralWidget(tabs)
+        container = QWidget()
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(BrandHeader())
+        layout.addWidget(tabs)
+        self.setCentralWidget(container)
