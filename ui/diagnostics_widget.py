@@ -1,11 +1,13 @@
 """
-Version: 1.1.0
+Version: 1.2.0
 Date: 2026-08-06
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize diagnostic headings, states, findings, and recommendations.
+Changelog: Localize diagnostic text containing dynamic VLAN identifiers.
 """
 
 from __future__ import annotations
+
+import re
 
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QAbstractItemView, QGroupBox, QTableWidget, QTableWidgetItem, QVBoxLayout
@@ -39,10 +41,26 @@ class DiagnosticsWidget(QGroupBox):
             self._table.setItem(0, 1, QTableWidgetItem(tr("No likely problems detected")))
             return
         for row, finding in enumerate(findings):
-            values = tuple(tr(value) for value in (finding.severity.value, finding.title, finding.probable_reason, finding.recommendation, finding.source))
+            values = tuple(
+                self._translate_value(value)
+                for value in (
+                    finding.severity.value,
+                    finding.title,
+                    finding.probable_reason,
+                    finding.recommendation,
+                    finding.source,
+                )
+            )
             for column, value in enumerate(values):
                 item = QTableWidgetItem(value)
                 if column == 0:
                     item.setForeground(self.COLORS[finding.severity])
                 self._table.setItem(row, column, item)
         self._table.resizeColumnsToContents()
+
+    @staticmethod
+    def _translate_value(value: str) -> str:
+        unavailable = re.fullmatch(r"VLAN (\d+) unavailable", value)
+        if unavailable:
+            return tr("VLAN {vlan_id} unavailable", vlan_id=unavailable.group(1))
+        return tr(value)
