@@ -1,8 +1,8 @@
 """
-Version: 0.11.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add read-only SNMP v2c GET and WALK interface.
+Changelog: Localize SNMP input controls and result headings.
 """
 
 from __future__ import annotations
@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from core.i18n import tr
 from core.snmp_service import SnmpService, SnmpValue
 from ui.async_task import BackgroundTask
 
@@ -38,22 +39,22 @@ class SnmpPanel(QWidget):
         self._community = QLineEdit()
         self._community.setEchoMode(QLineEdit.EchoMode.Password)
         self._oid = QLineEdit("1.3.6.1.2.1.1.1.0")
-        form.addRow("Target", self._target)
-        form.addRow("Community", self._community)
-        form.addRow("Numeric OID", self._oid)
+        form.addRow(tr("Target"), self._target)
+        form.addRow(tr("Community"), self._community)
+        form.addRow(tr("Numeric OID"), self._oid)
         buttons = QHBoxLayout()
         self._get = QPushButton("GET")
         self._get.clicked.connect(lambda: self._run(False))
         self._walk = QPushButton("WALK")
         self._walk.clicked.connect(lambda: self._run(True))
-        self._status = QLabel("SNMP v2c read-only; the community string is never saved.")
+        self._status = QLabel(tr("SNMP v2c read-only; the community string is never saved."))
         self._status.setObjectName("mutedLabel")
         buttons.addWidget(self._status)
         buttons.addStretch()
         buttons.addWidget(self._get)
         buttons.addWidget(self._walk)
         self._table = QTableWidget(0, 2)
-        self._table.setHorizontalHeaderLabels(("OID", "Value"))
+        self._table.setHorizontalHeaderLabels(("OID", tr("Value")))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.horizontalHeader().setStretchLastSection(True)
         layout.addLayout(form)
@@ -63,7 +64,7 @@ class SnmpPanel(QWidget):
     def _run(self, walk: bool) -> None:
         self._get.setEnabled(False)
         self._walk.setEnabled(False)
-        self._status.setText("Querying SNMP agent…")
+        self._status.setText(tr("Querying SNMP agent…"))
         target, community, oid = self._target.text(), self._community.text(), self._oid.text()
         operation = (lambda: self._service.walk(target, community, oid)) if walk else (lambda: self._service.get(target, community, oid))
         self._task = BackgroundTask(operation)
@@ -78,7 +79,7 @@ class SnmpPanel(QWidget):
             if isinstance(result, SnmpValue):
                 self._table.setItem(row, 0, QTableWidgetItem(result.oid))
                 self._table.setItem(row, 1, QTableWidgetItem(result.value))
-        self._finish(f"Received {len(values)} SNMP value(s).")
+        self._finish(tr("Received {count} SNMP value(s).", count=len(values)))
 
     def _finish(self, status: str) -> None:
         self._status.setText(status)

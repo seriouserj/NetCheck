@@ -1,8 +1,8 @@
 """
-Version: 0.7.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add validated immutable application settings model.
+Changelog: Add a validated persistent interface language preference.
 """
 
 from __future__ import annotations
@@ -10,6 +10,8 @@ from __future__ import annotations
 import ipaddress
 from dataclasses import dataclass
 from enum import Enum
+
+from core.i18n import AppLanguage
 
 
 class ThemePreference(str, Enum):
@@ -28,6 +30,7 @@ class AppSettings:
     preferred_dns: str = ""
     default_interface: str = ""
     theme: ThemePreference = ThemePreference.SYSTEM
+    language: AppLanguage = AppLanguage.ENGLISH
 
     def validate(self) -> AppSettings:
         """Return this instance after enforcing supported values."""

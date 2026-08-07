@@ -1,8 +1,8 @@
 """
-Version: 0.10.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add LLDP/CDP neighbor discovery interface.
+Changelog: Localize LLDP and CDP neighbor discovery controls.
 """
 
 from __future__ import annotations
@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from core.i18n import tr
 from core.neighbor_models import NetworkNeighbor
 from core.neighbor_service import NeighborService
 from ui.async_task import BackgroundTask
@@ -35,17 +36,17 @@ class NeighborsPanel(QWidget):
         self._task: BackgroundTask | None = None
         layout = QVBoxLayout(self)
         controls = QHBoxLayout()
-        controls.addWidget(QLabel("Interface"))
+        controls.addWidget(QLabel(tr("Interface")))
         self._interface = QComboBox()
         self._interface.addItems(sorted(name for name in psutil.net_if_addrs() if name.startswith(("en", "vlan"))))
-        self._start = QPushButton("Listen for neighbors")
+        self._start = QPushButton(tr("Listen for neighbors"))
         self._start.clicked.connect(self._discover)
         controls.addWidget(self._interface, 1)
         controls.addWidget(self._start)
-        self._status = QLabel("Passive capture may request macOS administrator authorization.")
+        self._status = QLabel(tr("Passive capture may request macOS administrator authorization."))
         self._status.setObjectName("mutedLabel")
         self._table = QTableWidget(0, 7)
-        self._table.setHorizontalHeaderLabels(("Protocol", "System", "Port", "Platform", "Management IP", "Native VLAN", "Capabilities"))
+        self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in ("Protocol", "System", "Port", "Platform", "Management IP", "Native VLAN", "Capabilities")))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.horizontalHeader().setStretchLastSection(True)
         layout.addLayout(controls)
@@ -54,7 +55,7 @@ class NeighborsPanel(QWidget):
 
     def _discover(self) -> None:
         self._start.setEnabled(False)
-        self._status.setText("Listening for LLDP and CDP advertisements…")
+        self._status.setText(tr("Listening for LLDP and CDP advertisements…"))
         interface = self._interface.currentText()
         self._task = BackgroundTask(lambda: self._service.discover(interface))
         self._task.signals.completed.connect(self._show)
@@ -70,7 +71,7 @@ class NeighborsPanel(QWidget):
             values = (neighbor.protocol, neighbor.system_name, neighbor.port_id, neighbor.platform, neighbor.management_address, neighbor.native_vlan, neighbor.capabilities)
             for column, item_value in enumerate(values):
                 self._table.setItem(row, column, QTableWidgetItem(item_value))
-        self._finish(f"Found {len(neighbors)} neighbor advertisement(s).")
+        self._finish(tr("Found {count} neighbor advertisement(s).", count=len(neighbors)))
 
     def _finish(self, status: str) -> None:
         self._status.setText(status)

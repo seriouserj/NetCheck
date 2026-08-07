@@ -1,14 +1,15 @@
 """
-Version: 0.7.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add native persistent settings storage.
+Changelog: Persist and safely recover the selected interface language.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import QSettings
 
+from core.i18n import AppLanguage
 from core.settings_models import AppSettings, ThemePreference
 
 
@@ -25,6 +26,10 @@ class SettingsStore:
         except ValueError:
             theme = ThemePreference.SYSTEM
         try:
+            language = AppLanguage(str(self._backend.value("appearance/language", "en")))
+        except ValueError:
+            language = AppLanguage.ENGLISH
+        try:
             timeout = float(self._backend.value("network/timeout_seconds", 3.0))
         except (TypeError, ValueError):
             timeout = 3.0
@@ -33,11 +38,12 @@ class SettingsStore:
             preferred_dns=str(self._backend.value("network/preferred_dns", "")),
             default_interface=str(self._backend.value("network/default_interface", "")),
             theme=theme,
+            language=language,
         )
         try:
             return settings.validate()
         except ValueError:
-            return AppSettings(timeout_seconds=settings.timeout_seconds, default_interface=settings.default_interface, theme=theme)
+            return AppSettings(timeout_seconds=settings.timeout_seconds, default_interface=settings.default_interface, theme=theme, language=language)
 
     def save(self, settings: AppSettings) -> None:
         """Validate and atomically synchronize current settings."""
@@ -46,6 +52,7 @@ class SettingsStore:
         self._backend.setValue("network/preferred_dns", settings.preferred_dns)
         self._backend.setValue("network/default_interface", settings.default_interface)
         self._backend.setValue("appearance/theme", settings.theme.value)
+        self._backend.setValue("appearance/language", settings.language.value)
         self._backend.sync()
         if self._backend.status() != QSettings.Status.NoError:
             raise OSError("The settings backend could not save the configuration.")

@@ -1,8 +1,8 @@
 """
-Version: 0.9.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add Smart Diagnostics inference after refresh.
+Changelog: Localize Dashboard controls, values, and status messages.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 )
 
 from core.diagnostic_engine import DiagnosticEngine
+from core.i18n import tr
 from core.interface_models import InterfaceDiagnostics
 from core.interface_service import InterfaceService
 from ui.async_task import BackgroundTask
@@ -46,11 +47,11 @@ class DashboardTab(QWidget):
         layout.setSpacing(16)
 
         header = QHBoxLayout()
-        title = QLabel("Dashboard")
+        title = QLabel(tr("Dashboard"))
         title.setObjectName("sectionTitle")
-        self._status = QLabel("Ready")
+        self._status = QLabel(tr("Ready"))
         self._status.setObjectName("mutedLabel")
-        self._refresh = QPushButton("Refresh")
+        self._refresh = QPushButton(tr("Refresh"))
         self._refresh.clicked.connect(self.refresh)
         header.addWidget(title)
         header.addStretch()
@@ -58,7 +59,7 @@ class DashboardTab(QWidget):
         header.addWidget(self._refresh)
 
         self._table = QTableWidget(0, len(self.HEADERS))
-        self._table.setHorizontalHeaderLabels(self.HEADERS)
+        self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in self.HEADERS))
         self._table.setAlternatingRowColors(True)
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -76,7 +77,7 @@ class DashboardTab(QWidget):
         if self._active_task is not None:
             return
         self._refresh.setEnabled(False)
-        self._status.setText("Scanning Ethernet adapters…")
+        self._status.setText(tr("Scanning Ethernet adapters…"))
         task = BackgroundTask(self._service.collect)
         task.signals.completed.connect(self._display_results)
         task.signals.failed.connect(self._display_error)
@@ -92,7 +93,7 @@ class DashboardTab(QWidget):
                 self._populate_row(row_index, interface)
         self._table.resizeColumnsToContents()
         self._table.setSortingEnabled(True)
-        self._status.setText(f"{len(rows)} Ethernet adapter{'s' if len(rows) != 1 else ''}")
+        self._status.setText(tr("{count} Ethernet adapter(s)", count=len(rows)))
         typed_rows = [item for item in rows if isinstance(item, InterfaceDiagnostics)]
         self._diagnostics.set_findings(self._diagnostic_engine.analyze_interfaces(typed_rows))
         self._finish_refresh()
@@ -100,7 +101,7 @@ class DashboardTab(QWidget):
     def _populate_row(self, row: int, interface: InterfaceDiagnostics) -> None:
         values = (
             interface.name,
-            interface.status,
+            tr(interface.status),
             interface.speed,
             interface.duplex,
             interface.mac,
@@ -108,7 +109,7 @@ class DashboardTab(QWidget):
             "\n".join(interface.ipv6) or "—",
             interface.gateway,
             ", ".join(interface.dns_servers) or "—",
-            interface.internet,
+            tr(interface.internet),
         )
         for column, value in enumerate(values):
             item = QTableWidgetItem(value)

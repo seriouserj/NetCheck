@@ -1,8 +1,8 @@
 """
-Version: 1.0.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Use the platform-native font for stable cross-platform rendering.
+Changelog: Configure the persisted interface language before creating widgets.
 """
 
 from __future__ import annotations
@@ -10,6 +10,7 @@ from __future__ import annotations
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication
 
+from core.i18n import set_language
 from core.metadata import APP_NAME, APP_VERSION, ORGANIZATION_NAME
 from core.settings_store import SettingsStore
 from ui.theme import apply_theme
@@ -23,4 +24,6 @@ def configure_application(application: QApplication) -> None:
     font = application.font()
     font.setPointSize(13)
     application.setFont(font)
-    apply_theme(application, SettingsStore().load().theme.value)
+    settings = SettingsStore().load()
+    set_language(settings.language)
+    apply_theme(application, settings.theme.value)

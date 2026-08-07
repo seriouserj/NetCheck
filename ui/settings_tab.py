@@ -1,8 +1,8 @@
 """
-Version: 0.8.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Integrate General settings and Profiles panels.
+Changelog: Add live interface language selection for four supported languages.
 """
 
 from __future__ import annotations
@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from core.i18n import AppLanguage, set_language, tr
 from core.settings_models import AppSettings, ThemePreference
 from core.settings_store import SettingsStore
 from ui.profiles_panel import ProfilesPanel
@@ -48,29 +49,35 @@ class SettingsTab(QWidget):
         self._timeout.setDecimals(1)
         self._timeout.setSuffix(" seconds")
         self._dns = QLineEdit()
-        self._dns.setPlaceholderText("Optional IPv4 or IPv6 address")
+        self._dns.setPlaceholderText(tr("Optional IPv4 or IPv6 address"))
         self._interface = QComboBox()
-        self._interface.addItem("Automatic", "")
+        self._interface.addItem(tr("Automatic"), "")
         for name in sorted(psutil.net_if_addrs()):
             self._interface.addItem(name, name)
         self._theme = QComboBox()
-        self._theme.addItem("System", ThemePreference.SYSTEM.value)
-        self._theme.addItem("Light", ThemePreference.LIGHT.value)
-        self._theme.addItem("Dark", ThemePreference.DARK.value)
-        form.addRow("Default timeout", self._timeout)
-        form.addRow("Preferred DNS", self._dns)
-        form.addRow("Default interface", self._interface)
-        form.addRow("Theme", self._theme)
+        self._theme.addItem(tr("System"), ThemePreference.SYSTEM.value)
+        self._theme.addItem(tr("Light"), ThemePreference.LIGHT.value)
+        self._theme.addItem(tr("Dark"), ThemePreference.DARK.value)
+        self._language = QComboBox()
+        self._language.addItem(tr("English"), AppLanguage.ENGLISH.value)
+        self._language.addItem(tr("German"), AppLanguage.GERMAN.value)
+        self._language.addItem(tr("Russian"), AppLanguage.RUSSIAN.value)
+        self._language.addItem(tr("Ukrainian"), AppLanguage.UKRAINIAN.value)
+        form.addRow(tr("Default timeout"), self._timeout)
+        form.addRow(tr("Preferred DNS"), self._dns)
+        form.addRow(tr("Default interface"), self._interface)
+        form.addRow(tr("Theme"), self._theme)
+        form.addRow(tr("Language"), self._language)
         self._status = QLabel("")
         self._status.setObjectName("mutedLabel")
-        save = QPushButton("Save settings")
+        save = QPushButton(tr("Save settings"))
         save.clicked.connect(self._save)
         layout.addLayout(form)
         layout.addWidget(save)
         layout.addWidget(self._status)
         layout.addStretch()
-        tabs.addTab(general, "General")
-        tabs.addTab(ProfilesPanel(), "Profiles")
+        tabs.addTab(general, tr("General"))
+        tabs.addTab(ProfilesPanel(), tr("Profiles"))
         root_layout.addWidget(tabs)
         self._load()
 
@@ -82,6 +89,8 @@ class SettingsTab(QWidget):
         self._interface.setCurrentIndex(max(0, interface_index))
         theme_index = self._theme.findData(settings.theme.value)
         self._theme.setCurrentIndex(max(0, theme_index))
+        language_index = self._language.findData(settings.language.value)
+        self._language.setCurrentIndex(max(0, language_index))
 
     def _save(self) -> None:
         settings = AppSettings(
@@ -89,6 +98,7 @@ class SettingsTab(QWidget):
             preferred_dns=self._dns.text().strip(),
             default_interface=str(self._interface.currentData()),
             theme=ThemePreference(str(self._theme.currentData())),
+            language=AppLanguage(str(self._language.currentData())),
         )
         try:
             self._store.save(settings)
@@ -98,5 +108,6 @@ class SettingsTab(QWidget):
         application = QApplication.instance()
         if isinstance(application, QApplication):
             apply_theme(application, settings.theme.value)
-        self._status.setText("Settings saved.")
+        set_language(settings.language)
+        self._status.setText(tr("Settings saved."))
         self.settings_saved.emit(settings)

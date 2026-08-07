@@ -1,8 +1,8 @@
 """
-Version: 0.11.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add read-only SNMP v2c diagnostics panel.
+Changelog: Localize daily network tool controls and navigation.
 """
 
 from __future__ import annotations
@@ -24,6 +24,7 @@ from PySide6.QtWidgets import (
 )
 
 from core.dns_tool import RECORD_TYPES, dns_lookup
+from core.i18n import tr
 from core.ping_tool import ping
 from core.traceroute_tool import traceroute
 from core.wake_on_lan import send_magic_packet
@@ -44,7 +45,7 @@ class CommandPanel(QWidget):
         controls.addWidget(QLabel(label))
         self.input = QLineEdit()
         self.input.setPlaceholderText(placeholder)
-        self.button = QPushButton("Run")
+        self.button = QPushButton(tr("Run"))
         self.button.clicked.connect(self.run)
         controls.addWidget(self.input, 1)
         controls.addWidget(self.button)
@@ -55,7 +56,7 @@ class CommandPanel(QWidget):
 
     def run(self) -> None:
         self.button.setEnabled(False)
-        self.output.setPlainText("Running…")
+        self.output.setPlainText(tr("Running…"))
         value = self.input.text()
         self._task = BackgroundTask(lambda: self._action(value))
         self._task.signals.completed.connect(lambda result: self._finish(str(result)))
@@ -79,10 +80,10 @@ class DnsPanel(QWidget):
         self.kind = QComboBox()
         self.kind.addItems(RECORD_TYPES)
         self.server = QLineEdit()
-        self.server.setPlaceholderText("Optional, e.g. 1.1.1.1")
-        form.addRow("Name", self.name)
-        form.addRow("Record type", self.kind)
-        form.addRow("DNS server", self.server)
+        self.server.setPlaceholderText(tr("Optional, e.g. 1.1.1.1"))
+        form.addRow(tr("Name"), self.name)
+        form.addRow(tr("Record type"), self.kind)
+        form.addRow(tr("DNS server"), self.server)
         self.command = CommandPanel("", "", lambda _: dns_lookup(self.name.text(), self.kind.currentText(), self.server.text()))
         self.command.input.setVisible(False)
         layout.addLayout(form)
@@ -97,11 +98,11 @@ class WolPanel(QWidget):
         layout = QFormLayout(self)
         self.mac = QLineEdit()
         self.broadcast = QLineEdit("255.255.255.255")
-        self.status = QLabel("Ready")
-        button = QPushButton("Send magic packet")
+        self.status = QLabel(tr("Ready"))
+        button = QPushButton(tr("Send magic packet"))
         button.clicked.connect(self._send)
-        layout.addRow("MAC address", self.mac)
-        layout.addRow("Broadcast", self.broadcast)
+        layout.addRow(tr("MAC address"), self.mac)
+        layout.addRow(tr("Broadcast"), self.broadcast)
         layout.addRow(button)
         layout.addRow(self.status)
 
@@ -120,10 +121,10 @@ class ToolsTab(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
         tabs = QTabWidget()
-        tabs.addTab(CommandPanel("Target", "hostname or IP address", ping), "Ping")
-        tabs.addTab(CommandPanel("Target", "hostname or IP address", traceroute), "Traceroute")
-        tabs.addTab(DnsPanel(), "DNS Lookup")
-        tabs.addTab(WolPanel(), "Wake-on-LAN")
+        tabs.addTab(CommandPanel(tr("Target"), tr("hostname or IP address"), ping), "Ping")
+        tabs.addTab(CommandPanel(tr("Target"), tr("hostname or IP address"), traceroute), tr("Traceroute"))
+        tabs.addTab(DnsPanel(), tr("DNS Lookup"))
+        tabs.addTab(WolPanel(), tr("Wake-on-LAN"))
         tabs.addTab(NeighborsPanel(), "LLDP/CDP")
         tabs.addTab(SnmpPanel(), "SNMP")
         layout.addWidget(tabs)

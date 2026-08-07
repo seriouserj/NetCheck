@@ -1,8 +1,8 @@
 """
-Version: 0.8.0
+Version: 1.1.0
 Date: 2026-08-06
 Author: NetCheck Contributors
-Changelog: Add profile creation, editing, and deletion interface.
+Changelog: Localize reusable profile management controls.
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from core.i18n import tr
 from profiles.models import NetworkProfile
 from profiles.repository import ProfileRepository
 
@@ -31,7 +32,7 @@ class ProfilesPanel(QWidget):
         self._repository = repository or ProfileRepository()
         layout = QVBoxLayout(self)
         selector = QHBoxLayout()
-        selector.addWidget(QLabel("Saved profile"))
+        selector.addWidget(QLabel(tr("Saved profile")))
         self._profiles = QComboBox()
         self._profiles.currentIndexChanged.connect(self._select)
         selector.addWidget(self._profiles, 1)
@@ -42,16 +43,16 @@ class ProfilesPanel(QWidget):
         self._dns = QLineEdit()
         self._subnet = QLineEdit()
         self._subnet.setPlaceholderText("192.168.1.0/24")
-        form.addRow("Name", self._name)
-        form.addRow("Default VLANs", self._vlans)
-        form.addRow("Preferred DNS", self._dns)
-        form.addRow("Default subnet", self._subnet)
+        form.addRow(tr("Name"), self._name)
+        form.addRow(tr("Default VLANs"), self._vlans)
+        form.addRow(tr("Preferred DNS"), self._dns)
+        form.addRow(tr("Default subnet"), self._subnet)
         buttons = QHBoxLayout()
-        new_button = QPushButton("New")
+        new_button = QPushButton(tr("New"))
         new_button.clicked.connect(self._clear)
-        save_button = QPushButton("Save profile")
+        save_button = QPushButton(tr("Save profile"))
         save_button.clicked.connect(self._save)
-        delete_button = QPushButton("Delete")
+        delete_button = QPushButton(tr("Delete"))
         delete_button.clicked.connect(self._delete)
         buttons.addWidget(new_button)
         buttons.addStretch()
@@ -96,7 +97,7 @@ class ProfilesPanel(QWidget):
     def _clear(self) -> None:
         for field in (self._name, self._vlans, self._dns, self._subnet):
             field.clear()
-        self._status.setText("New profile")
+        self._status.setText(tr("New profile"))
 
     def _save(self) -> None:
         try:
@@ -105,7 +106,7 @@ class ProfilesPanel(QWidget):
         except (ValueError, OSError) as error:
             self._status.setText(f"Error: {error}")
             return
-        self._status.setText("Profile saved.")
+        self._status.setText(tr("Profile saved."))
         self._reload(profile.name)
 
     def _delete(self) -> None:
