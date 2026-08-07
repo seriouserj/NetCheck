@@ -1,0 +1,72 @@
+# -*- mode: python ; coding: utf-8 -*-
+# Version: 1.0.0
+# Date: 2026-08-07
+# Author: NetCheck Contributors
+# Changelog: Add deterministic PyInstaller macOS application bundle configuration.
+
+from pathlib import Path
+
+from PyInstaller.utils.hooks import collect_data_files
+
+
+project_root = Path(SPECPATH)
+manuf_data = collect_data_files("manuf")
+
+analysis = Analysis(
+    [str(project_root / "main.py")],
+    pathex=[str(project_root)],
+    binaries=[],
+    datas=manuf_data,
+    hiddenimports=[],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=["tkinter"],
+    noarchive=False,
+    optimize=1,
+)
+
+python_archive = PYZ(analysis.pure)
+
+executable = EXE(
+    python_archive,
+    analysis.scripts,
+    [],
+    exclude_binaries=True,
+    name="NetCheck",
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=False,
+    console=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
+
+collection = COLLECT(
+    executable,
+    analysis.binaries,
+    analysis.datas,
+    strip=False,
+    upx=False,
+    name="NetCheck",
+)
+
+app = BUNDLE(
+    collection,
+    name="NetCheck.app",
+    icon=str(project_root / "icons" / "netcheck-1024.png"),
+    bundle_identifier="com.tubbetec.netcheck",
+    version="1.0.0",
+    info_plist={
+        "CFBundleDisplayName": "NetCheck",
+        "CFBundleShortVersionString": "1.0.0",
+        "CFBundleVersion": "1",
+        "LSMinimumSystemVersion": "13.0",
+        "NSHighResolutionCapable": True,
+        "NSLocalNetworkUsageDescription": "NetCheck scans local networks selected by the user for diagnostics.",
+        "NSPrincipalClass": "NSApplication",
+    },
+)

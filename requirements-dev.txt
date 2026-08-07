@@ -3,4 +3,5 @@
 # Author: NetCheck Contributors
 # Changelog: Add pinned development, lint, and macOS packaging tools.
 PyInstaller>=6.21,<7
+Pillow>=11.3,<13
 ruff>=0.16,<0.17
