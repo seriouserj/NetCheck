@@ -2,12 +2,16 @@
 # Version: 1.0.0
 # Date: 2026-08-07
 # Author: NetCheck Contributors
-# Changelog: Add reproducible macOS app bundle, signing, smoke-test, and archive build.
+# Changelog: Resolve configured Python commands through PATH for CI builds.
 
 set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-python_binary="${PYTHON_BINARY:-${project_root}/.venv/bin/python}"
+python_candidate="${PYTHON_BINARY:-${project_root}/.venv/bin/python}"
+if ! python_binary="$(command -v "${python_candidate}")"; then
+    echo "Python environment not found: ${python_candidate}" >&2
+    exit 1
+fi
 version="$(cd "${project_root}" && "${python_binary}" -c 'from core.metadata import APP_VERSION; print(APP_VERSION)')"
 architecture="$(uname -m)"
 output_directory="${project_root}/dist"
@@ -27,11 +31,6 @@ trap cleanup EXIT
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
     echo "NetCheck.app must be built on macOS." >&2
-    exit 1
-fi
-
-if [[ ! -x "${python_binary}" ]]; then
-    echo "Python environment not found: ${python_binary}" >&2
     exit 1
 fi
 
