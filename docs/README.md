@@ -1,8 +1,8 @@
 <!--
-Version: 1.0.0
-Date: 2026-08-06
+Version: 1.0.1
+Date: 2026-08-07
 Author: NetCheck Contributors
-Changelog: Document the stable feature set, permissions, and verification workflow.
+Changelog: Add packaged application and release workflow documentation.
 -->
 
 # NetCheck
@@ -28,6 +28,16 @@ python3 main.py
 The application uses native Qt 6 widgets through PySide6 and follows the active macOS
 light or dark appearance.
 
+## Packaged application
+
+Tagged releases provide an Intel macOS ZIP that contains `NetCheck.app` and does not
+require a separate Python installation. Verify the accompanying SHA-256 file before
+opening it. Until a Developer ID certificate is configured, builds use an ad-hoc
+signature and require the standard first-launch confirmation in Finder.
+
+For reproducible builds, artifact naming, signing, and release automation, see the
+[release guide](RELEASE.md).
+
 ## Features
 
 - Ethernet dashboard with link, speed, duplex, addressing, routes, DNS, and connectivity
@@ -52,8 +62,9 @@ Only scan networks and devices you are authorized to test.
 ## Verify
 
 ```shell
+python3 -m ruff check main.py core ui profiles scripts tests
 python3 -m pytest -q
-QT_QPA_PLATFORM=offscreen python3 -c "from PySide6.QtWidgets import QApplication; from ui.main_window import MainWindow; app = QApplication([]); window = MainWindow(); assert window.centralWidget().count() == 6"
+QT_QPA_PLATFORM=offscreen python3 scripts/smoke_test.py
 ```
 
 The stable release is verified with Python 3.13 on macOS.
