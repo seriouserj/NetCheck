@@ -1,8 +1,8 @@
 """
-Version: 0.7.0
-Date: 2026-08-06
-Author: NetCheck Contributors
-Changelog: Add explicit light, dark, and system theme selection.
+Version: 1.1.0
+Date: 2026-08-07
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Apply the DITIS navy and cyan brand palette to native Qt themes.
 """
 
 from __future__ import annotations
@@ -19,13 +19,16 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         application.setPalette(palette)
     elif preference == "light":
         palette = application.style().standardPalette()
+        palette.setColor(QPalette.ColorRole.Highlight, QColor("#0077c8"))
+        palette.setColor(QPalette.ColorRole.Link, QColor("#0077c8"))
         application.setPalette(palette)
     else:
         application.setPalette(QPalette())
         palette = application.palette()
     dark = palette.color(QPalette.ColorRole.Window).lightness() < 128
-    accent = "#5ac8fa" if dark else "#007aff"
-    muted = "#a1a1a6" if dark else "#6e6e73"
+    accent = "#27b9ee" if dark else "#0077c8"
+    accent_hover = "#42c8f5" if dark else "#009fe3"
+    muted = "#9eb5c9" if dark else "#5d6f7f"
     application.setStyleSheet(
         f"""
         QMainWindow {{ background: palette(window); }}
@@ -33,8 +36,14 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#pageSubtitle {{ color: {muted}; font-size: 16px; }}
         QLabel#sectionTitle {{ font-size: 24px; font-weight: 650; }}
         QLabel#mutedLabel {{ color: {muted}; }}
-        QPushButton {{ padding: 6px 14px; min-height: 24px; }}
+        QPushButton {{ padding: 6px 14px; min-height: 24px; border-radius: 6px; }}
+        QPushButton:hover {{ color: {accent_hover}; }}
+        QTabBar::tab:selected {{ color: {accent}; font-weight: 650; border-bottom: 2px solid {accent}; }}
         QTableWidget {{ border: 1px solid palette(mid); border-radius: 6px; gridline-color: palette(midlight); }}
+        QHeaderView::section {{ font-weight: 600; padding: 6px; }}
+        QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus {{ border: 1px solid {accent}; }}
+        QGroupBox {{ font-weight: 600; }}
+        a {{ color: {accent}; }}
         QToolTip {{ padding: 6px; }}
         """
     )
@@ -43,14 +52,17 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
 def _dark_palette() -> QPalette:
     """Build an accessible Qt dark palette using macOS-like neutral colors."""
     palette = QPalette()
-    palette.setColor(QPalette.ColorRole.Window, QColor("#1c1c1e"))
+    palette.setColor(QPalette.ColorRole.Window, QColor("#071727"))
     palette.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.white)
-    palette.setColor(QPalette.ColorRole.Base, QColor("#2c2c2e"))
-    palette.setColor(QPalette.ColorRole.AlternateBase, QColor("#3a3a3c"))
+    palette.setColor(QPalette.ColorRole.Base, QColor("#0b2239"))
+    palette.setColor(QPalette.ColorRole.AlternateBase, QColor("#102f4e"))
     palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
-    palette.setColor(QPalette.ColorRole.Button, QColor("#3a3a3c"))
+    palette.setColor(QPalette.ColorRole.Button, QColor("#12375b"))
     palette.setColor(QPalette.ColorRole.ButtonText, Qt.GlobalColor.white)
-    palette.setColor(QPalette.ColorRole.Highlight, QColor("#0a84ff"))
+    palette.setColor(QPalette.ColorRole.Highlight, QColor("#0077c8"))
     palette.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.white)
-    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text, QColor("#8e8e93"))
+    palette.setColor(QPalette.ColorRole.Link, QColor("#27b9ee"))
+    palette.setColor(QPalette.ColorRole.Mid, QColor("#285071"))
+    palette.setColor(QPalette.ColorRole.Midlight, QColor("#1b405f"))
+    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text, QColor("#71899d"))
     return palette

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Version: 1.0.0
 # Date: 2026-08-07
-# Author: NetCheck Contributors
+# Author: Serhii Dralo <dralo@ditis.group>
 # Changelog: Produce portable checksums and resolve Python commands through PATH.
 
 set -euo pipefail

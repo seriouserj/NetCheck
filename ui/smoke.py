@@ -1,7 +1,7 @@
 """
 Version: 1.1.0
 Date: 2026-08-07
-Author: NetCheck Contributors
+Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Validate navigation in the currently selected interface language.
 """
 

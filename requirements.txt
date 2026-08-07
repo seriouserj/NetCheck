@@ -1,6 +1,6 @@
 # Version: 0.11.0
 # Date: 2026-08-06
-# Author: NetCheck Contributors
+# Author: Serhii Dralo <dralo@ditis.group>
 # Changelog: Add Python 3.13-compatible PySNMP dependency.
 PySide6>=6.9,<7
 psutil>=7.0,<8

@@ -1,7 +1,7 @@
 """
 Version: 0.6.0
 Date: 2026-08-06
-Author: NetCheck Contributors
+Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Add Wake-on-LAN magic packet transmission.
 """
 

@@ -1,8 +1,8 @@
 <!--
-Version: 1.0.1
+Version: 1.1.0
 Date: 2026-08-07
-Author: NetCheck Contributors
-Changelog: Add packaged application and release workflow documentation.
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Document localization, single-prompt VLAN tests, and product branding.
 -->
 
 # NetCheck
@@ -50,6 +50,16 @@ For reproducible builds, artifact naming, signing, and release automation, see t
 - Smart Diagnostics with probable causes and recommended corrective actions
 - Passive LLDP and CDP neighbor discovery
 - Read-only SNMP v2c GET and WALK operations
+- Runtime English, German, Russian, and Ukrainian localization
+
+An entire VLAN list or range runs inside one privileged worker and therefore requests
+macOS administrator authorization once per test batch. Temporary interfaces are still
+removed after each VLAN, including failure paths.
+
+## Author
+
+NetCheck is authored by Serhii Dralo, [dralo@ditis.group](mailto:dralo@ditis.group),
+with official branding from [DITIS Group](https://ditis.group).
 
 ## macOS permissions
 

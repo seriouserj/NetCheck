@@ -2,7 +2,7 @@
 Version: 1.1.0
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add the internal privileged VLAN batch worker mode.
+Changelog: Keep version and privileged VLAN worker modes independent from Qt GUI imports.
 """
 
 from __future__ import annotations
@@ -12,11 +12,7 @@ import sys
 if sys.version_info < (3, 13):
     raise SystemExit("NetCheck requires Python 3.13 or newer.")
 
-from PySide6.QtWidgets import QApplication
-
-from core.application import configure_application
 from core.metadata import APP_VERSION
-from ui.main_window import MainWindow
 
 
 def main() -> int:
@@ -29,6 +25,11 @@ def main() -> int:
 
         index = sys.argv.index("--vlan-worker")
         return run_vlan_worker(sys.argv[index + 1 :])
+    from PySide6.QtWidgets import QApplication
+
+    from core.application import configure_application
+    from ui.main_window import MainWindow
+
     application = QApplication(sys.argv)
     if "--smoke-test" in sys.argv:
         from ui.smoke import run_smoke_test

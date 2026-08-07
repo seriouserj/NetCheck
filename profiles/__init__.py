@@ -1,7 +1,7 @@
 """
 Version: 0.8.0
 Date: 2026-08-06
-Author: NetCheck Contributors
+Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Export the typed network profile API.
 """
 

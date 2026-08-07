@@ -1,8 +1,8 @@
 <!--
-Version: 1.0.1
+Version: 1.1.0
 Date: 2026-08-07
-Author: NetCheck Contributors
-Changelog: Add packaged macOS installation and release links.
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Document v1.1 localization, VLAN authorization, and DITIS branding.
 -->
 
 # NetCheck
@@ -13,19 +13,28 @@ Electron layer.
 
 ## Install the macOS application
 
-Download the Intel macOS ZIP and its SHA-256 file from
+Download the latest Intel macOS ZIP and its SHA-256 file from
 [GitHub Releases](https://github.com/seriouserj/NetCheck/releases). Verify the download,
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.0.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.0.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.1.0-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.1.0-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
 Release builds are ad-hoc signed until an Apple Developer ID certificate is configured.
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
+
+## Version 1.1 highlights
+
+- One macOS administrator authorization for an entire VLAN list or range
+- English, German, Russian, and Ukrainian interface languages
+- Correct diagnostics that ignore unused disconnected and virtual bridge interfaces
+- DITIS Group branding, transparent application icon, and author information
+
+NetCheck is authored by [Serhii Dralo](mailto:dralo@ditis.group).
 
 ## Quick start
 

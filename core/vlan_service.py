@@ -1,7 +1,7 @@
 """
 Version: 1.1.0
 Date: 2026-08-06
-Author: NetCheck Contributors
+Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Run multi-VLAN diagnostics through one administrator authorization.
 """
 

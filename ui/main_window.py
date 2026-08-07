@@ -1,8 +1,8 @@
 """
 Version: 1.1.0
 Date: 2026-08-06
-Author: NetCheck Contributors
-Changelog: Rebuild navigation immediately after a language setting change.
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Add branded author information through the native Help menu.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ from PySide6.QtWidgets import QMainWindow, QTabWidget
 
 from core.i18n import tr
 from core.metadata import APP_NAME, APP_VERSION
+from ui.about_dialog import AboutDialog
 from ui.dashboard_tab import DashboardTab
 from ui.discovery_tab import DiscoveryTab
 from ui.ports_tab import PortsTab
@@ -28,7 +29,13 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"{APP_NAME} {APP_VERSION}")
         self.setMinimumSize(900, 600)
         self.resize(1180, 760)
+        help_menu = self.menuBar().addMenu(tr("Help"))
+        about_action = help_menu.addAction(tr("About NetCheck"))
+        about_action.triggered.connect(self._show_about)
         self._build_tabs()
+
+    def _show_about(self) -> None:
+        AboutDialog(self).exec()
 
     def _build_tabs(self) -> None:
         """Create all translated tabs from the current language."""

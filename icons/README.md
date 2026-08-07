@@ -1,10 +1,13 @@
 <!--
-Version: 0.1.0
-Date: 2026-08-06
-Author: NetCheck Contributors
-Changelog: Document icon asset requirements.
+Version: 1.1.0
+Date: 2026-08-07
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Document application icon and official DITIS brand assets.
 -->
 
 # Icons
 
-Application icons stored here must support high-DPI rendering and both macOS themes.
+`netcheck-1024.png` is the transparent high-resolution macOS application icon.
+`ditis-logo.svg` is the official DITIS Group logo sourced from
+<https://ditis.group/wp-content/themes/dts/img/logo-it.svg> and displayed without
+altering its geometry or proportions.

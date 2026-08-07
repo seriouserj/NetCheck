@@ -1,7 +1,7 @@
 """
 Version: 1.1.0
 Date: 2026-08-06
-Author: NetCheck Contributors
+Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Verify virtual Thunderbolt bridges are not Ethernet adapters.
 """
 

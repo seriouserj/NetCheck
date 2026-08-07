@@ -1,7 +1,7 @@
 """
 Version: 0.11.0
 Date: 2026-08-06
-Author: NetCheck Contributors
+Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Add bounded read-only SNMP v2c GET and WALK operations.
 """
 

@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.0.0
+# Version: 1.1.0
 # Date: 2026-08-07
-# Author: NetCheck Contributors
-# Changelog: Add deterministic PyInstaller macOS application bundle configuration.
+# Author: Serhii Dralo <dralo@ditis.group>
+# Changelog: Package official branding and v1.1.0 author metadata.
 
 from pathlib import Path
 
@@ -11,12 +11,16 @@ from PyInstaller.utils.hooks import collect_data_files
 
 project_root = Path(SPECPATH)
 manuf_data = collect_data_files("manuf")
+brand_data = [
+    (str(project_root / "icons" / "ditis-logo.svg"), "icons"),
+    (str(project_root / "icons" / "netcheck-1024.png"), "icons"),
+]
 
 analysis = Analysis(
     [str(project_root / "main.py")],
     pathex=[str(project_root)],
     binaries=[],
-    datas=manuf_data,
+    datas=[*manuf_data, *brand_data],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -59,11 +63,13 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.0.0",
+    version="1.1.0",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.0.0",
-        "CFBundleVersion": "1",
+        "CFBundleShortVersionString": "1.1.0",
+        "CFBundleVersion": "2",
+        "CFBundleGetInfoString": "NetCheck 1.1.0 — Serhii Dralo <dralo@ditis.group>",
+        "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,
         "NSLocalNetworkUsageDescription": "NetCheck scans local networks selected by the user for diagnostics.",
