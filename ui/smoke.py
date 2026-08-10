@@ -1,8 +1,8 @@
 """
-Version: 1.6.2
+Version: 1.6.3
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate click-to-copy behavior in result tables.
+Changelog: Validate click-to-copy and centered form alignment.
 """
 
 from __future__ import annotations

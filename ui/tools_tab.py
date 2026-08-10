@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
+Version: 1.6.3
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add the multi-target continuous Ping panel.
+Changelog: Center compact tool forms within their available content areas.
 """
 
 from __future__ import annotations

@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.6.3
 Date: 2026-08-06
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize reusable profile management controls.
+Changelog: Center the complete reusable profile form block.
 """
 
 from __future__ import annotations

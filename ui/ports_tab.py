@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.6.3
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Expand scanner fields and align actions with the DITIS button system.
+Changelog: Center port scanner form labels while preserving wide inputs.
 """
 
 from __future__ import annotations

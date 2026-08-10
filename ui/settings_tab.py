@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
+Version: 1.6.3
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Distribute settings navigation evenly and keep form fields compact.
+Changelog: Center the compact general settings form vertically and horizontally.
 """
 
 from __future__ import annotations

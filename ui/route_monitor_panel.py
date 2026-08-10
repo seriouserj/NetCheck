@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
+Version: 1.6.3
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Present live MTR-style route loss and latency statistics.
+Changelog: Center route monitor labels while preserving wide target input.
 """
 
 from __future__ import annotations

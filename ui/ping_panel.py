@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
+Version: 1.6.3
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add multi-target, payload-size, and continuous Ping controls.
+Changelog: Center Ping form labels while preserving wide target input.
 """
 
 from __future__ import annotations

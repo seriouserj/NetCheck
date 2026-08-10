@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
+Version: 1.6.3
 Date: 2026-08-07
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Show live VLAN progress and refresh newly connected interfaces.
+Changelog: Center VLAN form labels relative to fixed-height controls.
 """
 
 from __future__ import annotations

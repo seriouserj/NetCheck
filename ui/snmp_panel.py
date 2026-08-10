@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
+Version: 1.6.3
 Date: 2026-08-06
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize SNMP input controls and result headings.
+Changelog: Center SNMP form labels relative to fixed-height inputs.
 """
 
 from __future__ import annotations
