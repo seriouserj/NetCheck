@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize TCP scanner controls, headings, and states.
+Changelog: Expand scanner fields and align actions with the DITIS button system.
 """
 
 from __future__ import annotations
@@ -17,7 +17,6 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -28,6 +27,7 @@ from core.port_models import PortScanResult, PortState
 from core.port_parser import parse_ports
 from core.port_scanner import PortScanner
 from ui.async_task import BackgroundTask
+from ui.hover_table import HoverRowTableWidget
 
 
 class PortsTab(QWidget):
@@ -42,9 +42,12 @@ class PortsTab(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
         form = QFormLayout()
+        form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
         self._target = QLineEdit()
+        self._target.setMinimumWidth(640)
         self._target.setPlaceholderText("hostname or IP address")
         self._ports = QLineEdit("22, 53, 80, 443")
+        self._ports.setMinimumWidth(640)
         self._ports.setPlaceholderText("22, 80, 443, 8000-8100")
         form.addRow(tr("Target"), self._target)
         form.addRow(tr("TCP ports"), self._ports)
@@ -52,11 +55,12 @@ class PortsTab(QWidget):
         self._status = QLabel(tr("Ready"))
         self._status.setObjectName("mutedLabel")
         self._start = QPushButton(tr("Scan ports"))
+        self._start.setProperty("primary", True)
         self._start.clicked.connect(self._start_scan)
         controls.addWidget(self._status)
         controls.addStretch()
         controls.addWidget(self._start)
-        self._table = QTableWidget(0, 4)
+        self._table = HoverRowTableWidget(0, 4)
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in ("Port", "State", "Service", "Latency")))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
