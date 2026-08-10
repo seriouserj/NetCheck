@@ -1,8 +1,8 @@
 """
-Version: 1.3.1
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Apply the compact segmented style to settings navigation.
+Changelog: Distribute settings navigation evenly and keep form fields compact.
 """
 
 from __future__ import annotations
@@ -43,6 +43,7 @@ class SettingsTab(QWidget):
         tabs = QTabWidget()
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
+        tabs.tabBar().setExpanding(True)
         tabs.setDocumentMode(True)
         general = QWidget()
         layout = QVBoxLayout(general)

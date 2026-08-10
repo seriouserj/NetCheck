@@ -46,10 +46,12 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#brandProduct {{ color: white; font-size: 20px; font-weight: 700; }}
         QLabel#brandAuthor {{ color: #b8e8fa; font-size: 12px; }}
         QTabWidget#mainTabs, QTabWidget#mainTabs::pane, QTabBar#mainTabBar, QTabBar#mainTabBar::base {{ background: palette(window); border: 0; }}
+        QTabWidget#mainTabs::tab-bar {{ alignment: center; }}
         QTabBar#mainTabBar::tab {{ color: palette(text); background: palette(button); padding: 10px 18px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 132px; min-height: 30px; font-size: 16px; font-weight: 600; }}
         QTabBar#mainTabBar::tab:selected {{ color: white; background: {navy}; }}
         QTabBar#mainTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
         QTabWidget#innerTabs, QTabBar#innerTabBar, QTabBar#innerTabBar::base {{ background: palette(window); }}
+        QTabWidget#innerTabs::tab-bar {{ alignment: center; }}
         QTabWidget#innerTabs::pane {{ background: palette(window); border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
         QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 9px 14px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 142px; min-height: 28px; font-size: 14px; font-weight: 600; }}
         QTabBar#innerTabBar::tab:selected {{ color: white; background: {navy}; border-color: {navy}; }}

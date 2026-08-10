@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Stabilize branded tabs and simplify the macOS window title.
+Changelog: Distribute the primary navigation evenly across the available width.
 """
 
 from __future__ import annotations
@@ -44,6 +44,7 @@ class MainWindow(QMainWindow):
         tabs.setDocumentMode(True)
         tabs.setObjectName("mainTabs")
         tabs.tabBar().setObjectName("mainTabBar")
+        tabs.tabBar().setExpanding(True)
         tabs.addTab(DashboardTab(), tr("Dashboard"))
         tabs.addTab(VlanTab(), "VLAN")
         tabs.addTab(DiscoveryTab(), tr("Discovery"))

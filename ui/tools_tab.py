@@ -171,6 +171,7 @@ class ToolsTab(QWidget):
         tabs = QTabWidget()
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
+        tabs.tabBar().setExpanding(True)
         tabs.setDocumentMode(True)
         tabs.addTab(PingPanel(), "Ping")
         tabs.addTab(
