@@ -91,10 +91,15 @@ class HoverRowTableWidget(QTableWidget):
 
     def _show_copy_menu(self, position: QPoint) -> None:
         menu = QMenu(self)
+        cell = self.itemAt(position)
+        copy_cell = menu.addAction(tr("Copy cell"))
+        copy_cell.setEnabled(cell is not None)
         copy_selection = menu.addAction(tr("Copy selection"))
         copy_all = menu.addAction(tr("Copy entire table"))
         chosen = menu.exec(self.viewport().mapToGlobal(position))
-        if chosen is copy_selection:
+        if chosen is copy_cell and cell is not None:
+            QApplication.clipboard().setText(cell.text())
+        elif chosen is copy_selection:
             self.copy_selected_cells()
         elif chosen is copy_all:
             self.copy_all()
