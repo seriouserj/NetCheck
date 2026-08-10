@@ -1,8 +1,8 @@
 """
-Version: 1.4.0
+Version: 1.5.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the tubbeTEC-branded NetCheck 1.4.0 desktop application.
+Changelog: Start NetCheck 1.5.0 with streaming tools and unified neighbor capture.
 """
 
 from __future__ import annotations

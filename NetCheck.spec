@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.4.0
+# Version: 1.5.0
 # Date: 2026-08-10
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the tubbeTEC-branded NetCheck v1.4.0 application.
+# Changelog: Package the NetCheck v1.5.0 usability and diagnostics release.
 
 from pathlib import Path
 
@@ -64,12 +64,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.4.0",
+    version="1.5.0",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.4.0",
-        "CFBundleVersion": "6",
-        "CFBundleGetInfoString": "NetCheck 1.4.0 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.5.0",
+        "CFBundleVersion": "7",
+        "CFBundleGetInfoString": "NetCheck 1.5.0 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,
