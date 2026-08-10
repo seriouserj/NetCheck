@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.3.1
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize daily network tool controls and navigation.
+Changelog: Refine inner navigation and center compact tool actions.
 """
 
 from __future__ import annotations
@@ -42,13 +42,22 @@ class CommandPanel(QWidget):
         self._task: BackgroundTask | None = None
         layout = QVBoxLayout(self)
         controls = QHBoxLayout()
-        controls.addWidget(QLabel(label))
         self.input = QLineEdit()
         self.input.setPlaceholderText(placeholder)
         self.button = QPushButton(tr("Run"))
+        self.button.setProperty("primary", True)
+        self.button.setMinimumWidth(120)
+        self.button.setMaximumWidth(180)
         self.button.clicked.connect(self.run)
-        controls.addWidget(self.input, 1)
-        controls.addWidget(self.button)
+        if label:
+            controls.addWidget(QLabel(label))
+            controls.addWidget(self.input, 1)
+            controls.addWidget(self.button)
+        else:
+            self.input.setVisible(False)
+            controls.addStretch()
+            controls.addWidget(self.button)
+            controls.addStretch()
         self.output = QPlainTextEdit()
         self.output.setReadOnly(True)
         layout.addLayout(controls)
@@ -85,7 +94,6 @@ class DnsPanel(QWidget):
         form.addRow(tr("Record type"), self.kind)
         form.addRow(tr("DNS server"), self.server)
         self.command = CommandPanel("", "", lambda _: dns_lookup(self.name.text(), self.kind.currentText(), self.server.text()))
-        self.command.input.setVisible(False)
         layout.addLayout(form)
         layout.addWidget(self.command)
 
@@ -100,10 +108,17 @@ class WolPanel(QWidget):
         self.broadcast = QLineEdit("255.255.255.255")
         self.status = QLabel(tr("Ready"))
         button = QPushButton(tr("Send magic packet"))
+        button.setProperty("primary", True)
+        button.setMinimumWidth(160)
+        button.setMaximumWidth(220)
         button.clicked.connect(self._send)
+        button_row = QHBoxLayout()
+        button_row.addStretch()
+        button_row.addWidget(button)
+        button_row.addStretch()
         layout.addRow(tr("MAC address"), self.mac)
         layout.addRow(tr("Broadcast"), self.broadcast)
-        layout.addRow(button)
+        layout.addRow(button_row)
         layout.addRow(self.status)
 
     def _send(self) -> None:
@@ -121,6 +136,9 @@ class ToolsTab(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
         tabs = QTabWidget()
+        tabs.setObjectName("innerTabs")
+        tabs.tabBar().setObjectName("innerTabBar")
+        tabs.setDocumentMode(True)
         tabs.addTab(CommandPanel(tr("Target"), tr("hostname or IP address"), ping), "Ping")
         tabs.addTab(CommandPanel(tr("Target"), tr("hostname or IP address"), traceroute), tr("Traceroute"))
         tabs.addTab(DnsPanel(), tr("DNS Lookup"))

@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.3.1
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Size and center the save action like a compact Bootstrap button.
+Changelog: Apply the compact segmented style to settings navigation.
 """
 
 from __future__ import annotations
@@ -41,6 +41,9 @@ class SettingsTab(QWidget):
         root_layout = QVBoxLayout(self)
         root_layout.setContentsMargins(24, 24, 24, 24)
         tabs = QTabWidget()
+        tabs.setObjectName("innerTabs")
+        tabs.tabBar().setObjectName("innerTabBar")
+        tabs.setDocumentMode(True)
         general = QWidget()
         layout = QVBoxLayout(general)
         layout.setContentsMargins(24, 24, 24, 24)
