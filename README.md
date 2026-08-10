@@ -1,8 +1,8 @@
 <!--
-Version: 1.6.0
+Version: 1.6.1
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document multi-target Ping, route monitoring, and report export in v1.6.0.
+Changelog: Document the resilient NetCheck v1.6.1 maintenance release.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.6.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.6.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.6.1-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.6.1-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,7 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.6 highlights
+## Version 1.6.1 highlights
 
 - Concurrent Ping of up to 16 hosts with configurable payload sizes up to 65,507 bytes
 - Four-request finite Ping mode and cancellable continuous 100-request statistics batches
