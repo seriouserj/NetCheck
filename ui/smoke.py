@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.4.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate branded window composition and translated navigation.
+Changelog: Validate the tubbeTEC-branded window and translated navigation.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ def run_smoke_test(application: QApplication) -> int:
     if tabs is None:
         raise RuntimeError("MainWindow must contain a QTabWidget.")
     if window.findChild(BrandHeader) is None:
-        raise RuntimeError("MainWindow must contain the DITIS brand header.")
+        raise RuntimeError("MainWindow must contain the tubbeTEC brand header.")
     actual_tabs = tuple(tabs.tabText(index) for index in range(tabs.count()))
     expected_tabs = tuple(tr(item) if item != "VLAN" else item for item in EXPECTED_TABS)
     if actual_tabs != expected_tabs:

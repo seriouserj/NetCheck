@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.4.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Keep the dark brand header clean by omitting the release number.
+Changelog: Apply tubbeTEC branding and a single author credit in the header.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel
 
-from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
+from core.metadata import APP_NAME, AUTHOR_NAME
 from core.resources import resource_path
 
 
@@ -29,13 +29,13 @@ class BrandHeader(QFrame):
         logo = QLabel()
         logo.setObjectName("brandLogo")
         logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        logo.setFixedSize(250, 52)
-        pixmap = QPixmap(str(resource_path("icons/ditis-logo.png")))
+        logo.setFixedSize(190, 52)
+        pixmap = QPixmap(str(resource_path("icons/tubbetec-logo.png")))
         if not pixmap.isNull():
             logo.setPixmap(
                 pixmap.scaled(
-                    220,
-                    42,
+                    160,
+                    50,
                     Qt.AspectRatioMode.KeepAspectRatio,
                     Qt.TransformationMode.SmoothTransformation,
                 )
@@ -43,12 +43,7 @@ class BrandHeader(QFrame):
         layout.addWidget(logo)
 
         layout.addStretch()
-        product = QLabel(APP_NAME)
+        product = QLabel(f"{APP_NAME} Tool by {AUTHOR_NAME}")
         product.setObjectName("brandProduct")
         product.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         layout.addWidget(product)
-
-        author = QLabel(f"{AUTHOR_NAME}\n{AUTHOR_EMAIL}")
-        author.setObjectName("brandAuthor")
-        author.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        layout.addWidget(author)
