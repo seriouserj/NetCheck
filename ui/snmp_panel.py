@@ -10,7 +10,6 @@ from __future__ import annotations
 from PySide6.QtCore import QThreadPool
 from PySide6.QtWidgets import (
     QAbstractItemView,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -23,6 +22,7 @@ from PySide6.QtWidgets import (
 from core.i18n import tr
 from core.snmp_service import SnmpService, SnmpValue
 from ui.async_task import BackgroundTask
+from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
 
 
@@ -34,7 +34,7 @@ class SnmpPanel(QWidget):
         self._service = SnmpService()
         self._task: BackgroundTask | None = None
         layout = QVBoxLayout(self)
-        form = QFormLayout()
+        form = centered_form()
         self._target = QLineEdit()
         self._community = QLineEdit()
         self._community.setEchoMode(QLineEdit.EchoMode.Password)

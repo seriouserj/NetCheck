@@ -15,7 +15,6 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QComboBox,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -34,6 +33,7 @@ from core.vlan_parser import parse_vlan_ids
 from core.vlan_service import VlanService
 from ui.async_task import BackgroundTask
 from ui.diagnostics_widget import DiagnosticsWidget
+from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
 
 
@@ -55,7 +55,7 @@ class VlanTab(QWidget):
         self._row_for_vlan: dict[int, int] = {}
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
-        form = QFormLayout()
+        form = centered_form()
         self._parent = QComboBox()
         self._refresh_interfaces()
         self._interface_refresh = QPushButton(tr("Refresh"))

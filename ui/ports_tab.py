@@ -11,7 +11,6 @@ from PySide6.QtCore import QThreadPool
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QAbstractItemView,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -27,6 +26,7 @@ from core.port_models import PortScanResult, PortState
 from core.port_parser import parse_ports
 from core.port_scanner import PortScanner
 from ui.async_task import BackgroundTask
+from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
 
 
@@ -41,8 +41,7 @@ class PortsTab(QWidget):
         self._task: BackgroundTask | None = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
-        form = QFormLayout()
-        form.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
+        form = centered_form()
         self._target = QLineEdit()
         self._target.setMinimumWidth(640)
         self._target.setPlaceholderText("hostname or IP address")

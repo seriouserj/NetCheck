@@ -7,12 +7,13 @@ Changelog: Validate click-to-copy behavior in result tables.
 
 from __future__ import annotations
 
-from PySide6.QtCore import QThreadPool
+from PySide6.QtCore import Qt, QThreadPool
 from PySide6.QtWidgets import QApplication, QTableWidgetItem, QTabWidget
 
 from core.application import configure_application
 from core.i18n import tr
 from ui.brand_header import BrandHeader
+from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
 from ui.main_window import MainWindow
 
@@ -38,6 +39,11 @@ def run_smoke_test(application: QApplication) -> int:
     if application.clipboard().text() != "192.0.2.1":
         raise RuntimeError("Clicking a result cell must copy its exact value.")
     copy_table.close()
+    form = centered_form()
+    if not form.formAlignment() & Qt.AlignmentFlag.AlignVCenter:
+        raise RuntimeError("Diagnostic forms must be vertically centered.")
+    if not form.labelAlignment() & Qt.AlignmentFlag.AlignVCenter:
+        raise RuntimeError("Form labels must be centered beside their fields.")
     QThreadPool.globalInstance().waitForDone(15_000)
     application.processEvents()
     window.close()

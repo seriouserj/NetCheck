@@ -13,7 +13,6 @@ from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
     QDoubleSpinBox,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -26,6 +25,7 @@ from PySide6.QtWidgets import (
 from core.i18n import AppLanguage, set_language, tr
 from core.settings_models import AppSettings, ThemePreference
 from core.settings_store import SettingsStore
+from ui.form_layout import centered_form
 from ui.profiles_panel import ProfilesPanel
 from ui.theme import apply_theme
 
@@ -48,7 +48,7 @@ class SettingsTab(QWidget):
         general = QWidget()
         layout = QVBoxLayout(general)
         layout.setContentsMargins(24, 24, 24, 24)
-        form = QFormLayout()
+        form = centered_form()
         self._timeout = QDoubleSpinBox()
         self._timeout.setRange(0.1, 120.0)
         self._timeout.setDecimals(1)
@@ -85,6 +85,7 @@ class SettingsTab(QWidget):
         save_row.addStretch()
         save_row.addWidget(save)
         save_row.addStretch()
+        layout.addStretch()
         layout.addLayout(form)
         layout.addLayout(save_row)
         layout.addWidget(self._status)

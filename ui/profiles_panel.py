@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from PySide6.QtWidgets import (
     QComboBox,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -22,6 +21,7 @@ from PySide6.QtWidgets import (
 from core.i18n import tr
 from profiles.models import NetworkProfile
 from profiles.repository import ProfileRepository
+from ui.form_layout import centered_form
 
 
 class ProfilesPanel(QWidget):
@@ -36,7 +36,7 @@ class ProfilesPanel(QWidget):
         self._profiles = QComboBox()
         self._profiles.currentIndexChanged.connect(self._select)
         selector.addWidget(self._profiles, 1)
-        form = QFormLayout()
+        form = centered_form()
         self._name = QLineEdit()
         self._vlans = QLineEdit()
         self._vlans.setPlaceholderText("20, 30-35, 100")
@@ -60,6 +60,7 @@ class ProfilesPanel(QWidget):
         buttons.addWidget(save_button)
         self._status = QLabel("")
         self._status.setObjectName("mutedLabel")
+        layout.addStretch()
         layout.addLayout(selector)
         layout.addLayout(form)
         layout.addLayout(buttons)

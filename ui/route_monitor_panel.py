@@ -16,7 +16,6 @@ from PySide6.QtWidgets import (
     QAbstractItemView,
     QCheckBox,
     QDoubleSpinBox,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -29,6 +28,7 @@ from PySide6.QtWidgets import (
 
 from core.i18n import tr
 from core.route_monitor import RouteHopStats, monitor_route
+from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
 from ui.sortable_items import NumericItem
 
@@ -65,7 +65,7 @@ class RouteMonitorPanel(QWidget):
         self._task: _MonitorTask | None = None
         self._stop_event: Event | None = None
         layout = QVBoxLayout(self)
-        form = QFormLayout()
+        form = centered_form(grow_fields=True)
         self._target = QLineEdit()
         self._target.setPlaceholderText(tr("hostname or IP address"))
         self._cycles = QSpinBox()

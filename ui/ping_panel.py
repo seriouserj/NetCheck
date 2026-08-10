@@ -12,7 +12,6 @@ from threading import Event
 from PySide6.QtCore import QThreadPool
 from PySide6.QtWidgets import (
     QCheckBox,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -25,6 +24,7 @@ from PySide6.QtWidgets import (
 
 from core.i18n import tr
 from core.multi_ping import parse_ping_targets, run_multi_ping
+from ui.form_layout import centered_form
 from ui.streaming_task import StreamingTask
 
 
@@ -36,7 +36,7 @@ class PingPanel(QWidget):
         self._task: StreamingTask | None = None
         self._stop_event: Event | None = None
         layout = QVBoxLayout(self)
-        form = QFormLayout()
+        form = centered_form(grow_fields=True)
         self._targets = QLineEdit()
         self._targets.setPlaceholderText(tr("hostnames or IP addresses, separated by commas"))
         self._packet_size = QSpinBox()

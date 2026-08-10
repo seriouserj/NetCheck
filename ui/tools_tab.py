@@ -9,10 +9,9 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from PySide6.QtCore import QThreadPool
+from PySide6.QtCore import Qt, QThreadPool
 from PySide6.QtWidgets import (
     QComboBox,
-    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -28,6 +27,7 @@ from core.i18n import tr
 from core.traceroute_tool import traceroute
 from core.wake_on_lan import send_magic_packet
 from ui.async_task import BackgroundTask
+from ui.form_layout import centered_form
 from ui.neighbors_panel import NeighborsPanel
 from ui.ping_panel import PingPanel
 from ui.route_monitor_panel import RouteMonitorPanel
@@ -117,7 +117,7 @@ class DnsPanel(QWidget):
     def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout(self)
-        form = QFormLayout()
+        form = centered_form()
         self.name = QLineEdit()
         self.kind = QComboBox()
         self.kind.addItems(RECORD_TYPES)
@@ -136,10 +136,12 @@ class WolPanel(QWidget):
 
     def __init__(self) -> None:
         super().__init__()
-        layout = QFormLayout(self)
+        layout = QVBoxLayout(self)
+        form = centered_form()
         self.mac = QLineEdit()
         self.broadcast = QLineEdit("255.255.255.255")
         self.status = QLabel(tr("Ready"))
+        self.status.setAlignment(Qt.AlignmentFlag.AlignCenter)
         button = QPushButton(tr("Send magic packet"))
         button.setProperty("primary", True)
         button.setMinimumWidth(160)
@@ -149,10 +151,13 @@ class WolPanel(QWidget):
         button_row.addStretch()
         button_row.addWidget(button)
         button_row.addStretch()
-        layout.addRow(tr("MAC address"), self.mac)
-        layout.addRow(tr("Broadcast"), self.broadcast)
-        layout.addRow(button_row)
-        layout.addRow(self.status)
+        form.addRow(tr("MAC address"), self.mac)
+        form.addRow(tr("Broadcast"), self.broadcast)
+        layout.addStretch()
+        layout.addLayout(form)
+        layout.addLayout(button_row)
+        layout.addWidget(self.status)
+        layout.addStretch()
 
     def _send(self) -> None:
         try:
