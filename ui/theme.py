@@ -1,8 +1,8 @@
 """
-Version: 1.3.1
+Version: 1.5.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add a balanced segmented style for inner navigation panels.
+Changelog: Add spacious fields, Bootstrap-like tabs, and collapsed square tables.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#pageSubtitle {{ color: {muted}; font-size: 16px; }}
         QLabel#sectionTitle {{ font-size: 24px; font-weight: 650; }}
         QLabel#mutedLabel {{ color: {muted}; }}
-        QPushButton {{ color: {navy}; padding: 7px 16px; min-height: 24px; border: 1px solid {navy}; border-radius: 6px; background: palette(button); }}
+        QPushButton {{ color: {navy}; padding: 7px 16px; min-height: 26px; border: 1px solid {navy}; border-radius: 5px; background: palette(button); }}
         QPushButton:hover {{ color: white; background: {navy}; border-color: {navy}; }}
         QPushButton[primary="true"] {{ color: white; background: {accent}; border-color: {accent}; font-weight: 650; }}
         QPushButton[primary="true"]:hover {{ color: white; background: {navy}; border-color: {navy}; }}
@@ -45,14 +45,19 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#brandLogo {{ background: white; border-radius: 7px; }}
         QLabel#brandProduct {{ color: white; font-size: 20px; font-weight: 700; }}
         QLabel#brandAuthor {{ color: #b8e8fa; font-size: 12px; }}
-        QTabBar#mainTabBar::tab {{ color: palette(text); background: palette(button); padding: 8px 18px; margin: 0; border: 0; border-right: 1px solid #8a949e; font-weight: 600; }}
+        QTabBar#mainTabBar::tab {{ color: palette(text); background: palette(button); padding: 10px 20px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-height: 28px; font-size: 15px; font-weight: 600; }}
         QTabBar#mainTabBar::tab:selected {{ color: white; background: {navy}; }}
         QTabBar#mainTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
-        QTabWidget#innerTabs::pane {{ border: 1px solid #8a949e; border-radius: 7px; top: -1px; }}
-        QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 8px 15px; margin: 0 1px 0 0; border: 1px solid #8a949e; border-bottom: 0; min-height: 22px; font-weight: 600; }}
+        QTabWidget#innerTabs::pane {{ border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
+        QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 9px 16px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-height: 24px; font-weight: 600; }}
         QTabBar#innerTabBar::tab:selected {{ color: white; background: {navy}; border-color: {navy}; }}
         QTabBar#innerTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
-        QTableWidget {{ border: 1px solid #707b86; border-radius: 6px; gridline-color: #a7b0b9; selection-background-color: {navy}; selection-color: white; }}
+        QLineEdit {{ min-height: 36px; padding: 0 10px; }}
+        QComboBox {{ min-height: 36px; padding: 0 32px 0 10px; }}
+        QSpinBox, QDoubleSpinBox {{ min-height: 36px; padding-left: 10px; }}
+        QPlainTextEdit {{ padding: 8px; }}
+        QTableWidget {{ border: 1px solid #707b86; border-radius: 0; gridline-color: #8b96a1; selection-background-color: {navy}; selection-color: white; }}
+        QTableWidget::item {{ border: 0; padding: 5px 8px; }}
         QTableWidget::item:hover {{ background: #d9f3fc; color: {navy}; }}
         QHeaderView::section {{ font-weight: 600; padding: 7px; border: 0; border-right: 1px solid #8b96a1; border-bottom: 1px solid #707b86; }}
         QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus {{ border: 1px solid {accent}; }}
