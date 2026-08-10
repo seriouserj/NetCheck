@@ -1,12 +1,12 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish product metadata for the live VLAN diagnostics release.
+Changelog: Publish NetCheck 1.3.0 product metadata.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.3.0"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

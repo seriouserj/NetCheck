@@ -1,8 +1,8 @@
 <!--
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document v1.1 localization, VLAN authorization, and DITIS branding.
+Changelog: Document the refined interface and enhanced host discovery in v1.3.0.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.2.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.2.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.3.0-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.3.0-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,7 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.1 highlights
+## Version 1.3 highlights
 
 - One macOS administrator authorization for an entire VLAN list or range
 - English, German, Russian, and Ukrainian interface languages
@@ -37,6 +37,10 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 - Persistent DITIS branding and clearly styled primary actions
 - Correct diagnostics that ignore unused disconnected and virtual bridge interfaces
 - DITIS Group branding, transparent application icon, and author information
+- Stable navy/cyan navigation, compact actions, and full-row table highlighting
+- Automatic discovery subnet selection from the active Ethernet adapter
+- Numeric IP sorting with reverse-DNS, mDNS cache, and NetBIOS name discovery
+- NetBIOS information in discovery results and wider port scanner inputs
 
 NetCheck is authored by [Serhii Dralo](mailto:dralo@ditis.group).
 

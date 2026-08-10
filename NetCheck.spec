@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.2.0
-# Date: 2026-08-07
+# Version: 1.3.0
+# Date: 2026-08-10
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package branded NetCheck v1.2.0 with live VLAN diagnostics.
+# Changelog: Package the refined NetCheck v1.3.0 interface and discovery tools.
 
 from pathlib import Path
 
@@ -64,12 +64,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.2.0",
+    version="1.3.0",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.2.0",
-        "CFBundleVersion": "3",
-        "CFBundleGetInfoString": "NetCheck 1.2.0 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.3.0",
+        "CFBundleVersion": "4",
+        "CFBundleGetInfoString": "NetCheck 1.3.0 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

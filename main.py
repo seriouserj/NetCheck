@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add a GUI-independent privileged worker for passive VLAN discovery.
+Changelog: Start the NetCheck 1.3.0 desktop application.
 """
 
 from __future__ import annotations
