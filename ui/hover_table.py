@@ -1,15 +1,23 @@
 """
-Version: 1.6.0
+Version: 1.6.2
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add keyboard and context-menu copying for every diagnostic table.
+Changelog: Copy an individual result value immediately when its cell is clicked.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import QEvent, QModelIndex, QPoint, Qt
-from PySide6.QtGui import QKeyEvent, QKeySequence, QMouseEvent
-from PySide6.QtWidgets import QApplication, QMenu, QStyle, QStyledItemDelegate, QStyleOptionViewItem, QTableWidget
+from PySide6.QtGui import QCursor, QKeyEvent, QKeySequence, QMouseEvent
+from PySide6.QtWidgets import (
+    QApplication,
+    QMenu,
+    QStyle,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QTableWidget,
+    QToolTip,
+)
 
 from core.i18n import tr
 
@@ -35,6 +43,7 @@ class HoverRowTableWidget(QTableWidget):
         self.setItemDelegate(_HoverRowDelegate(self))
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_copy_menu)
+        self.cellClicked.connect(self._copy_clicked_cell)
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         row = self.indexAt(event.position().toPoint()).row()
@@ -75,6 +84,14 @@ class HoverRowTableWidget(QTableWidget):
     def copy_all(self) -> None:
         """Copy column headings and the entire table as TSV."""
         QApplication.clipboard().setText(self.as_tsv())
+
+    def _copy_clicked_cell(self, row: int, column: int) -> None:
+        """Copy one clicked value and show brief, non-blocking feedback."""
+        item = self.item(row, column)
+        if item is None or not item.text():
+            return
+        QApplication.clipboard().setText(item.text())
+        QToolTip.showText(QCursor.pos(), tr("Copied: {value}", value=item.text()), self)
 
     def as_tsv(self) -> str:
         """Serialize visible table data to tab-separated text."""
