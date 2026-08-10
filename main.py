@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.3.1
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.3.0 desktop application.
+Changelog: Start the NetCheck 1.3.1 desktop application.
 """
 
 from __future__ import annotations

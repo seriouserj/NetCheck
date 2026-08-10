@@ -1,8 +1,8 @@
 <!--
-Version: 1.3.0
+Version: 1.3.1
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the refined interface and enhanced host discovery in v1.3.0.
+Changelog: Document the compact inner navigation and actions in v1.3.1.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.3.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.3.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.3.1-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.3.1-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,7 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.3 highlights
+## Version 1.3.1 highlights
 
 - One macOS administrator authorization for an entire VLAN list or range
 - English, German, Russian, and Ukrainian interface languages
@@ -41,6 +41,8 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 - Automatic discovery subnet selection from the active Ethernet adapter
 - Numeric IP sorting with reverse-DNS, mDNS cache, and NetBIOS name discovery
 - NetBIOS information in discovery results and wider port scanner inputs
+- Compact segmented navigation in Tools and Settings
+- Centered, consistently sized DNS and Wake-on-LAN actions
 
 NetCheck is authored by [Serhii Dralo](mailto:dralo@ditis.group).
 
