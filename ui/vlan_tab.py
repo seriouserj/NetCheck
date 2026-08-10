@@ -13,6 +13,7 @@ import psutil
 from PySide6.QtCore import QThreadPool, QTimer, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QComboBox,
     QFormLayout,
     QHBoxLayout,
@@ -20,7 +21,6 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -34,6 +34,7 @@ from core.vlan_parser import parse_vlan_ids
 from core.vlan_service import VlanService
 from ui.async_task import BackgroundTask
 from ui.diagnostics_widget import DiagnosticsWidget
+from ui.hover_table import HoverRowTableWidget
 
 
 class VlanTab(QWidget):
@@ -78,9 +79,9 @@ class VlanTab(QWidget):
         controls.addStretch()
         controls.addWidget(self._discover)
         controls.addWidget(self._start)
-        self._table = QTableWidget(0, len(self.HEADERS))
+        self._table = HoverRowTableWidget(0, len(self.HEADERS))
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in self.HEADERS))
-        self._table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.setAlternatingRowColors(True)
         self._table.verticalHeader().setVisible(False)
         self._table.horizontalHeader().setStretchLastSection(True)

@@ -13,7 +13,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -25,6 +24,7 @@ from core.interface_models import InterfaceDiagnostics
 from core.interface_service import InterfaceService
 from ui.async_task import BackgroundTask
 from ui.diagnostics_widget import DiagnosticsWidget
+from ui.hover_table import HoverRowTableWidget
 
 
 class DashboardTab(QWidget):
@@ -58,7 +58,7 @@ class DashboardTab(QWidget):
         header.addWidget(self._status)
         header.addWidget(self._refresh)
 
-        self._table = QTableWidget(0, len(self.HEADERS))
+        self._table = HoverRowTableWidget(0, len(self.HEADERS))
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in self.HEADERS))
         self._table.setAlternatingRowColors(True)
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)

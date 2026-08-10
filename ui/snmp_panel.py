@@ -15,7 +15,6 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -24,6 +23,7 @@ from PySide6.QtWidgets import (
 from core.i18n import tr
 from core.snmp_service import SnmpService, SnmpValue
 from ui.async_task import BackgroundTask
+from ui.hover_table import HoverRowTableWidget
 
 
 class SnmpPanel(QWidget):
@@ -53,7 +53,7 @@ class SnmpPanel(QWidget):
         buttons.addStretch()
         buttons.addWidget(self._get)
         buttons.addWidget(self._walk)
-        self._table = QTableWidget(0, 2)
+        self._table = HoverRowTableWidget(0, 2)
         self._table.setHorizontalHeaderLabels(("OID", tr("Value")))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.horizontalHeader().setStretchLastSection(True)

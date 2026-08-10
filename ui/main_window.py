@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Keep DITIS logo and author visible above every application tab.
+Changelog: Stabilize branded tabs and simplify the macOS window title.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow, QTabWidget, QVBoxLayout, QWidget
 
 from core.i18n import tr
-from core.metadata import APP_NAME, APP_VERSION
+from core.metadata import APP_NAME
 from ui.about_dialog import AboutDialog
 from ui.brand_header import BrandHeader
 from ui.dashboard_tab import DashboardTab
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle(f"{APP_NAME} {APP_VERSION}")
+        self.setWindowTitle(APP_NAME)
         self.setMinimumSize(900, 600)
         self.resize(1180, 760)
         help_menu = self.menuBar().addMenu(tr("Help"))
@@ -42,6 +42,8 @@ class MainWindow(QMainWindow):
         """Create all translated tabs from the current language."""
         tabs = QTabWidget()
         tabs.setDocumentMode(True)
+        tabs.setObjectName("mainTabs")
+        tabs.tabBar().setObjectName("mainTabBar")
         tabs.addTab(DashboardTab(), tr("Dashboard"))
         tabs.addTab(VlanTab(), "VLAN")
         tabs.addTab(DiscoveryTab(), tr("Discovery"))

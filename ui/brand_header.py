@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add persistent DITIS logo and author identity to the main window.
+Changelog: Keep the dark brand header clean by omitting the release number.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel
 
-from core.metadata import APP_NAME, APP_VERSION, AUTHOR_EMAIL, AUTHOR_NAME
+from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
 from core.resources import resource_path
 
 
@@ -43,7 +43,7 @@ class BrandHeader(QFrame):
         layout.addWidget(logo)
 
         layout.addStretch()
-        product = QLabel(f"{APP_NAME} {APP_VERSION}")
+        product = QLabel(APP_NAME)
         product.setObjectName("brandProduct")
         product.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         layout.addWidget(product)

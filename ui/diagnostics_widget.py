@@ -10,10 +10,11 @@ from __future__ import annotations
 import re
 
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QAbstractItemView, QGroupBox, QTableWidget, QTableWidgetItem, QVBoxLayout
+from PySide6.QtWidgets import QAbstractItemView, QGroupBox, QTableWidgetItem, QVBoxLayout
 
 from core.diagnostic_models import DiagnosticFinding, DiagnosticSeverity
 from core.i18n import tr
+from ui.hover_table import HoverRowTableWidget
 
 
 class DiagnosticsWidget(QGroupBox):
@@ -24,7 +25,7 @@ class DiagnosticsWidget(QGroupBox):
     def __init__(self) -> None:
         super().__init__(tr("Smart Diagnostics"))
         layout = QVBoxLayout(self)
-        self._table = QTableWidget(0, 5)
+        self._table = HoverRowTableWidget(0, 5)
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in ("Severity", "Finding", "Probable reason", "Recommendation", "Source")))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)

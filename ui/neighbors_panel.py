@@ -15,7 +15,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -25,6 +24,7 @@ from core.i18n import tr
 from core.neighbor_models import NetworkNeighbor
 from core.neighbor_service import NeighborService
 from ui.async_task import BackgroundTask
+from ui.hover_table import HoverRowTableWidget
 
 
 class NeighborsPanel(QWidget):
@@ -45,7 +45,7 @@ class NeighborsPanel(QWidget):
         controls.addWidget(self._start)
         self._status = QLabel(tr("Passive capture may request macOS administrator authorization."))
         self._status.setObjectName("mutedLabel")
-        self._table = QTableWidget(0, 7)
+        self._table = HoverRowTableWidget(0, 7)
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in ("Protocol", "System", "Port", "Platform", "Management IP", "Native VLAN", "Capabilities")))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.horizontalHeader().setStretchLastSection(True)

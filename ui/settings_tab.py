@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Present settings save as a clear primary action button.
+Changelog: Size and center the save action like a compact Bootstrap button.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QDoubleSpinBox,
     QFormLayout,
+    QHBoxLayout,
     QLabel,
     QLineEdit,
     QPushButton,
@@ -72,9 +73,16 @@ class SettingsTab(QWidget):
         self._status.setObjectName("mutedLabel")
         save = QPushButton(tr("Save settings"))
         save.setProperty("primary", True)
+        save.setMinimumWidth(240)
+        save.setMaximumWidth(360)
         save.clicked.connect(self._save)
+        save_row = QHBoxLayout()
+        save_row.setContentsMargins(30, 0, 30, 0)
+        save_row.addStretch()
+        save_row.addWidget(save)
+        save_row.addStretch()
         layout.addLayout(form)
-        layout.addWidget(save)
+        layout.addLayout(save_row)
         layout.addWidget(self._status)
         layout.addStretch()
         tabs.addTab(general, tr("General"))
