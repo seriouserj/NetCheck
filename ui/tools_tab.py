@@ -1,8 +1,8 @@
 """
-Version: 1.6.3
+Version: 1.6.4
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center compact tool forms within their available content areas.
+Changelog: Center the complete tools navigation group.
 """
 
 from __future__ import annotations
@@ -33,6 +33,7 @@ from ui.ping_panel import PingPanel
 from ui.route_monitor_panel import RouteMonitorPanel
 from ui.snmp_panel import SnmpPanel
 from ui.streaming_task import StreamingTask
+from ui.tab_navigation import center_tab_group
 
 
 class CommandPanel(QWidget):
@@ -176,7 +177,7 @@ class ToolsTab(QWidget):
         tabs = QTabWidget()
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
-        tabs.tabBar().setExpanding(True)
+        center_tab_group(tabs)
         tabs.setDocumentMode(True)
         tabs.addTab(PingPanel(), "Ping")
         tabs.addTab(

@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
+Version: 1.6.4
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Distribute the primary navigation evenly across the available width.
+Changelog: Center the complete primary navigation group.
 """
 
 from __future__ import annotations
@@ -18,6 +18,7 @@ from ui.dashboard_tab import DashboardTab
 from ui.discovery_tab import DiscoveryTab
 from ui.ports_tab import PortsTab
 from ui.settings_tab import SettingsTab
+from ui.tab_navigation import center_tab_group
 from ui.tools_tab import ToolsTab
 from ui.vlan_tab import VlanTab
 
@@ -44,7 +45,7 @@ class MainWindow(QMainWindow):
         tabs.setDocumentMode(True)
         tabs.setObjectName("mainTabs")
         tabs.tabBar().setObjectName("mainTabBar")
-        tabs.tabBar().setExpanding(True)
+        center_tab_group(tabs)
         tabs.addTab(DashboardTab(), tr("Dashboard"))
         tabs.addTab(VlanTab(), "VLAN")
         tabs.addTab(DiscoveryTab(), tr("Discovery"))

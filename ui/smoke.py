@@ -1,14 +1,14 @@
 """
-Version: 1.6.3
+Version: 1.6.4
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate click-to-copy and centered form alignment.
+Changelog: Validate centered primary and nested tab navigation.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, QThreadPool
-from PySide6.QtWidgets import QApplication, QTableWidgetItem, QTabWidget
+from PySide6.QtWidgets import QApplication, QStyle, QTableWidgetItem, QTabWidget
 
 from core.application import configure_application
 from core.i18n import tr
@@ -33,6 +33,17 @@ def run_smoke_test(application: QApplication) -> int:
     expected_tabs = tuple(tr(item) if item != "VLAN" else item for item in EXPECTED_TABS)
     if actual_tabs != expected_tabs:
         raise RuntimeError(f"Unexpected application tabs: {actual_tabs}")
+    for tab_widget in window.findChildren(QTabWidget):
+        if tab_widget.objectName() not in {"mainTabs", "innerTabs"}:
+            continue
+        alignment = tab_widget.tabBar().style().styleHint(
+            QStyle.StyleHint.SH_TabBar_Alignment,
+            None,
+            tab_widget.tabBar(),
+            None,
+        )
+        if alignment != Qt.AlignmentFlag.AlignCenter.value:
+            raise RuntimeError("Every navigation tab group must be centered.")
     copy_table = HoverRowTableWidget(1, 1)
     copy_table.setItem(0, 0, QTableWidgetItem("192.0.2.1"))
     copy_table.cellClicked.emit(0, 0)

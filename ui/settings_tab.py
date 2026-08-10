@@ -1,8 +1,8 @@
 """
-Version: 1.6.3
+Version: 1.6.4
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center the compact general settings form vertically and horizontally.
+Changelog: Center the complete settings navigation group.
 """
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ from core.settings_models import AppSettings, ThemePreference
 from core.settings_store import SettingsStore
 from ui.form_layout import centered_form
 from ui.profiles_panel import ProfilesPanel
+from ui.tab_navigation import center_tab_group
 from ui.theme import apply_theme
 
 
@@ -43,7 +44,7 @@ class SettingsTab(QWidget):
         tabs = QTabWidget()
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
-        tabs.tabBar().setExpanding(True)
+        center_tab_group(tabs)
         tabs.setDocumentMode(True)
         general = QWidget()
         layout = QVBoxLayout(general)
