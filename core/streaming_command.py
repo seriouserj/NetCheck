@@ -61,11 +61,12 @@ def run_streaming_command(
                     process.wait(timeout=1.0)
                 break
             if selector.select(min(0.1, remaining)):
-                pending = _read_available(master_fd, pending, lines, output_callback)
+                pending, _ = _read_available(master_fd, pending, lines, output_callback)
         while selector.select(0.01):
-            previous_size = len(pending)
-            pending = _read_available(master_fd, pending, lines, output_callback)
-            if len(pending) == previous_size:
+            pending, received_data = _read_available(
+                master_fd, pending, lines, output_callback
+            )
+            if not received_data:
                 break
         if pending:
             _publish(pending.decode("utf-8", errors="replace").rstrip("\r"), lines, output_callback)
@@ -85,17 +86,17 @@ def _read_available(
     pending: bytes,
     lines: list[str],
     output_callback: OutputCallback | None,
-) -> bytes:
+) -> tuple[bytes, bool]:
     """Read available pseudo-terminal bytes and publish complete lines."""
     try:
         chunk = os.read(descriptor, 4096)
     except (BlockingIOError, OSError):
-        return pending
+        return pending, False
     pending += chunk
     while b"\n" in pending:
         raw_line, pending = pending.split(b"\n", 1)
         _publish(raw_line.decode("utf-8", errors="replace").rstrip("\r"), lines, output_callback)
-    return pending
+    return pending, bool(chunk)
 
 
 def _publish(line: str, lines: list[str], output_callback: OutputCallback | None) -> None:

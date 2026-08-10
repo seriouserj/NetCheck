@@ -48,6 +48,20 @@ def test_streaming_command_keeps_partial_output_on_timeout() -> None:
     assert "timed out" in received[-1]
 
 
+def test_streaming_command_drains_large_terminal_output() -> None:
+    received: list[str] = []
+
+    result = run_streaming_command(
+        (sys.executable, "-u", "-c", "[print(index) for index in range(2000)]"),
+        5.0,
+        received.append,
+    )
+
+    assert result.return_code == 0
+    assert len(received) == 2000
+    assert received[-1] == "1999"
+
+
 def test_traceroute_uses_one_short_probe_per_hop() -> None:
     calls: list[tuple[tuple[str, ...], float]] = []
 
