@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.5.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize expanded host discovery columns.
+Changelog: Localize the combined single-authorization neighbor capture message.
 """
 
 from __future__ import annotations
@@ -153,6 +153,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Scan failed: {message}": "Scan fehlgeschlagen: {message}",
         "Test failed: {message}": "Test fehlgeschlagen: {message}",
         "Listen for neighbors": "Nachbarn erkennen",
+        "One macOS authorization captures LLDP and CDP together.": "Eine macOS-Autorisierung erfasst LLDP und CDP gemeinsam.",
         "Listening for LLDP and CDP advertisements…": "LLDP- und CDP-Ankündigungen werden empfangen…",
         "Found {count} neighbor advertisement(s).": "{count} Nachbarankündigung(en) gefunden.",
         "Querying SNMP agent…": "SNMP-Agent wird abgefragt…",
@@ -305,6 +306,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Scan failed: {message}": "Ошибка сканирования: {message}",
         "Test failed: {message}": "Ошибка теста: {message}",
         "Listen for neighbors": "Поиск соседей",
+        "One macOS authorization captures LLDP and CDP together.": "Одна авторизация macOS запускает общий захват LLDP и CDP.",
         "Listening for LLDP and CDP advertisements…": "Ожидание объявлений LLDP и CDP…",
         "Found {count} neighbor advertisement(s).": "Найдено объявлений соседей: {count}.",
         "Querying SNMP agent…": "Запрос к SNMP-агенту…",
@@ -457,6 +459,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Scan failed: {message}": "Помилка сканування: {message}",
         "Test failed: {message}": "Помилка тесту: {message}",
         "Listen for neighbors": "Пошук сусідів",
+        "One macOS authorization captures LLDP and CDP together.": "Одна авторизація macOS запускає спільне захоплення LLDP і CDP.",
         "Listening for LLDP and CDP advertisements…": "Очікування оголошень LLDP і CDP…",
         "Found {count} neighbor advertisement(s).": "Знайдено оголошень сусідів: {count}.",
         "Querying SNMP agent…": "Запит до SNMP-агента…",

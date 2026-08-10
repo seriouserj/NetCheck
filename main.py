@@ -30,6 +30,11 @@ def main() -> int:
 
         index = sys.argv.index("--vlan-discovery-worker")
         return run_vlan_discovery_worker(sys.argv[index + 1 :])
+    if "--neighbor-worker" in sys.argv:
+        from core.neighbor_service import run_neighbor_worker
+
+        index = sys.argv.index("--neighbor-worker")
+        return run_neighbor_worker(sys.argv[index + 1 :])
     from PySide6.QtWidgets import QApplication
 
     from core.application import configure_application

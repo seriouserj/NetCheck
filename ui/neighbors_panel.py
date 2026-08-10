@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.5.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize LLDP and CDP neighbor discovery controls.
+Changelog: Explain single-prompt combined LLDP and CDP capture.
 """
 
 from __future__ import annotations
@@ -43,7 +43,7 @@ class NeighborsPanel(QWidget):
         self._start.clicked.connect(self._discover)
         controls.addWidget(self._interface, 1)
         controls.addWidget(self._start)
-        self._status = QLabel(tr("Passive capture may request macOS administrator authorization."))
+        self._status = QLabel(tr("One macOS authorization captures LLDP and CDP together."))
         self._status.setObjectName("mutedLabel")
         self._table = HoverRowTableWidget(0, 7)
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in ("Protocol", "System", "Port", "Platform", "Management IP", "Native VLAN", "Capabilities")))
