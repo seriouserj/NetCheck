@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.6.1
+# Version: 1.6.2
 # Date: 2026-08-10
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.6.1 maintenance release.
+# Changelog: Package the NetCheck v1.6.2 click-to-copy maintenance release.
 
 from pathlib import Path
 
@@ -64,12 +64,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.6.1",
+    version="1.6.2",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.6.1",
-        "CFBundleVersion": "9",
-        "CFBundleGetInfoString": "NetCheck 1.6.1 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.6.2",
+        "CFBundleVersion": "10",
+        "CFBundleGetInfoString": "NetCheck 1.6.2 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

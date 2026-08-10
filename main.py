@@ -1,8 +1,8 @@
 """
-Version: 1.6.1
+Version: 1.6.2
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.1 maintenance release.
+Changelog: Start the NetCheck 1.6.2 click-to-copy maintenance release.
 """
 
 from __future__ import annotations

@@ -1,12 +1,12 @@
 """
-Version: 1.6.1
+Version: 1.6.2
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.6.1 with resilient release delivery.
+Changelog: Publish NetCheck 1.6.2 with click-to-copy result cells.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.6.1"
+APP_VERSION = "1.6.2"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"
