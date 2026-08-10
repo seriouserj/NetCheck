@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize the combined single-authorization neighbor capture message.
+Changelog: Localize multi-target continuous Ping controls and status messages.
 """
 
 from __future__ import annotations
@@ -106,6 +106,17 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Service": "Dienst",
         "Run": "Starten",
         "Running…": "Wird ausgeführt…",
+        "Start": "Starten",
+        "Stop": "Stoppen",
+        "Targets": "Ziele",
+        "Packet payload": "Paketnutzlast",
+        " bytes": " Bytes",
+        "hostnames or IP addresses, separated by commas": "Hostnamen oder IP-Adressen, durch Kommas getrennt",
+        "Continuous; show statistics every 100 requests": "Fortlaufend; Statistik alle 100 Anfragen anzeigen",
+        "Finite mode sends 4 requests to every target.": "Der endliche Modus sendet 4 Anfragen an jedes Ziel.",
+        "Pinging {count} target(s)…": "{count} Ziel(e) werden angepingt…",
+        "Ping completed.": "Ping abgeschlossen.",
+        "Stopping ping sessions…": "Ping-Sitzungen werden beendet…",
         "Traceroute": "Routenverfolgung",
         "DNS Lookup": "DNS-Abfrage",
         "Wake-on-LAN": "Wake-on-LAN",
@@ -259,6 +270,17 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Service": "Служба",
         "Run": "Запустить",
         "Running…": "Выполняется…",
+        "Start": "Запустить",
+        "Stop": "Остановить",
+        "Targets": "Цели",
+        "Packet payload": "Размер данных пакета",
+        " bytes": " байт",
+        "hostnames or IP addresses, separated by commas": "Имена или IP-адреса через запятую",
+        "Continuous; show statistics every 100 requests": "Непрерывно; статистика через каждые 100 запросов",
+        "Finite mode sends 4 requests to every target.": "Обычный режим отправляет по 4 запроса каждой цели.",
+        "Pinging {count} target(s)…": "Проверка целей: {count}…",
+        "Ping completed.": "Проверка Ping завершена.",
+        "Stopping ping sessions…": "Остановка Ping…",
         "Traceroute": "Трассировка",
         "DNS Lookup": "DNS-запрос",
         "Wake-on-LAN": "Wake-on-LAN",
@@ -412,6 +434,17 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Service": "Служба",
         "Run": "Запустити",
         "Running…": "Виконується…",
+        "Start": "Запустити",
+        "Stop": "Зупинити",
+        "Targets": "Цілі",
+        "Packet payload": "Розмір даних пакета",
+        " bytes": " байт",
+        "hostnames or IP addresses, separated by commas": "Імена або IP-адреси через кому",
+        "Continuous; show statistics every 100 requests": "Безперервно; статистика через кожні 100 запитів",
+        "Finite mode sends 4 requests to every target.": "Звичайний режим надсилає по 4 запити кожній цілі.",
+        "Pinging {count} target(s)…": "Перевірка цілей: {count}…",
+        "Ping completed.": "Перевірку Ping завершено.",
+        "Stopping ping sessions…": "Зупинка Ping…",
         "Traceroute": "Трасування",
         "DNS Lookup": "DNS-запит",
         "Wake-on-LAN": "Wake-on-LAN",

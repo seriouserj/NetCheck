@@ -8,6 +8,7 @@ Changelog: Verify incremental command output and bounded traceroute probes.
 from __future__ import annotations
 
 import sys
+from threading import Event
 
 from core.command_runner import CommandResult
 from core.streaming_command import run_streaming_command
@@ -75,3 +76,16 @@ def test_traceroute_uses_one_short_probe_per_hop() -> None:
     assert calls == [
         (("traceroute", "-n", "-m", "30", "-q", "1", "-w", "1", "example.com"), 45.0)
     ]
+
+
+def test_streaming_command_honors_cancellation() -> None:
+    stop = Event()
+    stop.set()
+
+    result = run_streaming_command(
+        (sys.executable, "-u", "-c", "import time; time.sleep(10)"),
+        20.0,
+        cancel_event=stop,
+    )
+
+    assert result.return_code != 0

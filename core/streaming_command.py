@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add bounded subprocess execution with line-by-line output delivery.
+Changelog: Allow running streaming commands to be cancelled safely by the UI.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ import selectors
 import subprocess
 import time
 from collections.abc import Callable, Sequence
+from threading import Event
 
 from core.command_runner import CommandResult
 
@@ -23,6 +24,7 @@ def run_streaming_command(
     command: Sequence[str],
     timeout: float,
     output_callback: OutputCallback | None = None,
+    cancel_event: Event | None = None,
 ) -> CommandResult:
     """Run a command without a shell and deliver each output line immediately."""
     if timeout <= 0:
@@ -50,15 +52,13 @@ def run_streaming_command(
     selector.register(master_fd, selectors.EVENT_READ)
     try:
         while process.poll() is None:
+            if cancel_event is not None and cancel_event.is_set():
+                _terminate(process)
+                break
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 timed_out = True
-                process.terminate()
-                try:
-                    process.wait(timeout=0.5)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    process.wait(timeout=1.0)
+                _terminate(process)
                 break
             if selector.select(min(0.1, remaining)):
                 pending, _ = _read_available(master_fd, pending, lines, output_callback)
@@ -79,6 +79,16 @@ def run_streaming_command(
         _notify(message, output_callback)
         return CommandResult(124, "\n".join(lines), message)
     return CommandResult(process.returncode or 0, "\n".join(lines), "")
+
+
+def _terminate(process: subprocess.Popen[bytes]) -> None:
+    """Stop a child process and guarantee that it has been reaped."""
+    process.terminate()
+    try:
+        process.wait(timeout=0.5)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait(timeout=1.0)
 
 
 def _read_available(

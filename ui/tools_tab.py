@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Stream Ping and Traceroute output while keeping compact actions.
+Changelog: Add the multi-target continuous Ping panel.
 """
 
 from __future__ import annotations
@@ -25,11 +25,11 @@ from PySide6.QtWidgets import (
 
 from core.dns_tool import RECORD_TYPES, dns_lookup
 from core.i18n import tr
-from core.ping_tool import ping
 from core.traceroute_tool import traceroute
 from core.wake_on_lan import send_magic_packet
 from ui.async_task import BackgroundTask
 from ui.neighbors_panel import NeighborsPanel
+from ui.ping_panel import PingPanel
 from ui.snmp_panel import SnmpPanel
 from ui.streaming_task import StreamingTask
 
@@ -171,15 +171,7 @@ class ToolsTab(QWidget):
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
         tabs.setDocumentMode(True)
-        tabs.addTab(
-            CommandPanel(
-                tr("Target"),
-                tr("hostname or IP address"),
-                lambda target, emit: ping(target, output_callback=emit),
-                streaming=True,
-            ),
-            "Ping",
-        )
+        tabs.addTab(PingPanel(), "Ping")
         tabs.addTab(
             CommandPanel(
                 tr("Target"),
