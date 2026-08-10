@@ -1,8 +1,8 @@
 <!--
-Version: 1.6.3
+Version: 1.6.4
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document centered diagnostic forms in v1.6.3.
+Changelog: Document centered primary and nested navigation in v1.6.4.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.6.3-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.6.3-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.6.4-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.6.4-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,10 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.6.3 highlights
+## Version 1.6.4 highlights
+
+- Primary and nested navigation menus are centered as complete fixed-width groups
+- Centering remains stable across English, German, Russian, and Ukrainian labels
 
 - Compact forms are centered horizontally and vertically in available content areas
 - Form labels align with the vertical center of their input controls
