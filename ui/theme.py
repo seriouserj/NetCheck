@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add spacious fields, Bootstrap-like tabs, and collapsed square tables.
+Changelog: Center fixed-height fields and unify navigation sizing and backgrounds.
 """
 
 from __future__ import annotations
@@ -45,16 +45,18 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#brandLogo {{ background: white; border-radius: 7px; }}
         QLabel#brandProduct {{ color: white; font-size: 20px; font-weight: 700; }}
         QLabel#brandAuthor {{ color: #b8e8fa; font-size: 12px; }}
-        QTabBar#mainTabBar::tab {{ color: palette(text); background: palette(button); padding: 10px 20px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-height: 28px; font-size: 15px; font-weight: 600; }}
+        QTabWidget#mainTabs, QTabWidget#mainTabs::pane, QTabBar#mainTabBar, QTabBar#mainTabBar::base {{ background: palette(window); border: 0; }}
+        QTabBar#mainTabBar::tab {{ color: palette(text); background: palette(button); padding: 10px 18px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 132px; min-height: 30px; font-size: 16px; font-weight: 600; }}
         QTabBar#mainTabBar::tab:selected {{ color: white; background: {navy}; }}
         QTabBar#mainTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
-        QTabWidget#innerTabs::pane {{ border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
-        QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 9px 16px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-height: 24px; font-weight: 600; }}
+        QTabWidget#innerTabs, QTabBar#innerTabBar, QTabBar#innerTabBar::base {{ background: palette(window); }}
+        QTabWidget#innerTabs::pane {{ background: palette(window); border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
+        QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 9px 14px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 142px; min-height: 28px; font-size: 14px; font-weight: 600; }}
         QTabBar#innerTabBar::tab:selected {{ color: white; background: {navy}; border-color: {navy}; }}
         QTabBar#innerTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
-        QLineEdit {{ min-height: 36px; padding: 0 10px; }}
-        QComboBox {{ min-height: 36px; padding: 0 32px 0 10px; }}
-        QSpinBox, QDoubleSpinBox {{ min-height: 36px; padding-left: 10px; }}
+        QLineEdit {{ min-height: 42px; max-height: 42px; padding: 0 10px; }}
+        QComboBox {{ min-height: 42px; max-height: 42px; padding: 0 32px 0 10px; }}
+        QSpinBox, QDoubleSpinBox {{ min-height: 42px; max-height: 42px; padding-left: 10px; }}
         QPlainTextEdit {{ padding: 8px; }}
         QTableWidget {{ border: 1px solid #707b86; border-radius: 0; gridline-color: #8b96a1; selection-background-color: {navy}; selection-color: white; }}
         QTableWidget::item {{ border: 0; padding: 5px 8px; }}
