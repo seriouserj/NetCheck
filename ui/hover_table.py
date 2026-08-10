@@ -1,15 +1,17 @@
 """
-Version: 1.3.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add consistent whole-row hover feedback for diagnostic tables.
+Changelog: Add keyboard and context-menu copying for every diagnostic table.
 """
 
 from __future__ import annotations
 
-from PySide6.QtCore import QEvent, QModelIndex
-from PySide6.QtGui import QMouseEvent
-from PySide6.QtWidgets import QStyle, QStyledItemDelegate, QStyleOptionViewItem, QTableWidget
+from PySide6.QtCore import QEvent, QModelIndex, QPoint, Qt
+from PySide6.QtGui import QKeyEvent, QKeySequence, QMouseEvent
+from PySide6.QtWidgets import QApplication, QMenu, QStyle, QStyledItemDelegate, QStyleOptionViewItem, QTableWidget
+
+from core.i18n import tr
 
 
 class _HoverRowDelegate(QStyledItemDelegate):
@@ -31,6 +33,8 @@ class HoverRowTableWidget(QTableWidget):
         self.setMouseTracking(True)
         self.viewport().setMouseTracking(True)
         self.setItemDelegate(_HoverRowDelegate(self))
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.customContextMenuRequested.connect(self._show_copy_menu)
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         row = self.indexAt(event.position().toPoint()).row()
@@ -43,3 +47,54 @@ class HoverRowTableWidget(QTableWidget):
         self.hovered_row = -1
         self.viewport().update()
         super().leaveEvent(event)
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        """Copy selected cells using the platform-standard shortcut."""
+        if event.matches(QKeySequence.StandardKey.Copy):
+            self.copy_selected_cells()
+            return
+        super().keyPressEvent(event)
+
+    def copy_selected_cells(self) -> None:
+        """Copy selected cells as tab-separated rows."""
+        indexes = sorted(self.selectedIndexes(), key=lambda index: (index.row(), index.column()))
+        if not indexes:
+            return
+        rows: dict[int, dict[int, str]] = {}
+        for index in indexes:
+            item = self.item(index.row(), index.column())
+            rows.setdefault(index.row(), {})[index.column()] = item.text() if item else ""
+        first_column = min(index.column() for index in indexes)
+        last_column = max(index.column() for index in indexes)
+        text = "\n".join(
+            "\t".join(cells.get(column, "") for column in range(first_column, last_column + 1))
+            for cells in rows.values()
+        )
+        QApplication.clipboard().setText(text)
+
+    def copy_all(self) -> None:
+        """Copy column headings and the entire table as TSV."""
+        QApplication.clipboard().setText(self.as_tsv())
+
+    def as_tsv(self) -> str:
+        """Serialize visible table data to tab-separated text."""
+        headers = [self.horizontalHeaderItem(column) for column in range(self.columnCount())]
+        lines = ["\t".join(item.text() if item else "" for item in headers)]
+        for row in range(self.rowCount()):
+            lines.append(
+                "\t".join(
+                    self.item(row, column).text() if self.item(row, column) else ""
+                    for column in range(self.columnCount())
+                )
+            )
+        return "\n".join(lines)
+
+    def _show_copy_menu(self, position: QPoint) -> None:
+        menu = QMenu(self)
+        copy_selection = menu.addAction(tr("Copy selection"))
+        copy_all = menu.addAction(tr("Copy entire table"))
+        chosen = menu.exec(self.viewport().mapToGlobal(position))
+        if chosen is copy_selection:
+            self.copy_selected_cells()
+        elif chosen is copy_all:
+            self.copy_all()

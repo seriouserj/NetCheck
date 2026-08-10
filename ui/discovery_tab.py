@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add automatic subnet, NetBIOS identity, and numeric IP sorting.
+Changelog: Add copy and TXT/PDF/SVG export actions for discovery reports.
 """
 
 from __future__ import annotations
@@ -28,6 +28,7 @@ from core.i18n import tr
 from core.network_defaults import FALLBACK_SUBNET, detect_default_subnet
 from ui.async_task import BackgroundTask
 from ui.hover_table import HoverRowTableWidget
+from ui.report_export import ReportExportBar
 from ui.sortable_items import IpAddressItem, NumericItem
 
 
@@ -64,7 +65,10 @@ class DiscoveryTab(QWidget):
         self._table.setSortingEnabled(True)
         self._table.horizontalHeader().setStretchLastSection(True)
         layout.addLayout(controls)
-        layout.addWidget(self._status)
+        status_row = QHBoxLayout()
+        status_row.addWidget(self._status)
+        status_row.addWidget(ReportExportBar(self._table, tr("Network discovery report")), 1)
+        layout.addLayout(status_row)
         layout.addWidget(self._table)
 
     def showEvent(self, event: QShowEvent) -> None:
