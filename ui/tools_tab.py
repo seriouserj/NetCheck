@@ -30,6 +30,7 @@ from core.wake_on_lan import send_magic_packet
 from ui.async_task import BackgroundTask
 from ui.neighbors_panel import NeighborsPanel
 from ui.ping_panel import PingPanel
+from ui.route_monitor_panel import RouteMonitorPanel
 from ui.snmp_panel import SnmpPanel
 from ui.streaming_task import StreamingTask
 
@@ -181,6 +182,7 @@ class ToolsTab(QWidget):
             ),
             tr("Traceroute"),
         )
+        tabs.addTab(RouteMonitorPanel(), tr("Route Monitor"))
         tabs.addTab(DnsPanel(), tr("DNS Lookup"))
         tabs.addTab(WolPanel(), tr("Wake-on-LAN"))
         tabs.addTab(NeighborsPanel(), "LLDP/CDP")
