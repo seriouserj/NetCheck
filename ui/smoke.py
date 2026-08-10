@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the restored DITIS window and translated navigation.
+Changelog: Validate the DITIS window and advanced tools navigation.
 """
 
 from __future__ import annotations

@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start NetCheck 1.5.0 with streaming tools and unified neighbor capture.
+Changelog: Start NetCheck 1.6.0 with advanced diagnostics and export tools.
 """
 
 from __future__ import annotations

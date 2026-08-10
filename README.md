@@ -1,8 +1,8 @@
 <!--
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document live network tools and interface refinements in v1.5.0.
+Changelog: Document multi-target Ping, route monitoring, and report export in v1.6.0.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.5.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.5.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.6.0-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.6.0-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,16 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.5 highlights
+## Version 1.6 highlights
+
+- Concurrent Ping of up to 16 hosts with configurable payload sizes up to 65,507 bytes
+- Four-request finite Ping mode and cancellable continuous 100-request statistics batches
+- Integrated MTR-style route monitor with per-hop loss and latency statistics
+- Live Last, Average, Best, and Worst route-hop measurements
+- Copy support for every result table through Command-C and context menus
+- Network discovery report export to TXT, PDF, and vector SVG
+- Vertically centered, consistently sized input controls
+- Equal-width primary navigation without the unused grey tab-bar background
 
 - One macOS administrator authorization for an entire VLAN list or range
 - English, German, Russian, and Ukrainian interface languages
