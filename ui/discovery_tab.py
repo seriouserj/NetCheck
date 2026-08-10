@@ -1,13 +1,14 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize network discovery controls and results.
+Changelog: Add automatic subnet, NetBIOS identity, and numeric IP sorting.
 """
 
 from __future__ import annotations
 
-from PySide6.QtCore import QThreadPool
+from PySide6.QtCore import Qt, QThreadPool
+from PySide6.QtGui import QShowEvent
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHBoxLayout,
@@ -15,7 +16,6 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -25,39 +25,53 @@ from core.discovery_models import DiscoveredHost
 from core.discovery_parser import parse_scan_network
 from core.discovery_service import DiscoveryService
 from core.i18n import tr
+from core.network_defaults import FALLBACK_SUBNET, detect_default_subnet
 from ui.async_task import BackgroundTask
+from ui.hover_table import HoverRowTableWidget
+from ui.sortable_items import IpAddressItem, NumericItem
 
 
 class DiscoveryTab(QWidget):
     """Scan and display responsive hosts on a selected IPv4 subnet."""
 
-    HEADERS = ("Hostname", "IP", "MAC", "Vendor", "Latency")
+    HEADERS = ("IP", "MAC", "Latency", "Hostname", "NetBIOS Info", "Vendor")
 
     def __init__(self) -> None:
         super().__init__()
         self._service = DiscoveryService()
         self._task: BackgroundTask | None = None
+        self._subnet_was_edited = False
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
         controls = QHBoxLayout()
         controls.addWidget(QLabel(tr("Subnet")))
-        self._subnet = QLineEdit("192.168.1.0/24")
-        self._subnet.setPlaceholderText("192.168.1.0/24")
+        self._subnet = QLineEdit(detect_default_subnet())
+        self._subnet.setPlaceholderText(FALLBACK_SUBNET)
+        self._subnet.textEdited.connect(lambda: setattr(self, "_subnet_was_edited", True))
         self._scan = QPushButton(tr("Scan"))
+        self._scan.setProperty("primary", True)
         self._scan.clicked.connect(self._start_scan)
         controls.addWidget(self._subnet, 1)
         controls.addWidget(self._scan)
         self._status = QLabel(tr("Ready"))
         self._status.setObjectName("mutedLabel")
-        self._table = QTableWidget(0, len(self.HEADERS))
+        self._table = HoverRowTableWidget(0, len(self.HEADERS))
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in self.HEADERS))
         self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self._table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self._table.setAlternatingRowColors(True)
+        self._table.verticalHeader().setVisible(False)
         self._table.setSortingEnabled(True)
         self._table.horizontalHeader().setStretchLastSection(True)
         layout.addLayout(controls)
         layout.addWidget(self._status)
         layout.addWidget(self._table)
+
+    def showEvent(self, event: QShowEvent) -> None:
+        """Refresh the suggested subnet until the user edits it manually."""
+        if not self._subnet_was_edited:
+            self._subnet.setText(detect_default_subnet())
+        super().showEvent(event)
 
     def _start_scan(self) -> None:
         try:
@@ -79,10 +93,19 @@ class DiscoveryTab(QWidget):
         for row, host in enumerate(hosts):
             if not isinstance(host, DiscoveredHost):
                 continue
-            values = (host.hostname, host.ip_address, host.mac_address, host.vendor, f"{host.latency_ms:.2f} ms")
-            for column, item_value in enumerate(values):
-                self._table.setItem(row, column, QTableWidgetItem(item_value))
+            items = (
+                IpAddressItem(host.ip_address),
+                QTableWidgetItem(host.mac_address),
+                NumericItem(f"{host.latency_ms:.2f} ms", host.latency_ms),
+                QTableWidgetItem(host.hostname),
+                QTableWidgetItem(host.netbios_info),
+                QTableWidgetItem(host.vendor),
+            )
+            for column, item in enumerate(items):
+                self._table.setItem(row, column, item)
         self._table.setSortingEnabled(True)
+        self._table.sortItems(0, Qt.SortOrder.AscendingOrder)
+        self._table.resizeColumnsToContents()
         self._status.setText(tr("Found {count} responsive host(s)", count=len(hosts)))
         self._finish()
 

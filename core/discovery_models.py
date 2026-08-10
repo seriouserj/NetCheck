@@ -1,8 +1,8 @@
 """
-Version: 0.4.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add immutable network host discovery model.
+Changelog: Include NetBIOS identity in discovered host results.
 """
 
 from __future__ import annotations
@@ -19,3 +19,4 @@ class DiscoveredHost:
     mac_address: str
     vendor: str
     latency_ms: float
+    netbios_info: str = "—"

@@ -1,13 +1,18 @@
 """
-Version: 0.4.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify discovery input and system output parsers.
+Changelog: Verify discovery input, network output, and cached host-name parsing.
 """
 
 import pytest
 
-from core.discovery_parser import parse_arp_mac, parse_ping_latency, parse_scan_network
+from core.discovery_parser import (
+    parse_arp_mac,
+    parse_cached_hostname,
+    parse_ping_latency,
+    parse_scan_network,
+)
 
 
 def test_parse_scan_network_normalizes_host_address() -> None:
@@ -24,3 +29,8 @@ def test_parse_scan_network_rejects_large_or_ipv6_ranges() -> None:
 def test_parse_ping_and_arp_output() -> None:
     assert parse_ping_latency("64 bytes from 192.0.2.1: time=1.247 ms") == 1.247
     assert parse_arp_mac("host (192.0.2.1) at a:b:c:d:e:f on en7") == "0a:0b:0c:0d:0e:0f"
+
+
+def test_parse_cached_hostname() -> None:
+    assert parse_cached_hostname("name: printer-office.local.\nip_address: 192.0.2.20") == "printer-office.local"
+    assert parse_cached_hostname("No entry found") == ""

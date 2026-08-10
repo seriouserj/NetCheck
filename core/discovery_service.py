@@ -1,27 +1,39 @@
 """
-Version: 0.4.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add bounded concurrent IPv4 host discovery.
+Changelog: Resolve macOS hostnames and NetBIOS identities for discovered hosts.
 """
 
 from __future__ import annotations
 
 import ipaddress
 import socket
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 
-from core.command_runner import run_command
+from core.command_runner import CommandResult, run_command
 from core.discovery_models import DiscoveredHost
-from core.discovery_parser import parse_arp_mac, parse_ping_latency
+from core.discovery_parser import parse_arp_mac, parse_cached_hostname, parse_ping_latency
+from core.netbios_service import NetBiosInfo, query_netbios_node_status
 from core.vendor_lookup import VendorLookup
+
+CommandRunner = Callable[[tuple[str, ...], float], CommandResult]
+NetBiosResolver = Callable[[str, float], NetBiosInfo]
 
 
 class DiscoveryService:
     """Discover responsive hosts using local ICMP, ARP, and reverse DNS."""
 
-    def __init__(self, vendor_lookup: VendorLookup | None = None) -> None:
+    def __init__(
+        self,
+        vendor_lookup: VendorLookup | None = None,
+        command_runner: CommandRunner = run_command,
+        netbios_resolver: NetBiosResolver = query_netbios_node_status,
+    ) -> None:
         self._vendors = vendor_lookup or VendorLookup()
+        self._run = command_runner
+        self._netbios = netbios_resolver
 
     def scan(self, network: ipaddress.IPv4Network, timeout: float = 1.0) -> list[DiscoveredHost]:
         """Scan a validated IPv4 network and return hosts in address order."""
@@ -33,23 +45,26 @@ class DiscoveryService:
 
     def _probe(self, address: str, timeout: float) -> DiscoveredHost | None:
         timeout_ms = max(100, int(timeout * 1000))
-        ping = run_command(("ping", "-n", "-c", "1", "-W", str(timeout_ms), address), timeout + 1.0)
+        ping = self._run(("ping", "-n", "-c", "1", "-W", str(timeout_ms), address), timeout + 1.0)
         latency = parse_ping_latency(ping.stdout)
         if ping.return_code != 0 or latency is None:
             return None
-        arp = run_command(("arp", "-n", address), 2.0)
+        arp = self._run(("arp", "-n", address), 2.0)
         mac_address = parse_arp_mac(arp.stdout)
+        netbios = self._netbios(address, min(0.5, max(0.2, timeout)))
+        hostname = self._resolve_hostname(address) or netbios.hostname or "—"
         return DiscoveredHost(
-            hostname=self._resolve_hostname(address),
+            hostname=hostname,
             ip_address=address,
             mac_address=mac_address or "—",
             vendor=self._vendors.resolve(mac_address),
             latency_ms=latency,
+            netbios_info=netbios.display_name,
         )
 
-    @staticmethod
-    def _resolve_hostname(address: str) -> str:
+    def _resolve_hostname(self, address: str) -> str:
         try:
             return socket.gethostbyaddr(address)[0]
         except (socket.herror, socket.gaierror, OSError):
-            return "—"
+            cached = self._run(("dscacheutil", "-q", "host", "-a", "ip_address", address), 1.0)
+            return parse_cached_hostname(cached.stdout)

@@ -1,8 +1,8 @@
 """
-Version: 0.4.0
-Date: 2026-08-06
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add subnet, ping, and ARP parsing for discovery.
+Changelog: Parse subnet, reachability, ARP, and macOS reverse-host output.
 """
 
 from __future__ import annotations
@@ -38,3 +38,9 @@ def parse_arp_mac(output: str) -> str:
     if not match:
         return ""
     return ":".join(part.zfill(2) for part in match.group(1).lower().split(":"))
+
+
+def parse_cached_hostname(output: str) -> str:
+    """Return the first normalized hostname from dscacheutil host output."""
+    match = re.search(r"^name:\s*(\S+)", output, re.MULTILINE | re.IGNORECASE)
+    return match.group(1).rstrip(".") if match else ""

@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.3.0
+Date: 2026-08-10
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize VLAN progress, discovery, details, and diagnostic findings.
+Changelog: Localize expanded host discovery columns.
 """
 
 from __future__ import annotations
@@ -95,6 +95,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Subnet": "Subnetz",
         "Scan": "Scannen",
         "Hostname": "Hostname",
+        "NetBIOS Info": "NetBIOS-Info",
         "Vendor": "Hersteller",
         "Latency": "Latenz",
         "Target": "Ziel",
@@ -246,6 +247,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Subnet": "Подсеть",
         "Scan": "Сканировать",
         "Hostname": "Имя хоста",
+        "NetBIOS Info": "Информация NetBIOS",
         "Vendor": "Производитель",
         "Latency": "Задержка",
         "Target": "Цель",
@@ -397,6 +399,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Subnet": "Підмережа",
         "Scan": "Сканувати",
         "Hostname": "Ім'я хоста",
+        "NetBIOS Info": "Інформація NetBIOS",
         "Vendor": "Виробник",
         "Latency": "Затримка",
         "Target": "Ціль",
