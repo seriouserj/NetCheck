@@ -1,8 +1,8 @@
 """
-Version: 1.6.8
+Version: 1.6.9
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate borderless tab rows and normalized input styling.
+Changelog: Validate navigation spacing and 24-pixel numeric stepper buttons.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QSpinBox,
     QStyle,
+    QStyleOptionSpinBox,
     QTableWidgetItem,
     QTabWidget,
 )
@@ -26,6 +27,8 @@ from ui.brand_header import BrandHeader
 from ui.form_layout import CONTROL_HEIGHT, centered_form
 from ui.hover_table import HoverRowTableWidget
 from ui.main_window import MainWindow
+from ui.settings_tab import SettingsTab
+from ui.tools_tab import ToolsTab
 
 EXPECTED_TABS = ("Dashboard", "VLAN", "Discovery", "Ports", "Tools", "Settings")
 
@@ -39,6 +42,9 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("MainWindow must contain a QTabWidget.")
     if window.findChild(BrandHeader) is None:
         raise RuntimeError("MainWindow must contain the DITIS brand header.")
+    central_layout = window.centralWidget().layout() if window.centralWidget() else None
+    if central_layout is None or central_layout.spacing() != 15:
+        raise RuntimeError("Primary navigation must have 15 pixels of top spacing.")
     actual_tabs = tuple(tabs.tabText(index) for index in range(tabs.count()))
     expected_tabs = tuple(tr(item) if item != "VLAN" else item for item in EXPECTED_TABS)
     if actual_tabs != expected_tabs:
@@ -82,6 +88,24 @@ def run_smoke_test(application: QApplication) -> int:
     wide_form.addRow("Value", spin_box)
     if spin_box.sizePolicy().horizontalPolicy() != QSizePolicy.Policy.Expanding:
         raise RuntimeError("Spin boxes in wide forms must align with line edits.")
+    spin_box.resize(300, 42)
+    spin_box.ensurePolished()
+    spin_option = QStyleOptionSpinBox()
+    spin_box.initStyleOption(spin_option)
+    stepper = spin_box.style().subControlRect(
+        QStyle.ComplexControl.CC_SpinBox,
+        spin_option,
+        QStyle.SubControl.SC_SpinBoxUp,
+        spin_box,
+    )
+    if stepper.width() < 24:
+        raise RuntimeError("Numeric stepper buttons must be at least 24 pixels wide.")
+    for panel_type in (ToolsTab, SettingsTab):
+        panel = window.findChild(panel_type)
+        if panel is None or panel.layout().contentsMargins().top() != 18:
+            raise RuntimeError("Secondary navigation must have an 18-pixel top gap.")
+    if "QTabWidget#innerTabs::pane" not in application.styleSheet() or "top: 15px" not in application.styleSheet():
+        raise RuntimeError("Secondary navigation must have 15 pixels below its tabs.")
     for object_name in (
         "scanButton",
         "copyReportButton",

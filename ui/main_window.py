@@ -1,8 +1,8 @@
 """
-Version: 1.6.8
+Version: 1.6.9
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Use the shared borderless primary navigation presentation.
+Changelog: Add 15 pixels of air below the cyan brand divider.
 """
 
 from __future__ import annotations
@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         container = QWidget()
         layout = QVBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        layout.setSpacing(15)
         layout.addWidget(BrandHeader())
         layout.addWidget(tabs)
         self.setCentralWidget(container)

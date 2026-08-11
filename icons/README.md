@@ -1,8 +1,8 @@
 <!--
-Version: 1.4.0
-Date: 2026-08-07
+Version: 1.6.9
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the tubbeTEC header logo and retained brand assets.
+Changelog: Document the numeric stepper arrow resources.
 -->
 
 # Icons
@@ -13,3 +13,5 @@ Changelog: Document the tubbeTEC header logo and retained brand assets.
 altering its geometry or proportions.
 `tubbetec-logo.png` is the transparent tubbeTEC header logo supplied by the project
 owner and displayed without altering its proportions.
+`step-up-white.svg` and `step-down-white.svg` provide high-contrast arrows for the
+shared navy integer and decimal stepper controls.

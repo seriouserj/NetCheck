@@ -1,8 +1,8 @@
 """
-Version: 1.6.8
+Version: 1.6.9
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Remove grey tab bases and normalize inactive input borders.
+Changelog: Add airy navigation spacing and accessible navy numeric steppers.
 """
 
 from __future__ import annotations
@@ -10,6 +10,8 @@ from __future__ import annotations
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QApplication
+
+from core.resources import resource_path
 
 
 def apply_theme(application: QApplication, preference: str = "system") -> None:
@@ -29,6 +31,8 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
     accent = "#009fe3"
     navy = "#05285a"
     muted = "#9eb5c9" if dark else "#5d6f7f"
+    step_up = resource_path("icons/step-up-white.svg").as_posix()
+    step_down = resource_path("icons/step-down-white.svg").as_posix()
     application.setStyleSheet(
         f"""
         QMainWindow {{ background: palette(window); }}
@@ -52,14 +56,19 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QTabBar#mainTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
         QTabWidget#innerTabs, QTabBar#innerTabBar, QTabBar#innerTabBar::base {{ background: palette(window); border: 0; }}
         QTabWidget#innerTabs::tab-bar {{ alignment: center; }}
-        QTabWidget#innerTabs::pane {{ background: palette(window); border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
+        QTabWidget#innerTabs::pane {{ background: palette(window); border: 1px solid #8a949e; border-radius: 0; top: 15px; }}
         QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 8px 12px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 131px; min-height: 26px; font-size: 14px; font-weight: 600; }}
         QTabBar#innerTabBar::tab:selected {{ color: white; background: {navy}; border-color: {navy}; }}
         QTabBar#innerTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
         QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ color: palette(text); background: palette(base); border: 1px solid #aeb6be; border-radius: 0; }}
         QLineEdit {{ min-height: 42px; max-height: 42px; padding: 0 10px; }}
         QComboBox {{ min-height: 42px; max-height: 42px; padding: 0 32px 0 10px; }}
-        QSpinBox, QDoubleSpinBox {{ min-height: 42px; max-height: 42px; padding: 0 32px 0 10px; }}
+        QSpinBox, QDoubleSpinBox {{ min-height: 42px; max-height: 42px; padding: 0 34px 0 10px; }}
+        QSpinBox::up-button, QDoubleSpinBox::up-button {{ subcontrol-origin: border; subcontrol-position: top right; width: 24px; height: 20px; background: {navy}; border: 0; border-left: 1px solid #8a949e; border-bottom: 1px solid #8a949e; }}
+        QSpinBox::down-button, QDoubleSpinBox::down-button {{ subcontrol-origin: border; subcontrol-position: bottom right; width: 24px; height: 20px; background: {navy}; border: 0; border-left: 1px solid #8a949e; }}
+        QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover, QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {{ background: {accent}; }}
+        QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {{ image: url({step_up}); width: 12px; height: 8px; }}
+        QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {{ image: url({step_down}); width: 12px; height: 8px; }}
         QPlainTextEdit {{ padding: 8px; }}
         QTableWidget {{ border: 1px solid #707b86; border-radius: 0; gridline-color: #8b96a1; selection-background-color: {navy}; selection-color: white; }}
         QTableWidget::item {{ border: 0; padding: 5px 8px; }}

@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.6.8
+# Version: 1.6.9
 # Date: 2026-08-11
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.6.8 visual-consistency maintenance release.
+# Changelog: Package custom numeric stepper arrow resources.
 
 from pathlib import Path
 
@@ -15,6 +15,8 @@ brand_data = [
     (str(project_root / "icons" / "ditis-logo.svg"), "icons"),
     (str(project_root / "icons" / "ditis-logo.png"), "icons"),
     (str(project_root / "icons" / "netcheck-1024.png"), "icons"),
+    (str(project_root / "icons" / "step-up-white.svg"), "icons"),
+    (str(project_root / "icons" / "step-down-white.svg"), "icons"),
 ]
 
 analysis = Analysis(

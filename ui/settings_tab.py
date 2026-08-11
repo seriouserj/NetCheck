@@ -1,8 +1,8 @@
 """
-Version: 1.6.8
+Version: 1.6.9
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Use the shared borderless secondary navigation presentation.
+Changelog: Set an 18-pixel gap between primary and settings navigation.
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ class SettingsTab(QWidget):
         super().__init__()
         self._store = store or SettingsStore()
         root_layout = QVBoxLayout(self)
-        root_layout.setContentsMargins(24, 24, 24, 24)
+        root_layout.setContentsMargins(24, 18, 24, 24)
         tabs = QTabWidget()
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")

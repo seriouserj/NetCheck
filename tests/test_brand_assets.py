@@ -1,8 +1,8 @@
 """
-Version: 1.4.0
-Date: 2026-08-10
+Version: 1.6.9
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify the tubbeTEC header logo and retained application assets.
+Changelog: Verify packaged SVG arrows for numeric stepper controls.
 """
 
 from xml.etree import ElementTree
@@ -41,3 +41,11 @@ def test_tubbetec_header_logo_is_transparent_and_visible() -> None:
     assert logo.mode == "RGBA"
     assert logo.size == (160, 63)
     assert logo.getbbox() is not None
+
+
+def test_numeric_stepper_arrows_are_valid_svg_resources() -> None:
+    for name in ("step-up-white.svg", "step-down-white.svg"):
+        arrow = resource_path(f"icons/{name}")
+
+        assert arrow.is_file()
+        assert ElementTree.parse(arrow).getroot().tag.endswith("svg")

@@ -1,0 +1,9 @@
+<!--
+Version: 1.6.9
+Date: 2026-08-11
+Author: Serhii Dralo <dralo@ditis.group>
+Changelog: Add a white downward stepper arrow for navy numeric controls.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8">
+  <path d="m2 2 4 4 4-4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
