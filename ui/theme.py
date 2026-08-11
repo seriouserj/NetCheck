@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.6.6
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center fixed-height fields and unify navigation sizing and backgrounds.
+Changelog: Reduce secondary navigation controls by approximately eight percent.
 """
 
 from __future__ import annotations
@@ -53,7 +53,7 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QTabWidget#innerTabs, QTabBar#innerTabBar, QTabBar#innerTabBar::base {{ background: palette(window); }}
         QTabWidget#innerTabs::tab-bar {{ alignment: center; }}
         QTabWidget#innerTabs::pane {{ background: palette(window); border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
-        QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 9px 14px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 142px; min-height: 28px; font-size: 14px; font-weight: 600; }}
+        QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 8px 12px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 131px; min-height: 26px; font-size: 14px; font-weight: 600; }}
         QTabBar#innerTabBar::tab:selected {{ color: white; background: {navy}; border-color: {navy}; }}
         QTabBar#innerTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
         QLineEdit {{ min-height: 42px; max-height: 42px; padding: 0 10px; }}
