@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
     QApplication,
     QFormLayout,
     QLabel,
-    QLineEdit,
     QStyle,
     QTableWidgetItem,
     QTabWidget,
@@ -21,7 +20,7 @@ from PySide6.QtWidgets import (
 from core.application import configure_application
 from core.i18n import tr
 from ui.brand_header import BrandHeader
-from ui.form_layout import centered_form
+from ui.form_layout import CONTROL_HEIGHT, centered_form
 from ui.hover_table import HoverRowTableWidget
 from ui.main_window import MainWindow
 
@@ -63,14 +62,14 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("Diagnostic forms must be vertically centered.")
     if not form.labelAlignment() & Qt.AlignmentFlag.AlignVCenter:
         raise RuntimeError("Form labels must be centered beside their fields.")
-    probe = QLineEdit()
+    probe = QLabel("Field")
     form.addRow("Probe", probe)
     label_item = form.itemAt(0, QFormLayout.ItemRole.LabelRole)
     label = label_item.widget() if label_item is not None else None
     if not isinstance(label, QLabel):
         raise RuntimeError("Form rows must use explicit QLabel widgets.")
-    if label.height() != probe.minimumHeight():
-        raise RuntimeError("Form labels must have the same height as their fields.")
+    if label.minimumHeight() != CONTROL_HEIGHT or label.maximumHeight() != CONTROL_HEIGHT:
+        raise RuntimeError("Form labels must match the themed control height.")
     if not label.alignment() & Qt.AlignmentFlag.AlignVCenter:
         raise RuntimeError("Every explicit form label must be vertically centered.")
     QThreadPool.globalInstance().waitForDone(15_000)
