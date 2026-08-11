@@ -1,8 +1,8 @@
 """
-Version: 1.6.6
+Version: 1.6.7
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.6 secondary-navigation maintenance release.
+Changelog: Start the NetCheck 1.6.7 tool-layout maintenance release.
 """
 
 from __future__ import annotations

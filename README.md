@@ -1,8 +1,8 @@
 <!--
-Version: 1.6.6
+Version: 1.6.7
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document compact secondary navigation in v1.6.6.
+Changelog: Document refined tool layouts and action icons in v1.6.7.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.6.6-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.6.6-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.6.7-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.6.7-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,11 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.6.6 highlights
+## Version 1.6.7 highlights
+
+- Ping and Route Monitor numeric controls align with their full-width target fields
+- Wake-on-LAN controls start at the top of the panel instead of floating vertically
+- Scan, copy, export, and Wake-on-LAN actions include compact accessible icons
 
 - Secondary Tools and Settings navigation is approximately eight percent more compact
 
