@@ -1,8 +1,8 @@
 """
-Version: 1.6.12
+Version: 1.6.13
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add visible active navigation states and fully branded combo boxes.
+Changelog: Keep disabled actions legible and on-brand during long diagnostics.
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QPushButton:hover {{ color: white; background: {accent}; border-color: {accent}; }}
         QPushButton:pressed {{ color: white; background: #0077c8; border-color: #0077c8; }}
         QPushButton:focus {{ border-color: {accent}; }}
-        QPushButton:disabled {{ color: #e2e7eb; background: #7d8994; border-color: #7d8994; }}
+        QPushButton:disabled {{ color: #b8e8fa; background: #173c67; border-color: #5d6f7f; }}
         QPushButton[primary="true"] {{ font-weight: 650; }}
         QFrame#brandHeader {{ background: {navy}; border-bottom: 3px solid {accent}; }}
         QLabel#brandLogo {{ background: white; border-radius: 7px; }}

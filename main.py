@@ -1,8 +1,8 @@
 """
-Version: 1.6.12
+Version: 1.6.13
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.12 active-navigation and combo-box styling release.
+Changelog: Start the NetCheck 1.6.13 disabled-action contrast release.
 """
 
 from __future__ import annotations

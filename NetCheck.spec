@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.6.12
+# Version: 1.6.13
 # Date: 2026-08-11
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.6.12 active-navigation and combo-box release.
+# Changelog: Package the NetCheck v1.6.13 disabled-action contrast release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.6.12",
+    version="1.6.13",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.6.12",
-        "CFBundleVersion": "20",
-        "CFBundleGetInfoString": "NetCheck 1.6.12 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.6.13",
+        "CFBundleVersion": "21",
+        "CFBundleGetInfoString": "NetCheck 1.6.13 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

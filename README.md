@@ -1,8 +1,8 @@
 <!--
-Version: 1.6.12
+Version: 1.6.13
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document active navigation and branded combo-box controls in v1.6.12.
+Changelog: Document readable branded disabled action buttons in v1.6.13.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.6.12-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.6.12-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.6.13-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.6.13-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,8 +27,9 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.6.12 highlights
+## Version 1.6.13 highlights
 
+- Disabled actions remain dark blue with readable pale-blue text and icons
 - Every action button uses the dark-navy brand surface by default and cyan on hover
 - Primary navigation uses cyan for both hover and the active page
 - Secondary navigation reverses the palette: cyan by default and navy for hover/active

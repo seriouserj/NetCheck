@@ -1,8 +1,8 @@
 """
-Version: 1.6.10
+Version: 1.6.13
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Keep every action icon legible on the unified navy button surface.
+Changelog: Use a high-contrast pale icon for disabled branded actions.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ def action_icon(name: ActionIconName, *, primary: bool = False) -> QIcon:
     icon = QIcon()
     icon.addPixmap(_draw_icon(name, normal), QIcon.Mode.Normal)
     icon.addPixmap(_draw_icon(name, QColor("#ffffff")), QIcon.Mode.Active)
-    icon.addPixmap(_draw_icon(name, QColor("#8a949e")), QIcon.Mode.Disabled)
+    icon.addPixmap(_draw_icon(name, QColor("#b8e8fa")), QIcon.Mode.Disabled)
     return icon
 
 

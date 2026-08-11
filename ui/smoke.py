@@ -1,8 +1,8 @@
 """
-Version: 1.6.12
+Version: 1.6.13
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate active navigation contrast and branded combo-box controls.
+Changelog: Validate branded, readable disabled action controls.
 """
 
 from __future__ import annotations
@@ -111,6 +111,8 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("Action buttons must use the navy brand surface by default.")
     if "QPushButton:hover { color: white; background: #009fe3" not in style_sheet:
         raise RuntimeError("Action buttons must use the cyan brand surface on hover.")
+    if "QPushButton:disabled { color: #b8e8fa; background: #173c67" not in style_sheet:
+        raise RuntimeError("Disabled action buttons must remain legible and navy rather than grey.")
     if "QTabBar#mainTabBar::tab:selected { color: white; background: #009fe3" not in style_sheet:
         raise RuntimeError("Active primary navigation must match its cyan hover state.")
     if "QTabBar#innerTabBar::tab { color: white; background: #009fe3" not in style_sheet:
