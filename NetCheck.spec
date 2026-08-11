@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.6.10
+# Version: 1.6.11
 # Date: 2026-08-11
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.6.10 unified-button styling release.
+# Changelog: Package the NetCheck v1.6.11 complete branded-button styling release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.6.10",
+    version="1.6.11",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.6.10",
-        "CFBundleVersion": "18",
-        "CFBundleGetInfoString": "NetCheck 1.6.10 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.6.11",
+        "CFBundleVersion": "19",
+        "CFBundleGetInfoString": "NetCheck 1.6.11 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

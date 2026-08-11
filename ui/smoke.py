@@ -1,8 +1,8 @@
 """
-Version: 1.6.10
+Version: 1.6.11
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate branded navigation spacing, steppers, and action button colors.
+Changelog: Validate the unified navy and cyan palette across actions and navigation.
 """
 
 from __future__ import annotations
@@ -111,6 +111,13 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("Action buttons must use the navy brand surface by default.")
     if "QPushButton:hover { color: white; background: #009fe3" not in style_sheet:
         raise RuntimeError("Action buttons must use the cyan brand surface on hover.")
+    for selector in ("QTabBar#mainTabBar::tab", "QTabBar#innerTabBar::tab"):
+        rule = f"{selector} {{ color: white; background: #05285a"
+        if rule not in style_sheet:
+            raise RuntimeError("Every navigation button must use the navy brand surface.")
+        hover_rule = f"{selector}:hover:!selected {{ color: white; background: #009fe3"
+        if hover_rule not in style_sheet:
+            raise RuntimeError("Every navigation button must use the cyan hover surface.")
     for object_name in (
         "scanButton",
         "copyReportButton",
