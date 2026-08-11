@@ -1,8 +1,8 @@
 """
-Version: 1.6.5
+Version: 1.6.6
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.5 form-alignment maintenance release.
+Changelog: Start the NetCheck 1.6.6 secondary-navigation maintenance release.
 """
 
 from __future__ import annotations

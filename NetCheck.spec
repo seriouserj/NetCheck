@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.6.5
+# Version: 1.6.6
 # Date: 2026-08-11
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.6.5 form-alignment maintenance release.
+# Changelog: Package the NetCheck v1.6.6 secondary-navigation maintenance release.
 
 from pathlib import Path
 
@@ -64,12 +64,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.6.5",
+    version="1.6.6",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.6.5",
-        "CFBundleVersion": "13",
-        "CFBundleGetInfoString": "NetCheck 1.6.5 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.6.6",
+        "CFBundleVersion": "14",
+        "CFBundleGetInfoString": "NetCheck 1.6.6 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,
