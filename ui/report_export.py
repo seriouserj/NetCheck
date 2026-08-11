@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.6.7
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Export diagnostic tables to TXT, PDF, and SVG reports.
+Changelog: Add accessible copy and export icons to report actions.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QMessageBox, QPushButton
 
 from core.i18n import tr
 from core.tabular_report import report_as_html, report_as_tsv
+from ui.action_icons import decorate_action
 from ui.hover_table import HoverRowTableWidget
 
 
@@ -30,10 +31,14 @@ class ReportExportBar(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addStretch()
         copy = QPushButton(tr("Copy"))
+        copy.setObjectName("copyReportButton")
+        decorate_action(copy, "copy")
         copy.clicked.connect(table.copy_all)
         layout.addWidget(copy)
         for file_type in ("TXT", "PDF", "SVG"):
             button = QPushButton(file_type)
+            button.setObjectName(f"export{file_type}Button")
+            decorate_action(button, "export")
             button.setToolTip(tr("Export report as {format}", format=file_type))
             button.clicked.connect(lambda checked=False, kind=file_type: self._save(kind.lower()))
             layout.addWidget(button)

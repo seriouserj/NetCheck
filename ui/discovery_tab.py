@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.6.7
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add copy and TXT/PDF/SVG export actions for discovery reports.
+Changelog: Add compact icons to scan and report actions.
 """
 
 from __future__ import annotations
@@ -26,6 +26,7 @@ from core.discovery_parser import parse_scan_network
 from core.discovery_service import DiscoveryService
 from core.i18n import tr
 from core.network_defaults import FALLBACK_SUBNET, detect_default_subnet
+from ui.action_icons import decorate_action
 from ui.async_task import BackgroundTask
 from ui.hover_table import HoverRowTableWidget
 from ui.report_export import ReportExportBar
@@ -50,7 +51,9 @@ class DiscoveryTab(QWidget):
         self._subnet.setPlaceholderText(FALLBACK_SUBNET)
         self._subnet.textEdited.connect(lambda: setattr(self, "_subnet_was_edited", True))
         self._scan = QPushButton(tr("Scan"))
+        self._scan.setObjectName("scanButton")
         self._scan.setProperty("primary", True)
+        decorate_action(self._scan, "scan", primary=True)
         self._scan.clicked.connect(self._start_scan)
         controls.addWidget(self._subnet, 1)
         controls.addWidget(self._scan)

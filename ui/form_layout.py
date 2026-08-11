@@ -1,8 +1,8 @@
 """
-Version: 1.6.5
+Version: 1.6.7
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Vertically center every explicit form label against 42-pixel controls.
+Changelog: Align expandable spin boxes with full-width form fields.
 """
 
 from __future__ import annotations
@@ -22,6 +22,14 @@ class CenteredFormLayout(QFormLayout):
         field: QWidget | QLayout | None = None,
     ) -> None:
         """Add a row with an explicit, control-height label for reliable centering."""
+        if (
+            isinstance(field, QWidget)
+            and self.fieldGrowthPolicy()
+            == QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow
+        ):
+            policy = field.sizePolicy()
+            policy.setHorizontalPolicy(QSizePolicy.Policy.Expanding)
+            field.setSizePolicy(policy)
         if isinstance(label, str) and field is not None:
             label_widget = QLabel(label)
             label_widget.setAlignment(

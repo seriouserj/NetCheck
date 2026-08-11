@@ -1,8 +1,8 @@
 """
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.7
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center the complete tools navigation group.
+Changelog: Move Wake-on-LAN controls upward and add an action icon.
 """
 
 from __future__ import annotations
@@ -26,6 +26,7 @@ from core.dns_tool import RECORD_TYPES, dns_lookup
 from core.i18n import tr
 from core.traceroute_tool import traceroute
 from core.wake_on_lan import send_magic_packet
+from ui.action_icons import decorate_action
 from ui.async_task import BackgroundTask
 from ui.form_layout import centered_form
 from ui.neighbors_panel import NeighborsPanel
@@ -144,7 +145,9 @@ class WolPanel(QWidget):
         self.status = QLabel(tr("Ready"))
         self.status.setAlignment(Qt.AlignmentFlag.AlignCenter)
         button = QPushButton(tr("Send magic packet"))
+        button.setObjectName("wakeButton")
         button.setProperty("primary", True)
+        decorate_action(button, "wake", primary=True)
         button.setMinimumWidth(160)
         button.setMaximumWidth(220)
         button.clicked.connect(self._send)
@@ -154,7 +157,6 @@ class WolPanel(QWidget):
         button_row.addStretch()
         form.addRow(tr("MAC address"), self.mac)
         form.addRow(tr("Broadcast"), self.broadcast)
-        layout.addStretch()
         layout.addLayout(form)
         layout.addLayout(button_row)
         layout.addWidget(self.status)

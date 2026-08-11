@@ -1,8 +1,8 @@
 """
-Version: 1.6.5
+Version: 1.6.7
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate explicit full-height labels in centered diagnostic forms.
+Changelog: Validate expanded form controls and icon-decorated report actions.
 """
 
 from __future__ import annotations
@@ -12,6 +12,9 @@ from PySide6.QtWidgets import (
     QApplication,
     QFormLayout,
     QLabel,
+    QPushButton,
+    QSizePolicy,
+    QSpinBox,
     QStyle,
     QTableWidgetItem,
     QTabWidget,
@@ -72,6 +75,22 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("Form labels must match the themed control height.")
     if not label.alignment() & Qt.AlignmentFlag.AlignVCenter:
         raise RuntimeError("Every explicit form label must be vertically centered.")
+    wide_form = centered_form(grow_fields=True)
+    spin_box = QSpinBox()
+    wide_form.addRow("Value", spin_box)
+    if spin_box.sizePolicy().horizontalPolicy() != QSizePolicy.Policy.Expanding:
+        raise RuntimeError("Spin boxes in wide forms must align with line edits.")
+    for object_name in (
+        "scanButton",
+        "copyReportButton",
+        "exportTXTButton",
+        "exportPDFButton",
+        "exportSVGButton",
+        "wakeButton",
+    ):
+        action = window.findChild(QPushButton, object_name)
+        if action is None or action.icon().isNull():
+            raise RuntimeError(f"Action button must have an icon: {object_name}")
     QThreadPool.globalInstance().waitForDone(15_000)
     application.processEvents()
     window.close()
