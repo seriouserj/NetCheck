@@ -1,14 +1,22 @@
 """
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.5
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate centered primary and nested tab navigation.
+Changelog: Validate explicit full-height labels in centered diagnostic forms.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, QThreadPool
-from PySide6.QtWidgets import QApplication, QStyle, QTableWidgetItem, QTabWidget
+from PySide6.QtWidgets import (
+    QApplication,
+    QFormLayout,
+    QLabel,
+    QLineEdit,
+    QStyle,
+    QTableWidgetItem,
+    QTabWidget,
+)
 
 from core.application import configure_application
 from core.i18n import tr
@@ -55,6 +63,16 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("Diagnostic forms must be vertically centered.")
     if not form.labelAlignment() & Qt.AlignmentFlag.AlignVCenter:
         raise RuntimeError("Form labels must be centered beside their fields.")
+    probe = QLineEdit()
+    form.addRow("Probe", probe)
+    label_item = form.itemAt(0, QFormLayout.ItemRole.LabelRole)
+    label = label_item.widget() if label_item is not None else None
+    if not isinstance(label, QLabel):
+        raise RuntimeError("Form rows must use explicit QLabel widgets.")
+    if label.height() != probe.minimumHeight():
+        raise RuntimeError("Form labels must have the same height as their fields.")
+    if not label.alignment() & Qt.AlignmentFlag.AlignVCenter:
+        raise RuntimeError("Every explicit form label must be vertically centered.")
     QThreadPool.globalInstance().waitForDone(15_000)
     application.processEvents()
     window.close()

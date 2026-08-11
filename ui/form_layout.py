@@ -1,21 +1,49 @@
 """
-Version: 1.6.3
-Date: 2026-08-10
+Version: 1.6.5
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Provide consistently centered form rows and labels.
+Changelog: Vertically center every explicit form label against 42-pixel controls.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFormLayout, QWidget
+from PySide6.QtWidgets import QFormLayout, QLabel, QLayout, QSizePolicy, QWidget
+
+CONTROL_HEIGHT = 42
+
+
+class CenteredFormLayout(QFormLayout):
+    """Form layout that avoids Qt's inconsistent native label alignment on macOS."""
+
+    def addRow(  # type: ignore[override]
+        self,
+        label: str | QWidget | QLayout,
+        field: QWidget | QLayout | None = None,
+    ) -> None:
+        """Add a row with an explicit, control-height label for reliable centering."""
+        if isinstance(label, str) and field is not None:
+            label_widget = QLabel(label)
+            label_widget.setAlignment(
+                Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+            )
+            label_widget.setFixedHeight(CONTROL_HEIGHT)
+            label_widget.setSizePolicy(
+                QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed
+            )
+            super().addRow(label_widget, field)
+            return
+        if field is None:
+            super().addRow(label)
+            return
+        super().addRow(label, field)
 
 
 def centered_form(
     parent: QWidget | None = None, *, grow_fields: bool = False
 ) -> QFormLayout:
     """Create a form whose block, labels, and controls are centered consistently."""
-    form = QFormLayout(parent)
+    form = CenteredFormLayout(parent)
     policy = (
         QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow
         if grow_fields
