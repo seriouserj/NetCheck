@@ -1,8 +1,8 @@
 """
-Version: 1.6.11
+Version: 1.6.12
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the unified navy and cyan palette across actions and navigation.
+Changelog: Validate active navigation contrast and branded combo-box controls.
 """
 
 from __future__ import annotations
@@ -111,13 +111,18 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("Action buttons must use the navy brand surface by default.")
     if "QPushButton:hover { color: white; background: #009fe3" not in style_sheet:
         raise RuntimeError("Action buttons must use the cyan brand surface on hover.")
-    for selector in ("QTabBar#mainTabBar::tab", "QTabBar#innerTabBar::tab"):
-        rule = f"{selector} {{ color: white; background: #05285a"
-        if rule not in style_sheet:
-            raise RuntimeError("Every navigation button must use the navy brand surface.")
-        hover_rule = f"{selector}:hover:!selected {{ color: white; background: #009fe3"
-        if hover_rule not in style_sheet:
-            raise RuntimeError("Every navigation button must use the cyan hover surface.")
+    if "QTabBar#mainTabBar::tab:selected { color: white; background: #009fe3" not in style_sheet:
+        raise RuntimeError("Active primary navigation must match its cyan hover state.")
+    if "QTabBar#innerTabBar::tab { color: white; background: #009fe3" not in style_sheet:
+        raise RuntimeError("Secondary navigation must use the reversed cyan default state.")
+    if "QTabBar#innerTabBar::tab:hover:!selected { color: white; background: #05285a" not in style_sheet:
+        raise RuntimeError("Secondary navigation must use the reversed navy hover state.")
+    if "QTabBar#innerTabBar::tab:selected { color: white; background: #05285a" not in style_sheet:
+        raise RuntimeError("Active secondary navigation must match its navy hover state.")
+    if "QComboBox::drop-down {" not in style_sheet or "QComboBox::down-arrow { image:" not in style_sheet:
+        raise RuntimeError("Combo boxes must use a branded drop-down button and white arrow.")
+    if "QComboBox QAbstractItemView {" not in style_sheet:
+        raise RuntimeError("Combo-box popup lists must use the application palette.")
     for object_name in (
         "scanButton",
         "copyReportButton",
