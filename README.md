@@ -1,8 +1,8 @@
 <!--
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.5
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document centered primary and nested navigation in v1.6.4.
+Changelog: Document reliable macOS form-label alignment in v1.6.5.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.6.4-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.6.4-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.6.5-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.6.5-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,10 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.6.4 highlights
+## Version 1.6.5 highlights
+
+- Every compact form uses explicit 42-pixel labels aligned to the vertical center
+- VLAN, Ports, Tools, Settings, and Profiles keep identical row alignment on macOS
 
 - Primary and nested navigation menus are centered as complete fixed-width groups
 - Centering remains stable across English, German, Russian, and Ukrainian labels

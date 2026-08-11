@@ -1,8 +1,8 @@
 """
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.5
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.4 centered-navigation maintenance release.
+Changelog: Start the NetCheck 1.6.5 form-alignment maintenance release.
 """
 
 from __future__ import annotations
