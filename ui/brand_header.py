@@ -1,18 +1,77 @@
 """
-Version: 1.5.0
-Date: 2026-08-10
+Version: 1.7.0
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Restore the DITIS 1.3.1 header as the primary design baseline.
+Changelog: Animate the cyan divider while background operations are active.
 """
 
 from __future__ import annotations
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QColor, QLinearGradient, QPainter, QPaintEvent, QPixmap, QResizeEvent
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 
 from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
 from core.resources import resource_path
+from ui.activity import activity_tracker
+
+
+class ActivityStrip(QWidget):
+    """Render a static cyan divider or an animated moving brand gradient."""
+
+    _ACCENT = QColor("#00D4FF")
+    _NAVY = QColor("#090979")
+
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent)
+        self._busy = False
+        self._position = 0.0
+        self._timer = QTimer(self)
+        self._timer.setInterval(24)
+        self._timer.timeout.connect(self._advance)
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+
+    def set_busy(self, busy: bool) -> None:
+        """Start or stop the moving gradient without changing strip geometry."""
+        if self._busy == busy:
+            return
+        self._busy = busy
+        if busy:
+            self._position = -0.25
+            self._timer.start()
+        else:
+            self._timer.stop()
+        self.update()
+
+    @property
+    def animating(self) -> bool:
+        """Return whether the moving gradient timer is active."""
+        return self._timer.isActive()
+
+    def _advance(self) -> None:
+        self._position += 0.012
+        if self._position > 1.25:
+            self._position = -0.25
+        self.update()
+
+    def paintEvent(self, event: QPaintEvent) -> None:
+        """Paint the divider and, while busy, its moving navy highlight."""
+        del event
+        painter = QPainter(self)
+        painter.fillRect(self.rect(), self._ACCENT)
+        if not self._busy or self.width() <= 0:
+            return
+        center = self._position * self.width()
+        span = max(120.0, self.width() * 0.24)
+        gradient = QLinearGradient(center - span / 2, 0, center + span / 2, 0)
+        transparent = QColor(self._ACCENT)
+        transparent.setAlpha(0)
+        gradient.setColorAt(0.0, transparent)
+        gradient.setColorAt(0.25, self._ACCENT)
+        gradient.setColorAt(0.5, self._NAVY)
+        gradient.setColorAt(0.75, QColor(0, 212, 255, 194))
+        gradient.setColorAt(1.0, transparent)
+        painter.fillRect(self.rect(), gradient)
 
 
 class BrandHeader(QFrame):
@@ -22,6 +81,10 @@ class BrandHeader(QFrame):
         super().__init__()
         self.setObjectName("brandHeader")
         self.setFixedHeight(72)
+        self._activity_strip = ActivityStrip(self)
+        tracker = activity_tracker()
+        tracker.busy_changed.connect(self._activity_strip.set_busy)
+        self._activity_strip.set_busy(tracker.busy)
         layout = QHBoxLayout(self)
         layout.setContentsMargins(20, 10, 20, 10)
         layout.setSpacing(18)
@@ -52,3 +115,15 @@ class BrandHeader(QFrame):
         author.setObjectName("brandAuthor")
         author.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         layout.addWidget(author)
+        self._place_activity_strip()
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        """Keep the activity strip exactly on the header's lower edge."""
+        super().resizeEvent(event)
+        self._place_activity_strip()
+
+    def _place_activity_strip(self) -> None:
+        """Place the unmanaged overlay without affecting header content spacing."""
+        strip_height = 3
+        self._activity_strip.setGeometry(0, self.height() - strip_height, self.width(), strip_height)
+        self._activity_strip.raise_()

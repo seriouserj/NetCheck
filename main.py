@@ -1,8 +1,8 @@
 """
-Version: 1.6.13
+Version: 1.7.0
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.13 disabled-action contrast release.
+Changelog: Start the NetCheck 1.7.0 animated activity indicator release.
 """
 
 from __future__ import annotations

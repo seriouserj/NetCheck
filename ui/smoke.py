@@ -1,8 +1,8 @@
 """
-Version: 1.6.13
+Version: 1.7.0
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate branded, readable disabled action controls.
+Changelog: Validate the animated header activity divider.
 """
 
 from __future__ import annotations
@@ -23,7 +23,8 @@ from PySide6.QtWidgets import (
 
 from core.application import configure_application
 from core.i18n import tr
-from ui.brand_header import BrandHeader
+from ui.activity import activity_tracker
+from ui.brand_header import ActivityStrip, BrandHeader
 from ui.form_layout import CONTROL_HEIGHT, centered_form
 from ui.hover_table import HoverRowTableWidget
 from ui.main_window import MainWindow
@@ -42,6 +43,20 @@ def run_smoke_test(application: QApplication) -> int:
         raise RuntimeError("MainWindow must contain a QTabWidget.")
     if window.findChild(BrandHeader) is None:
         raise RuntimeError("MainWindow must contain the DITIS brand header.")
+    activity_strip = window.findChild(ActivityStrip)
+    if activity_strip is None or activity_strip.height() != 3:
+        raise RuntimeError("Brand header must contain a three-pixel activity divider.")
+    tracker = activity_tracker()
+    was_busy = tracker.busy
+    if not was_busy:
+        tracker.begin()
+        application.processEvents()
+        if not activity_strip.animating:
+            raise RuntimeError("Brand divider must animate during background activity.")
+        tracker.end()
+        application.processEvents()
+        if activity_strip.animating:
+            raise RuntimeError("Brand divider must stop animating when activity settles.")
     central_layout = window.centralWidget().layout() if window.centralWidget() else None
     if central_layout is None or central_layout.spacing() != 15:
         raise RuntimeError("Primary navigation must have 15 pixels of top spacing.")
@@ -52,11 +67,15 @@ def run_smoke_test(application: QApplication) -> int:
     for tab_widget in window.findChildren(QTabWidget):
         if tab_widget.objectName() not in {"mainTabs", "innerTabs"}:
             continue
-        alignment = tab_widget.tabBar().style().styleHint(
-            QStyle.StyleHint.SH_TabBar_Alignment,
-            None,
-            tab_widget.tabBar(),
-            None,
+        alignment = (
+            tab_widget.tabBar()
+            .style()
+            .styleHint(
+                QStyle.StyleHint.SH_TabBar_Alignment,
+                None,
+                tab_widget.tabBar(),
+                None,
+            )
         )
         if alignment != Qt.AlignmentFlag.AlignCenter.value:
             raise RuntimeError("Every navigation tab group must be centered.")

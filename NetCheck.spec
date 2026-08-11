@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.6.13
+# Version: 1.7.0
 # Date: 2026-08-11
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.6.13 disabled-action contrast release.
+# Changelog: Package the NetCheck v1.7.0 animated activity indicator release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.6.13",
+    version="1.7.0",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.6.13",
-        "CFBundleVersion": "21",
-        "CFBundleGetInfoString": "NetCheck 1.6.13 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.7.0",
+        "CFBundleVersion": "22",
+        "CFBundleGetInfoString": "NetCheck 1.7.0 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

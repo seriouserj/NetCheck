@@ -1,8 +1,8 @@
 """
-Version: 1.6.3
-Date: 2026-08-10
+Version: 1.7.0
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center route monitor labels while preserving wide target input.
+Changelog: Publish route monitor lifetime to the global activity indicator.
 """
 
 from __future__ import annotations
@@ -28,15 +28,18 @@ from PySide6.QtWidgets import (
 
 from core.i18n import tr
 from core.route_monitor import RouteHopStats, monitor_route
+from ui.activity import activity_tracker
 from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
 from ui.sortable_items import NumericItem
 
 
 class _MonitorSignals(QObject):
+    started = Signal()
     updated = Signal(object)
     completed = Signal(object)
     failed = Signal(str)
+    settled = Signal()
 
 
 class _MonitorTask(QRunnable):
@@ -44,15 +47,21 @@ class _MonitorTask(QRunnable):
         super().__init__()
         self._operation = operation
         self.signals = _MonitorSignals()
+        tracker = activity_tracker()
+        self.signals.started.connect(tracker.begin)
+        self.signals.settled.connect(tracker.end)
 
     @Slot()
     def run(self) -> None:
+        self.signals.started.emit()
         try:
             result = self._operation(self.signals.updated.emit)
         except Exception as error:
             self.signals.failed.emit(str(error))
         else:
             self.signals.completed.emit(result)
+        finally:
+            self.signals.settled.emit()
 
 
 class RouteMonitorPanel(QWidget):

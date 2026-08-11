@@ -1,12 +1,12 @@
 """
-Version: 1.6.13
+Version: 1.7.0
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.6.13 with readable branded disabled actions.
+Changelog: Publish NetCheck 1.7.0 with an animated header activity indicator.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.6.13"
+APP_VERSION = "1.7.0"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"
