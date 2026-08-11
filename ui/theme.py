@@ -1,8 +1,8 @@
 """
-Version: 1.6.6
+Version: 1.6.8
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Reduce secondary navigation controls by approximately eight percent.
+Changelog: Remove grey tab bases and normalize inactive input borders.
 """
 
 from __future__ import annotations
@@ -50,15 +50,16 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QTabBar#mainTabBar::tab {{ color: palette(text); background: palette(button); padding: 10px 18px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 132px; min-height: 30px; font-size: 16px; font-weight: 600; }}
         QTabBar#mainTabBar::tab:selected {{ color: white; background: {navy}; }}
         QTabBar#mainTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
-        QTabWidget#innerTabs, QTabBar#innerTabBar, QTabBar#innerTabBar::base {{ background: palette(window); }}
+        QTabWidget#innerTabs, QTabBar#innerTabBar, QTabBar#innerTabBar::base {{ background: palette(window); border: 0; }}
         QTabWidget#innerTabs::tab-bar {{ alignment: center; }}
         QTabWidget#innerTabs::pane {{ background: palette(window); border: 1px solid #8a949e; border-radius: 0; top: 5px; }}
         QTabBar#innerTabBar::tab {{ color: {navy}; background: palette(button); padding: 8px 12px; margin: 0 5px 0 0; border: 1px solid #8a949e; border-radius: 4px; min-width: 131px; min-height: 26px; font-size: 14px; font-weight: 600; }}
         QTabBar#innerTabBar::tab:selected {{ color: white; background: {navy}; border-color: {navy}; }}
         QTabBar#innerTabBar::tab:hover:!selected {{ color: {navy}; background: #d9f3fc; }}
+        QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{ color: palette(text); background: palette(base); border: 1px solid #aeb6be; border-radius: 0; }}
         QLineEdit {{ min-height: 42px; max-height: 42px; padding: 0 10px; }}
         QComboBox {{ min-height: 42px; max-height: 42px; padding: 0 32px 0 10px; }}
-        QSpinBox, QDoubleSpinBox {{ min-height: 42px; max-height: 42px; padding-left: 10px; }}
+        QSpinBox, QDoubleSpinBox {{ min-height: 42px; max-height: 42px; padding: 0 32px 0 10px; }}
         QPlainTextEdit {{ padding: 8px; }}
         QTableWidget {{ border: 1px solid #707b86; border-radius: 0; gridline-color: #8b96a1; selection-background-color: {navy}; selection-color: white; }}
         QTableWidget::item {{ border: 0; padding: 5px 8px; }}

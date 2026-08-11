@@ -1,8 +1,8 @@
 """
-Version: 1.6.7
+Version: 1.6.8
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate expanded form controls and icon-decorated report actions.
+Changelog: Validate borderless tab rows and normalized input styling.
 """
 
 from __future__ import annotations
@@ -54,6 +54,8 @@ def run_smoke_test(application: QApplication) -> int:
         )
         if alignment != Qt.AlignmentFlag.AlignCenter.value:
             raise RuntimeError("Every navigation tab group must be centered.")
+        if tab_widget.documentMode() or tab_widget.tabBar().drawBase():
+            raise RuntimeError("Navigation must not draw a native grey tab-row base.")
     copy_table = HoverRowTableWidget(1, 1)
     copy_table.setItem(0, 0, QTableWidgetItem("192.0.2.1"))
     copy_table.cellClicked.emit(0, 0)

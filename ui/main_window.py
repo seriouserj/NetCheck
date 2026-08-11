@@ -1,8 +1,8 @@
 """
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.8
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center the complete primary navigation group.
+Changelog: Use the shared borderless primary navigation presentation.
 """
 
 from __future__ import annotations
@@ -42,7 +42,6 @@ class MainWindow(QMainWindow):
     def _build_tabs(self) -> None:
         """Create all translated tabs from the current language."""
         tabs = QTabWidget()
-        tabs.setDocumentMode(True)
         tabs.setObjectName("mainTabs")
         tabs.tabBar().setObjectName("mainTabBar")
         center_tab_group(tabs)

@@ -1,8 +1,8 @@
 """
-Version: 1.6.7
+Version: 1.6.8
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Move Wake-on-LAN controls upward and add an action icon.
+Changelog: Use the shared borderless secondary navigation presentation.
 """
 
 from __future__ import annotations
@@ -180,7 +180,6 @@ class ToolsTab(QWidget):
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
         center_tab_group(tabs)
-        tabs.setDocumentMode(True)
         tabs.addTab(PingPanel(), "Ping")
         tabs.addTab(
             CommandPanel(

@@ -1,8 +1,8 @@
 """
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.8
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center fixed-width Qt tab groups independently of interface language.
+Changelog: Remove the native dark tab-row base while preserving centered groups.
 """
 
 from __future__ import annotations
@@ -34,9 +34,13 @@ class _CenteredTabStyle(QProxyStyle):
 
 
 def center_tab_group(tabs: QTabWidget) -> None:
-    """Keep a tab group at its natural width and center it in the tab row."""
+    """Center a compact tab group without the native document-mode background."""
+    tabs.setDocumentMode(False)
+    tabs.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
     bar = tabs.tabBar()
     bar.setExpanding(False)
+    bar.setDrawBase(False)
+    bar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
     style = _CenteredTabStyle()
     style.setParent(bar)
     bar.setStyle(style)

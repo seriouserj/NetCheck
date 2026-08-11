@@ -1,8 +1,8 @@
 """
-Version: 1.6.4
-Date: 2026-08-10
+Version: 1.6.8
+Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center the complete settings navigation group.
+Changelog: Use the shared borderless secondary navigation presentation.
 """
 
 from __future__ import annotations
@@ -45,7 +45,6 @@ class SettingsTab(QWidget):
         tabs.setObjectName("innerTabs")
         tabs.tabBar().setObjectName("innerTabBar")
         center_tab_group(tabs)
-        tabs.setDocumentMode(True)
         general = QWidget()
         layout = QVBoxLayout(general)
         layout.setContentsMargins(24, 24, 24, 24)
