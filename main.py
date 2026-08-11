@@ -1,8 +1,8 @@
 """
-Version: 1.6.9
+Version: 1.6.10
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.6.9 navigation-spacing maintenance release.
+Changelog: Start the NetCheck 1.6.10 unified-button styling release.
 """
 
 from __future__ import annotations
