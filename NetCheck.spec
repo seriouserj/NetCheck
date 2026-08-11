@@ -2,7 +2,7 @@
 # Version: 1.6.9
 # Date: 2026-08-11
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package custom numeric stepper arrow resources.
+# Changelog: Package the NetCheck v1.6.9 navigation-spacing maintenance release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.6.8",
+    version="1.6.9",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.6.8",
-        "CFBundleVersion": "16",
-        "CFBundleGetInfoString": "NetCheck 1.6.8 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.6.9",
+        "CFBundleVersion": "17",
+        "CFBundleGetInfoString": "NetCheck 1.6.9 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,
