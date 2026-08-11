@@ -1,8 +1,8 @@
 """
-Version: 1.6.7
+Version: 1.6.10
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Provide palette-safe vector icons for common diagnostic actions.
+Changelog: Keep every action icon legible on the unified navy button surface.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ def decorate_action(button: QPushButton, name: ActionIconName, *, primary: bool 
 
 def action_icon(name: ActionIconName, *, primary: bool = False) -> QIcon:
     """Create a scalable-looking icon with normal, hover, and disabled states."""
-    normal = QColor("#ffffff" if primary else "#05285a")
+    normal = QColor("#ffffff")
     icon = QIcon()
     icon.addPixmap(_draw_icon(name, normal), QIcon.Mode.Normal)
     icon.addPixmap(_draw_icon(name, QColor("#ffffff")), QIcon.Mode.Active)

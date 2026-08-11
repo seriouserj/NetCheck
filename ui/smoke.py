@@ -1,8 +1,8 @@
 """
-Version: 1.6.9
+Version: 1.6.10
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate navigation spacing and 24-pixel numeric stepper buttons.
+Changelog: Validate branded navigation spacing, steppers, and action button colors.
 """
 
 from __future__ import annotations
@@ -106,6 +106,11 @@ def run_smoke_test(application: QApplication) -> int:
             raise RuntimeError("Secondary navigation must have an 18-pixel top gap.")
     if "QTabWidget#innerTabs::pane" not in application.styleSheet() or "top: 15px" not in application.styleSheet():
         raise RuntimeError("Secondary navigation must have 15 pixels below its tabs.")
+    style_sheet = application.styleSheet()
+    if "QPushButton { color: white" not in style_sheet or "background: #05285a" not in style_sheet:
+        raise RuntimeError("Action buttons must use the navy brand surface by default.")
+    if "QPushButton:hover { color: white; background: #009fe3" not in style_sheet:
+        raise RuntimeError("Action buttons must use the cyan brand surface on hover.")
     for object_name in (
         "scanButton",
         "copyReportButton",

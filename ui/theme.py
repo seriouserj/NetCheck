@@ -1,8 +1,8 @@
 """
-Version: 1.6.9
+Version: 1.6.10
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add airy navigation spacing and accessible navy numeric steppers.
+Changelog: Standardize every action button on the navy and cyan brand palette.
 """
 
 from __future__ import annotations
@@ -40,11 +40,12 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QLabel#pageSubtitle {{ color: {muted}; font-size: 16px; }}
         QLabel#sectionTitle {{ font-size: 24px; font-weight: 650; }}
         QLabel#mutedLabel {{ color: {muted}; }}
-        QPushButton {{ color: {navy}; padding: 7px 16px; min-height: 26px; border: 1px solid {navy}; border-radius: 5px; background: palette(button); }}
-        QPushButton:hover {{ color: white; background: {navy}; border-color: {navy}; }}
-        QPushButton[primary="true"] {{ color: white; background: {accent}; border-color: {accent}; font-weight: 650; }}
-        QPushButton[primary="true"]:hover {{ color: white; background: {navy}; border-color: {navy}; }}
-        QPushButton:pressed {{ color: white; background: {accent}; border-color: {accent}; }}
+        QPushButton {{ color: white; padding: 7px 16px; min-height: 26px; border: 1px solid {navy}; border-radius: 5px; background: {navy}; }}
+        QPushButton:hover {{ color: white; background: {accent}; border-color: {accent}; }}
+        QPushButton:pressed {{ color: white; background: #0077c8; border-color: #0077c8; }}
+        QPushButton:focus {{ border-color: {accent}; }}
+        QPushButton:disabled {{ color: #e2e7eb; background: #7d8994; border-color: #7d8994; }}
+        QPushButton[primary="true"] {{ font-weight: 650; }}
         QFrame#brandHeader {{ background: {navy}; border-bottom: 3px solid {accent}; }}
         QLabel#brandLogo {{ background: white; border-radius: 7px; }}
         QLabel#brandProduct {{ color: white; font-size: 20px; font-weight: 700; }}
