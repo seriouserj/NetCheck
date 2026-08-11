@@ -1,8 +1,8 @@
 <!--
-Version: 1.7.0
+Version: 1.7.1
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the animated activity divider in v1.7.0.
+Changelog: Document canonical DITIS colors in the v1.7.1 activity divider.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.7.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.7.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.7.1-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.7.1-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,9 +27,9 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.7.0 highlights
+## Version 1.7.1 highlights
 
-- The cyan divider animates with a moving navy gradient during long-running operations
+- The divider animates with the canonical DITIS cyan and navy colors during long-running operations
 - Concurrent operations keep the activity animation running until every task completes
 
 - Disabled actions remain dark blue with readable pale-blue text and icons

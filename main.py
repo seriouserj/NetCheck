@@ -1,8 +1,8 @@
 """
-Version: 1.7.0
+Version: 1.7.1
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.0 animated activity indicator release.
+Changelog: Start the NetCheck 1.7.1 canonical brand-gradient release.
 """
 
 from __future__ import annotations

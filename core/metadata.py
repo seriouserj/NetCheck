@@ -1,12 +1,12 @@
 """
-Version: 1.7.0
+Version: 1.7.1
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.7.0 with an animated header activity indicator.
+Changelog: Publish NetCheck 1.7.1 with canonical DITIS animation colors.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.7.0"
+APP_VERSION = "1.7.1"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

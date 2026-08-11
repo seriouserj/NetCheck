@@ -1,11 +1,18 @@
 """
-Version: 1.7.0
+Version: 1.7.1
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify concurrent-operation state for the animated header divider.
+Changelog: Verify activity state and canonical DITIS animation colors.
 """
 
 from ui.activity import ActivityTracker
+from ui.brand_header import ActivityStrip
+from ui.theme import BRAND_ACCENT, BRAND_NAVY
+
+
+def test_activity_strip_uses_canonical_brand_colors() -> None:
+    assert ActivityStrip.ACCENT_COLOR.name() == BRAND_ACCENT
+    assert ActivityStrip.NAVY_COLOR.name() == BRAND_NAVY
 
 
 def test_activity_tracker_stays_busy_until_every_operation_finishes() -> None:

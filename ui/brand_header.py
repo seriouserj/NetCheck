@@ -1,8 +1,8 @@
 """
-Version: 1.7.0
+Version: 1.7.1
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Animate the cyan divider while background operations are active.
+Changelog: Use the canonical DITIS palette in the animated divider.
 """
 
 from __future__ import annotations
@@ -14,13 +14,14 @@ from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
 from core.resources import resource_path
 from ui.activity import activity_tracker
+from ui.theme import BRAND_ACCENT, BRAND_NAVY
 
 
 class ActivityStrip(QWidget):
     """Render a static cyan divider or an animated moving brand gradient."""
 
-    _ACCENT = QColor("#00D4FF")
-    _NAVY = QColor("#090979")
+    ACCENT_COLOR = QColor(BRAND_ACCENT)
+    NAVY_COLOR = QColor(BRAND_NAVY)
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
@@ -58,18 +59,20 @@ class ActivityStrip(QWidget):
         """Paint the divider and, while busy, its moving navy highlight."""
         del event
         painter = QPainter(self)
-        painter.fillRect(self.rect(), self._ACCENT)
+        painter.fillRect(self.rect(), self.ACCENT_COLOR)
         if not self._busy or self.width() <= 0:
             return
         center = self._position * self.width()
         span = max(120.0, self.width() * 0.24)
         gradient = QLinearGradient(center - span / 2, 0, center + span / 2, 0)
-        transparent = QColor(self._ACCENT)
+        transparent = QColor(self.ACCENT_COLOR)
         transparent.setAlpha(0)
         gradient.setColorAt(0.0, transparent)
-        gradient.setColorAt(0.25, self._ACCENT)
-        gradient.setColorAt(0.5, self._NAVY)
-        gradient.setColorAt(0.75, QColor(0, 212, 255, 194))
+        gradient.setColorAt(0.25, self.ACCENT_COLOR)
+        gradient.setColorAt(0.5, self.NAVY_COLOR)
+        trailing_accent = QColor(self.ACCENT_COLOR)
+        trailing_accent.setAlpha(194)
+        gradient.setColorAt(0.75, trailing_accent)
         gradient.setColorAt(1.0, transparent)
         painter.fillRect(self.rect(), gradient)
 

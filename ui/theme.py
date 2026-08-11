@@ -1,8 +1,8 @@
 """
-Version: 1.6.13
+Version: 1.7.1
 Date: 2026-08-11
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Keep disabled actions legible and on-brand during long diagnostics.
+Changelog: Export the canonical DITIS colors for animated brand elements.
 """
 
 from __future__ import annotations
@@ -12,6 +12,9 @@ from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QApplication
 
 from core.resources import resource_path
+
+BRAND_ACCENT = "#009fe3"
+BRAND_NAVY = "#05285a"
 
 
 def apply_theme(application: QApplication, preference: str = "system") -> None:
@@ -28,8 +31,8 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         application.setPalette(QPalette())
         palette = application.palette()
     dark = palette.color(QPalette.ColorRole.Window).lightness() < 128
-    accent = "#009fe3"
-    navy = "#05285a"
+    accent = BRAND_ACCENT
+    navy = BRAND_NAVY
     muted = "#9eb5c9" if dark else "#5d6f7f"
     step_up = resource_path("icons/step-up-white.svg").as_posix()
     step_down = resource_path("icons/step-down-white.svg").as_posix()
