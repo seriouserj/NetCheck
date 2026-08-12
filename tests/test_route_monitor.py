@@ -1,13 +1,14 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify route-hop parsing and MTR-style statistics.
+Changelog: Verify macOS and Windows route-hop monitoring.
 """
 
 from threading import Event
 
 from core.command_runner import CommandResult
+from core.platform_commands import traceroute_command
 from core.route_monitor import monitor_route, parse_route_hop
 
 
@@ -15,6 +16,14 @@ def test_parses_reachable_and_timed_out_route_hops() -> None:
     assert parse_route_hop(" 1  192.168.1.1  1.234 ms") == (1, "192.168.1.1", 1.234)
     assert parse_route_hop(" 2  *") == (2, "—", None)
     assert parse_route_hop("traceroute to example.com") is None
+
+
+def test_parses_windows_tracert_hop() -> None:
+    assert parse_route_hop("  2    <1 ms    <1 ms     1 ms  192.168.1.1") == (
+        2,
+        "192.168.1.1",
+        1.0,
+    )
 
 
 def test_monitor_aggregates_loss_and_latency() -> None:
@@ -55,4 +64,4 @@ def test_monitor_builds_bounded_numeric_traceroute_command() -> None:
 
     monitor_route("router", cycles=1, runner=runner)
 
-    assert commands == [("traceroute", "-n", "-m", "30", "-q", "1", "-w", "1", "router")]
+    assert commands == [traceroute_command("router")]

@@ -1,12 +1,13 @@
 """
-Version: 1.6.9
-Date: 2026-08-11
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Set an 18-pixel gap between primary and tools navigation.
+Changelog: Mark raw LLDP/CDP capture unavailable on Windows.
 """
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
 
 from PySide6.QtCore import Qt, QThreadPool
@@ -193,6 +194,12 @@ class ToolsTab(QWidget):
         tabs.addTab(RouteMonitorPanel(), tr("Route Monitor"))
         tabs.addTab(DnsPanel(), tr("DNS Lookup"))
         tabs.addTab(WolPanel(), tr("Wake-on-LAN"))
-        tabs.addTab(NeighborsPanel(), "LLDP/CDP")
+        neighbor_index = tabs.addTab(NeighborsPanel(), "LLDP/CDP")
+        if sys.platform == "win32":
+            tabs.setTabEnabled(neighbor_index, False)
+            tabs.setTabToolTip(
+                neighbor_index,
+                tr("LLDP/CDP capture requires macOS packet capture support."),
+            )
         tabs.addTab(SnmpPanel(), "SNMP")
         layout.addWidget(tabs)

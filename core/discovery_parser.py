@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Parse subnet, reachability, ARP, and macOS reverse-host output.
+Changelog: Parse subnet, reachability, and ARP output from macOS and Windows.
 """
 
 from __future__ import annotations
@@ -27,17 +27,25 @@ def parse_scan_network(value: str, maximum_hosts: int = 1024) -> ipaddress.IPv4N
 
 
 def parse_ping_latency(output: str) -> float | None:
-    """Extract a millisecond round-trip time from macOS ping output."""
-    match = re.search(r"time[=<]([0-9.]+)\s*ms", output)
-    return float(match.group(1)) if match else None
+    """Extract a millisecond round-trip time from localized ping output."""
+    match = re.search(
+        r"(?:time|zeit|время|час)[=<]\s*([0-9]+(?:[.,][0-9]+)?)\s*ms",
+        output,
+        re.IGNORECASE,
+    )
+    return float(match.group(1).replace(",", ".")) if match else None
 
 
 def parse_arp_mac(output: str) -> str:
-    """Extract and normalize a MAC address from macOS arp output."""
-    match = re.search(r"\bat\s+([0-9a-f]{1,2}(?::[0-9a-f]{1,2}){5})\b", output, re.IGNORECASE)
+    """Extract and normalize a MAC address from macOS or Windows ARP output."""
+    match = re.search(
+        r"(?:\bat\s+)?([0-9a-f]{1,2}(?:(?::|-)[0-9a-f]{1,2}){5})\b",
+        output,
+        re.IGNORECASE,
+    )
     if not match:
         return ""
-    return ":".join(part.zfill(2) for part in match.group(1).lower().split(":"))
+    return ":".join(part.zfill(2) for part in re.split(r"[:-]", match.group(1).lower()))
 
 
 def parse_cached_hostname(output: str) -> str:

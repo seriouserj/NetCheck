@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add concurrent finite and continuous ping sessions with payload control.
+Changelog: Run concurrent payload-controlled ping sessions on macOS and Windows.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Event
 
 from core.command_runner import CommandResult
+from core.platform_commands import ping_command
 from core.streaming_command import OutputCallback, run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float, OutputCallback | None, Event | None], CommandResult]
@@ -55,15 +56,7 @@ def run_multi_ping(
         while not stop.is_set():
             batch += 1
             _emit(f"=== {target} · batch {batch} · {packet_size} byte payload ===", output_callback)
-            command = (
-                "ping",
-                "-n",
-                "-c",
-                str(batch_size),
-                "-s",
-                str(packet_size),
-                target,
-            )
+            command = ping_command(target, batch_size, packet_size)
             last_result = runner(
                 command,
                 max(12.0, batch_size * 2.0 + 5.0),

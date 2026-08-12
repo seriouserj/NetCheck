@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify multi-target parsing, payload selection, and finite batches.
+Changelog: Verify native macOS and Windows multi-target ping commands.
 """
 
 from threading import Event
@@ -11,6 +11,7 @@ import pytest
 
 from core.command_runner import CommandResult
 from core.multi_ping import parse_ping_targets, run_multi_ping
+from core.platform_commands import ping_command
 
 
 def test_parses_and_deduplicates_multiple_ping_targets() -> None:
@@ -36,8 +37,8 @@ def test_finite_multi_ping_uses_four_requests_and_payload_size() -> None:
     output = run_multi_ping(("192.0.2.1", "192.0.2.2"), packet_size=65000, runner=runner)
 
     assert set(commands) == {
-        ("ping", "-n", "-c", "4", "-s", "65000", "192.0.2.1"),
-        ("ping", "-n", "-c", "4", "-s", "65000", "192.0.2.2"),
+        ping_command("192.0.2.1", 4, 65000),
+        ping_command("192.0.2.2", 4, 65000),
     }
     assert "192.0.2.1: exit 0" in output
     assert "192.0.2.2: exit 0" in output
@@ -59,4 +60,4 @@ def test_continuous_mode_uses_hundred_request_batches() -> None:
 
     run_multi_ping(("router",), continuous=True, cancel_event=stop, runner=runner)
 
-    assert commands == [("ping", "-n", "-c", "100", "-s", "56", "router")]
+    assert commands == [ping_command("router", 100, 56)]

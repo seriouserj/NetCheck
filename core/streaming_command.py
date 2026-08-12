@@ -1,19 +1,23 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Allow running streaming commands to be cancelled safely by the UI.
+Changelog: Stream cancellable command output on macOS and Windows.
 """
 
 from __future__ import annotations
 
 import os
-import pty
-import selectors
+import queue
 import subprocess
+import sys
 import time
 from collections.abc import Callable, Sequence
-from threading import Event
+from threading import Event, Thread
+
+if sys.platform != "win32":
+    import pty
+    import selectors
 
 from core.command_runner import CommandResult
 
@@ -29,6 +33,18 @@ def run_streaming_command(
     """Run a command without a shell and deliver each output line immediately."""
     if timeout <= 0:
         raise ValueError("Timeout must be greater than zero.")
+    if sys.platform == "win32":
+        return _run_pipe_streaming(command, timeout, output_callback, cancel_event)
+    return _run_pty_streaming(command, timeout, output_callback, cancel_event)
+
+
+def _run_pty_streaming(
+    command: Sequence[str],
+    timeout: float,
+    output_callback: OutputCallback | None,
+    cancel_event: Event | None,
+) -> CommandResult:
+    """Stream through a pseudo-terminal on POSIX to preserve live output."""
     master_fd, slave_fd = pty.openpty()
     try:
         process = subprocess.Popen(
@@ -74,6 +90,67 @@ def run_streaming_command(
         selector.close()
         os.close(master_fd)
 
+    if timed_out:
+        message = f"Command timed out after {timeout:.1f} seconds."
+        _notify(message, output_callback)
+        return CommandResult(124, "\n".join(lines), message)
+    return CommandResult(process.returncode or 0, "\n".join(lines), "")
+
+
+def _run_pipe_streaming(
+    command: Sequence[str],
+    timeout: float,
+    output_callback: OutputCallback | None,
+    cancel_event: Event | None,
+) -> CommandResult:
+    """Stream merged output through a reader thread on Windows."""
+    creation_flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    try:
+        process = subprocess.Popen(
+            list(command),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            errors="replace",
+            bufsize=1,
+            creationflags=creation_flags,
+        )
+    except (FileNotFoundError, PermissionError, OSError) as error:
+        return CommandResult(127, "", str(error))
+    received: queue.Queue[str | None] = queue.Queue()
+
+    def read_output() -> None:
+        assert process.stdout is not None
+        for raw_line in process.stdout:
+            received.put(raw_line.rstrip("\r\n"))
+        received.put(None)
+
+    reader = Thread(target=read_output, name="netcheck-command-output", daemon=True)
+    reader.start()
+    lines: list[str] = []
+    deadline = time.monotonic() + timeout
+    timed_out = False
+    completed_output = False
+    while not completed_output:
+        if cancel_event is not None and cancel_event.is_set():
+            _terminate(process)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0 and process.poll() is None:
+            timed_out = True
+            _terminate(process)
+        try:
+            line = received.get(timeout=0.05)
+        except queue.Empty:
+            if process.poll() is not None and not reader.is_alive():
+                break
+            continue
+        if line is None:
+            completed_output = True
+        else:
+            _publish(line, lines, output_callback)
+    reader.join(timeout=0.5)
+    if process.poll() is None:
+        _terminate(process)
     if timed_out:
         message = f"Command timed out after {timeout:.1f} seconds."
         _notify(message, output_callback)

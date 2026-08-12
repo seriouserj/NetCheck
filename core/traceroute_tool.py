@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Stream route hops and bound every probe to avoid false timeouts.
+Changelog: Stream native macOS traceroute or Windows tracert output.
 """
 
 from __future__ import annotations
@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from core.command_runner import CommandResult
+from core.platform_commands import traceroute_command
 from core.streaming_command import OutputCallback, run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float, OutputCallback | None], CommandResult]
@@ -26,7 +27,7 @@ def traceroute(
     target = target.strip()
     if not target:
         raise ValueError("Enter a traceroute target.")
-    command = ("traceroute", "-n", "-m", str(maximum_hops), "-q", "1", "-w", "1", target)
+    command = traceroute_command(target, maximum_hops)
     result = runner(command, timeout, output_callback)
     output = "\n".join(part for part in (result.stdout, result.stderr) if part)
     if not output:

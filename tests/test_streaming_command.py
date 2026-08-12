@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify incremental command output and bounded traceroute probes.
+Changelog: Verify cross-platform streaming and native traceroute commands.
 """
 
 from __future__ import annotations
@@ -10,7 +10,9 @@ from __future__ import annotations
 import sys
 from threading import Event
 
+import core.streaming_command as streaming_command
 from core.command_runner import CommandResult
+from core.platform_commands import traceroute_command
 from core.streaming_command import run_streaming_command
 from core.traceroute_tool import traceroute
 
@@ -27,6 +29,20 @@ def test_streaming_command_delivers_each_line() -> None:
     assert result.return_code == 0
     assert received == ["first", "second"]
     assert result.stdout == "first\nsecond"
+
+
+def test_windows_pipe_streaming_delivers_each_line(monkeypatch) -> None:
+    received: list[str] = []
+    monkeypatch.setattr(streaming_command.sys, "platform", "win32")
+
+    result = run_streaming_command(
+        (sys.executable, "-u", "-c", "print('first'); print('second')"),
+        2.0,
+        received.append,
+    )
+
+    assert result.return_code == 0
+    assert received == ["first", "second"]
 
 
 def test_streaming_command_keeps_partial_output_on_timeout() -> None:
@@ -73,9 +89,7 @@ def test_traceroute_uses_one_short_probe_per_hop() -> None:
     output = traceroute("example.com", runner=runner)
 
     assert output == "1  192.0.2.1  1.0 ms"
-    assert calls == [
-        (("traceroute", "-n", "-m", "30", "-q", "1", "-w", "1", "example.com"), 45.0)
-    ]
+    assert calls == [(traceroute_command("example.com"), 45.0)]
 
 
 def test_streaming_command_honors_cancellation() -> None:

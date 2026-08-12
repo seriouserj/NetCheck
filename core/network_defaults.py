@@ -1,14 +1,15 @@
 """
-Version: 1.3.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Derive the default discovery subnet from local interface addressing.
+Changelog: Derive the default discovery subnet on macOS and Windows.
 """
 
 from __future__ import annotations
 
 import ipaddress
 import socket
+import sys
 
 import psutil
 
@@ -19,11 +20,11 @@ def detect_default_subnet() -> str:
     """Prefer en0, then another active en interface, then the static fallback."""
     addresses = psutil.net_if_addrs()
     statistics = psutil.net_if_stats()
-    ethernet_names = [name for name in addresses if name.startswith("en")]
+    ethernet_names = [name for name in addresses if _is_candidate(name)]
     ordered = sorted(
         ethernet_names,
         key=lambda name: (
-            name != "en0",
+            _preference(name),
             not bool(statistics.get(name) and statistics[name].isup),
             name,
         ),
@@ -43,3 +44,22 @@ def detect_default_subnet() -> str:
                 continue
             return str(interface.network)
     return FALLBACK_SUBNET
+
+
+def _preference(name: str) -> int:
+    normalized = name.casefold()
+    if sys.platform == "darwin":
+        return 0 if name == "en0" else 1
+    if sys.platform == "win32":
+        return 0 if "ethernet" in normalized else 1
+    return 0
+
+
+def _is_candidate(name: str) -> bool:
+    normalized = name.casefold()
+    if sys.platform == "darwin":
+        return name.startswith("en")
+    return not any(
+        marker in normalized
+        for marker in ("loopback", "bluetooth", "tunnel", "vethernet")
+    )

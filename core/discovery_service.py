@@ -1,8 +1,8 @@
 """
-Version: 1.3.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Resolve macOS hostnames and NetBIOS identities for discovered hosts.
+Changelog: Discover hosts with native macOS or Windows network commands.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from core.command_runner import CommandResult, run_command
 from core.discovery_models import DiscoveredHost
 from core.discovery_parser import parse_arp_mac, parse_cached_hostname, parse_ping_latency
 from core.netbios_service import NetBiosInfo, query_netbios_node_status
+from core.platform_commands import arp_lookup_command, is_windows, ping_once_command
 from core.vendor_lookup import VendorLookup
 
 CommandRunner = Callable[[tuple[str, ...], float], CommandResult]
@@ -44,12 +45,11 @@ class DiscoveryService:
         return sorted(hosts, key=lambda host: ipaddress.ip_address(host.ip_address))
 
     def _probe(self, address: str, timeout: float) -> DiscoveredHost | None:
-        timeout_ms = max(100, int(timeout * 1000))
-        ping = self._run(("ping", "-n", "-c", "1", "-W", str(timeout_ms), address), timeout + 1.0)
+        ping = self._run(ping_once_command(address, timeout), timeout + 1.0)
         latency = parse_ping_latency(ping.stdout)
         if ping.return_code != 0 or latency is None:
             return None
-        arp = self._run(("arp", "-n", address), 2.0)
+        arp = self._run(arp_lookup_command(address), 2.0)
         mac_address = parse_arp_mac(arp.stdout)
         netbios = self._netbios(address, min(0.5, max(0.2, timeout)))
         hostname = self._resolve_hostname(address) or netbios.hostname or "—"
@@ -66,5 +66,7 @@ class DiscoveryService:
         try:
             return socket.gethostbyaddr(address)[0]
         except (socket.herror, socket.gaierror, OSError):
+            if is_windows():
+                return ""
             cached = self._run(("dscacheutil", "-q", "host", "-a", "ip_address", address), 1.0)
             return parse_cached_hostname(cached.stdout)

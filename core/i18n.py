@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize multi-target continuous Ping controls and status messages.
+Changelog: Localize Windows platform capability messages.
 """
 
 from __future__ import annotations
@@ -47,6 +47,8 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Ports": "Ports",
         "Tools": "Werkzeuge",
         "Settings": "Einstellungen",
+        "VLAN testing requires macOS.": "VLAN-Tests erfordern macOS.",
+        "LLDP/CDP capture requires macOS packet capture support.": "LLDP/CDP-Erfassung erfordert die macOS-Paketerfassung.",
         "Interface": "Schnittstelle",
         "Status": "Status",
         "Speed": "Geschwindigkeit",
@@ -236,6 +238,8 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Ports": "Порты",
         "Tools": "Инструменты",
         "Settings": "Настройки",
+        "VLAN testing requires macOS.": "Тестирование VLAN требует macOS.",
+        "LLDP/CDP capture requires macOS packet capture support.": "Захват LLDP/CDP требует поддержки захвата пакетов macOS.",
         "Interface": "Интерфейс",
         "Status": "Состояние",
         "Speed": "Скорость",
@@ -425,6 +429,8 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Ports": "Порти",
         "Tools": "Інструменти",
         "Settings": "Налаштування",
+        "VLAN testing requires macOS.": "Тестування VLAN потребує macOS.",
+        "LLDP/CDP capture requires macOS packet capture support.": "Захоплення LLDP/CDP потребує підтримки захоплення пакетів macOS.",
         "Interface": "Інтерфейс",
         "Status": "Стан",
         "Speed": "Швидкість",

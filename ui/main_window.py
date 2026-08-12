@@ -1,11 +1,13 @@
 """
-Version: 1.6.9
-Date: 2026-08-11
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add 15 pixels of air below the cyan brand divider.
+Changelog: Mark macOS-only VLAN diagnostics unavailable on Windows.
 """
 
 from __future__ import annotations
+
+import sys
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow, QTabWidget, QVBoxLayout, QWidget
@@ -46,7 +48,10 @@ class MainWindow(QMainWindow):
         tabs.tabBar().setObjectName("mainTabBar")
         center_tab_group(tabs)
         tabs.addTab(DashboardTab(), tr("Dashboard"))
-        tabs.addTab(VlanTab(), "VLAN")
+        vlan_index = tabs.addTab(VlanTab(), "VLAN")
+        if sys.platform == "win32":
+            tabs.setTabEnabled(vlan_index, False)
+            tabs.setTabToolTip(vlan_index, tr("VLAN testing requires macOS."))
         tabs.addTab(DiscoveryTab(), tr("Discovery"))
         tabs.addTab(PortsTab(), tr("Ports"))
         tabs.addTab(ToolsTab(), tr("Tools"))

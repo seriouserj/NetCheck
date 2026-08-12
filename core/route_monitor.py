@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add a dependency-free MTR-style route quality monitor for macOS.
+Changelog: Monitor route quality through native macOS or Windows tracing.
 """
 
 from __future__ import annotations
@@ -13,12 +13,14 @@ from dataclasses import dataclass
 from threading import Event
 
 from core.command_runner import CommandResult
+from core.platform_commands import traceroute_command
 from core.streaming_command import OutputCallback, run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float, OutputCallback | None, Event | None], CommandResult]
 UpdateCallback = Callable[[tuple["RouteHopStats", ...]], None]
 _HOP_LINE = re.compile(r"^\s*(?P<hop>\d+)\s+(?P<body>.+)$")
 _LATENCY = re.compile(r"(?P<latency>\d+(?:\.\d+)?)\s*ms")
+_IPV4_ADDRESS = re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b")
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,7 +84,8 @@ def parse_route_hop(line: str) -> tuple[int, str, float | None] | None:
     if match is None:
         return None
     body = match.group("body").strip()
-    address = "—" if body.startswith("*") else body.split()[0]
+    windows_addresses = _IPV4_ADDRESS.findall(body)
+    address = windows_addresses[-1] if windows_addresses else "—" if body.startswith("*") else body.split()[0]
     latency_match = _LATENCY.search(body)
     latency = float(latency_match.group("latency")) if latency_match else None
     return int(match.group("hop")), address, latency
@@ -123,7 +126,7 @@ def monitor_route(
                 update_callback(_snapshot(accumulators))
 
         result = runner(
-            ("traceroute", "-n", "-m", "30", "-q", "1", "-w", "1", target),
+            traceroute_command(target),
             35.0,
             receive,
             stop,
