@@ -1,8 +1,8 @@
 """
-Version: 1.5.0
-Date: 2026-08-10
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Capture LLDP and CDP through one authorized worker invocation.
+Changelog: Close temporary capture output before cross-platform worker access.
 """
 
 from __future__ import annotations
@@ -41,13 +41,19 @@ class NeighborService:
             raise ValueError("Select an interface for neighbor discovery.")
         if self._run(("which", "tcpdump"), 2.0).return_code != 0:
             raise RuntimeError("tcpdump is required for LLDP/CDP discovery.")
-        with tempfile.NamedTemporaryFile(prefix="netcheck-neighbors-", suffix=".txt") as output:
-            command = self._worker_command(interface, timeout, output.name)
+        with tempfile.NamedTemporaryFile(
+            prefix="netcheck-neighbors-", suffix=".txt", delete=False
+        ) as output:
+            output_path = Path(output.name)
+        try:
+            command = self._worker_command(interface, timeout, str(output_path))
             result = self._run_privileged(command, timeout + 60.0)
             if result.return_code != 0:
                 detail = result.stderr or result.stdout or "Neighbor capture authorization failed."
                 raise RuntimeError(detail)
-            capture = Path(output.name).read_text(encoding="utf-8", errors="replace")
+            capture = output_path.read_text(encoding="utf-8", errors="replace")
+        finally:
+            output_path.unlink(missing_ok=True)
         neighbors: list[NetworkNeighbor] = []
         for parser in (parse_lldp, parse_cdp):
             neighbor = parser(capture)

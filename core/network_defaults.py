@@ -48,11 +48,13 @@ def detect_default_subnet() -> str:
 
 def _preference(name: str) -> int:
     normalized = name.casefold()
+    if name == "en0":
+        return 0
     if sys.platform == "darwin":
-        return 0 if name == "en0" else 1
+        return 1
     if sys.platform == "win32":
-        return 0 if "ethernet" in normalized else 1
-    return 0
+        return 1 if "ethernet" in normalized else 2
+    return 1
 
 
 def _is_candidate(name: str) -> bool:

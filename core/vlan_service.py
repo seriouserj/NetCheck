@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Stabilize sequential DHCP tests and stream completed VLAN results.
+Changelog: Close temporary worker output before cross-platform access.
 """
 
 from __future__ import annotations
@@ -66,24 +66,30 @@ class VlanService:
         """Run a complete VLAN batch in one authorized worker process."""
         if not vlan_ids:
             return []
-        with tempfile.NamedTemporaryFile(prefix="netcheck-vlan-", suffix=".json") as output:
-            Path(output.name).write_text("[]", encoding="utf-8")
-            command = self._worker_command(parent, vlan_ids, timeout, output.name)
+        with tempfile.NamedTemporaryFile(
+            prefix="netcheck-vlan-", suffix=".json", delete=False
+        ) as output:
+            output_path = Path(output.name)
+            output.write(b"[]")
+        try:
+            command = self._worker_command(parent, vlan_ids, timeout, str(output_path))
             batch_timeout = max(120.0, len(vlan_ids) * (max(10.0, timeout * 2.0) + 20.0))
             reported = 0
             with ThreadPoolExecutor(max_workers=1) as executor:
                 future = executor.submit(self._run_privileged, command, batch_timeout)
                 while not future.done():
-                    reported = self._report_progress(output.name, reported, progress)
+                    reported = self._report_progress(str(output_path), reported, progress)
                     time.sleep(0.1)
                 completed = future.result()
-            reported = self._report_progress(output.name, reported, progress)
+            reported = self._report_progress(str(output_path), reported, progress)
             if completed.return_code != 0:
                 detail = completed.stderr or completed.stdout or "Administrator authorization failed"
                 if "-128" in detail or "canceled" in detail.casefold() or "abgebrochen" in detail.casefold():
                     detail = "Administrator authorization was canceled; no further VLANs were tested."
                 return [self._failed(vlan_id, detail) for vlan_id in vlan_ids]
-            response = Path(output.name).read_bytes()
+            response = output_path.read_bytes()
+        finally:
+            output_path.unlink(missing_ok=True)
         try:
             payload = json.loads(response)
             if not isinstance(payload, list):

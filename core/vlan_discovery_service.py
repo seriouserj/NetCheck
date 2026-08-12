@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add fast passive discovery of observed IEEE 802.1Q VLAN tags.
+Changelog: Close temporary capture output before cross-platform worker access.
 """
 
 from __future__ import annotations
@@ -31,17 +31,23 @@ class VlanDiscoveryService:
 
     def discover(self, interface: str, duration: float = 8.0) -> list[int]:
         """Return VLAN IDs observed on an Ethernet interface during a short capture."""
-        with tempfile.NamedTemporaryFile(prefix="netcheck-vlan-discovery-", suffix=".json") as output:
-            command = self._worker_command(interface, duration, output.name)
+        with tempfile.NamedTemporaryFile(
+            prefix="netcheck-vlan-discovery-", suffix=".json", delete=False
+        ) as output:
+            output_path = Path(output.name)
+        try:
+            command = self._worker_command(interface, duration, str(output_path))
             completed = self._run_privileged(command, duration + 60.0)
             if completed.return_code != 0:
                 detail = completed.stderr or completed.stdout or "VLAN discovery authorization failed"
                 raise RuntimeError(detail)
             try:
-                payload = json.loads(Path(output.name).read_text(encoding="utf-8"))
+                payload = json.loads(output_path.read_text(encoding="utf-8"))
                 return sorted({int(item) for item in payload if 1 <= int(item) <= 4094})
             except (OSError, TypeError, ValueError, json.JSONDecodeError) as error:
                 raise RuntimeError(f"Invalid VLAN discovery response: {error}") from error
+        finally:
+            output_path.unlink(missing_ok=True)
 
     @staticmethod
     def _worker_command(interface: str, duration: float, output_path: str) -> tuple[str, ...]:
