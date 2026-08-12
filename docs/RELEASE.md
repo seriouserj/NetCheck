@@ -1,17 +1,17 @@
 <!--
-Version: 1.7.9
+Version: 1.8.0
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Update reproducible build and artifact examples for v1.7.9.
+Changelog: Document reproducible macOS and Windows release builds.
 -->
 
-# macOS release guide
+# macOS and Windows release guide
 
 NetCheck uses PyInstaller to create a native Intel macOS application bundle. The bundle
 contains Python 3.13 and all runtime dependencies, so end users do not install Python or
 PySide6 separately.
 
-## Build locally
+## Build macOS locally
 
 Create a Python 3.13 environment, install both dependency sets, and run the build script:
 
@@ -25,8 +25,25 @@ scripts/build_macos.sh
 The build validates the Python version, creates `dist/NetCheck.app`, signs and verifies
 the bundle, runs a headless UI smoke test, and creates these release files:
 
-- `dist/NetCheck-1.7.9-macos-x86_64.zip`
-- `dist/NetCheck-1.7.9-macos-x86_64.zip.sha256`
+- `dist/NetCheck-1.8.0-macos-x86_64.zip`
+- `dist/NetCheck-1.8.0-macos-x86_64.zip.sha256`
+
+## Build Windows locally
+
+On a Windows x86-64 system with Python 3.13, install the dependency sets and
+run the PowerShell build script:
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt -r requirements-dev.txt
+.\scripts\build_windows.ps1
+```
+
+The script creates and verifies:
+
+- `dist/NetCheck-1.8.0-windows-x86_64.zip`
+- `dist/NetCheck-1.8.0-windows-x86_64.zip.sha256`
 
 Build and signing take place in a temporary local directory. This prevents iCloud and
 other File Provider metadata from invalidating the macOS code signature.
@@ -51,17 +68,17 @@ be performed after the Developer ID build and before public distribution.
 
 ## Automated release
 
-The `Release` GitHub Actions workflow runs on version tags. It installs Python 3.13,
-validates the source, builds the application, uploads the ZIP and checksum as workflow
-artifacts, and attaches them to the matching GitHub Release.
+The `Release` GitHub Actions workflow runs on version tags. Separate native runners
+build macOS Intel and Windows x86-64 packages. A publication job downloads both verified
+artifact sets and attaches them to one matching GitHub Release.
 
 Create and push an annotated version tag only after the `CI` workflow passes on `main`:
 
 ```shell
-git tag -a v1.7.9 -m "NetCheck v1.7.9"
+git tag -a v1.8.0 -m "NetCheck v1.8.0"
 git push origin main
-git push origin v1.7.9
+git push origin v1.8.0
 ```
 
 Before publishing, verify that the release ZIP matches its checksum and that the app
-opens on a supported Intel Mac.
+opens on a supported Intel Mac and Windows x86-64 system.

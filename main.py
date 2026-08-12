@@ -1,8 +1,8 @@
 """
-Version: 1.7.9
+Version: 1.8.0
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.9 landscape report release.
+Changelog: Start the native macOS or Windows NetCheck application.
 """
 
 from __future__ import annotations

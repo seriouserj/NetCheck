@@ -2,7 +2,7 @@
 # Version: 1.8.0
 # Date: 2026-08-12
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.8.0 macOS Intel release.
+# Changelog: Package the native NetCheck Windows x86-64 application.
 
 from pathlib import Path
 
@@ -46,10 +46,8 @@ executable = EXE(
     strip=False,
     upx=False,
     console=False,
-    argv_emulation=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
+    icon=str(project_root / "build" / "netcheck.ico"),
+    version=str(project_root / "build" / "windows-version-info.txt"),
 )
 
 collection = COLLECT(
@@ -59,23 +57,4 @@ collection = COLLECT(
     strip=False,
     upx=False,
     name="NetCheck",
-)
-
-app = BUNDLE(
-    collection,
-    name="NetCheck.app",
-    icon=str(project_root / "icons" / "netcheck-1024.png"),
-    bundle_identifier="com.tubbetec.netcheck",
-    version="1.8.0",
-    info_plist={
-        "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.8.0",
-        "CFBundleVersion": "32",
-        "CFBundleGetInfoString": "NetCheck 1.8.0 — Serhii Dralo <dralo@ditis.group>",
-        "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
-        "LSMinimumSystemVersion": "13.0",
-        "NSHighResolutionCapable": True,
-        "NSLocalNetworkUsageDescription": "NetCheck scans local networks selected by the user for diagnostics.",
-        "NSPrincipalClass": "NSApplication",
-    },
 )

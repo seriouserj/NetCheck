@@ -1,7 +1,7 @@
-# Version: 1.0.0
-# Date: 2026-08-07
+# Version: 1.8.0
+# Date: 2026-08-12
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Add Python 3.13 lint, test, and Qt smoke-test CI for macOS.
+# Changelog: Validate NetCheck on macOS Intel and Windows x86-64.
 
 name: CI
 
@@ -21,8 +21,16 @@ concurrency:
 
 jobs:
   validate:
-    name: Python 3.13 / macOS Intel
-    runs-on: macos-15-intel
+    name: Python 3.13 / ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS Intel
+            os: macos-15-intel
+          - name: Windows x86-64
+            os: windows-2022
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     steps:
       - name: Check out repository

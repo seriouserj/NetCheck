@@ -1,13 +1,13 @@
 <!--
-Version: 1.7.9
+Version: 1.8.0
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document seamless activity animation and landscape PDF reports in v1.7.9.
+Changelog: Document the first native Windows x86-64 release.
 -->
 
 # NetCheck
 
-NetCheck is a native macOS network diagnostic tool for system administrators, network
+NetCheck is a native macOS and Windows network diagnostic tool for system administrators, network
 engineers, and IT support teams. It uses Python 3.13 and PySide6—no browser runtime or
 Electron layer.
 
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.7.9-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.7.9-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.8.0-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.8.0-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,18 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.7.9 highlights
+## Install the Windows application
+
+Download `NetCheck-1.8.0-windows-x86_64.zip`, verify the accompanying SHA-256
+file, extract the complete directory, and start `NetCheck.exe`. The portable
+package contains Python, PySide6, and all runtime dependencies.
+
+## Version 1.8.0 highlights
+
+- Native portable Windows x86-64 application with the same Qt interface and branding
+- Windows Ethernet adapter, gateway, DNS, Ping, Tracert, route-monitor, Discovery, Ports, DNS, Wake-on-LAN, SNMP, profiles, and report support
+- Platform-native live command streaming and Windows PowerShell adapter diagnostics
+- VLAN creation/testing and raw LLDP/CDP capture remain disabled on Windows because they require adapter-specific drivers or packet-capture support
 
 - PDF reports use A4 landscape orientation and compact seven-millimetre margins
 - Wide discovery tables use smaller typography and predictable wrapping so every column fits
