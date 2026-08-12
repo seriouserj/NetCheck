@@ -1,8 +1,8 @@
 """
-Version: 1.7.2
+Version: 1.7.3
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Widen the visible activity gradient for a smoother header animation.
+Changelog: Match the visible activity gradient to the header logo width.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ class ActivityStrip(QWidget):
 
     ACCENT_COLOR = QColor(BRAND_ACCENT)
     NAVY_COLOR = QColor(BRAND_NAVY)
-    GRADIENT_SPAN_RATIO = 0.40
+    GRADIENT_SPAN_PX = 360.0
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
@@ -64,16 +64,17 @@ class ActivityStrip(QWidget):
         if not self._busy or self.width() <= 0:
             return
         center = self._position * self.width()
-        span = max(180.0, self.width() * self.GRADIENT_SPAN_RATIO)
+        span = min(self.GRADIENT_SPAN_PX, float(self.width()))
         gradient = QLinearGradient(center - span / 2, 0, center + span / 2, 0)
         transparent = QColor(self.ACCENT_COLOR)
         transparent.setAlpha(0)
         gradient.setColorAt(0.0, transparent)
-        gradient.setColorAt(0.25, self.ACCENT_COLOR)
-        gradient.setColorAt(0.5, self.NAVY_COLOR)
+        gradient.setColorAt(0.15, self.ACCENT_COLOR)
+        gradient.setColorAt(0.35, self.NAVY_COLOR)
+        gradient.setColorAt(0.65, self.NAVY_COLOR)
         trailing_accent = QColor(self.ACCENT_COLOR)
         trailing_accent.setAlpha(194)
-        gradient.setColorAt(0.75, trailing_accent)
+        gradient.setColorAt(0.85, trailing_accent)
         gradient.setColorAt(1.0, transparent)
         painter.fillRect(self.rect(), gradient)
 

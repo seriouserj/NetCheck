@@ -1,8 +1,8 @@
 """
-Version: 1.7.2
+Version: 1.7.3
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify canonical colors and the wider activity gradient.
+Changelog: Verify canonical colors and the logo-width activity gradient.
 """
 
 from ui.activity import ActivityTracker
@@ -13,7 +13,7 @@ from ui.theme import BRAND_ACCENT, BRAND_NAVY
 def test_activity_strip_uses_canonical_brand_colors() -> None:
     assert ActivityStrip.ACCENT_COLOR.name() == BRAND_ACCENT
     assert ActivityStrip.NAVY_COLOR.name() == BRAND_NAVY
-    assert ActivityStrip.GRADIENT_SPAN_RATIO == 0.40
+    assert ActivityStrip.GRADIENT_SPAN_PX == 360.0
 
 
 def test_activity_tracker_stays_busy_until_every_operation_finishes() -> None:

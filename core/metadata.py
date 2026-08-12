@@ -1,12 +1,12 @@
 """
-Version: 1.7.2
+Version: 1.7.3
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.7.2 with refined header proportions.
+Changelog: Publish NetCheck 1.7.3 with a logo-width activity gradient.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.7.2"
+APP_VERSION = "1.7.3"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

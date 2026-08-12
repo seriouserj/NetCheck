@@ -1,8 +1,8 @@
 <!--
-Version: 1.7.2
+Version: 1.7.3
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Update reproducible build and artifact examples for v1.7.2.
+Changelog: Update reproducible build and artifact examples for v1.7.3.
 -->
 
 # macOS release guide
@@ -25,8 +25,8 @@ scripts/build_macos.sh
 The build validates the Python version, creates `dist/NetCheck.app`, signs and verifies
 the bundle, runs a headless UI smoke test, and creates these release files:
 
-- `dist/NetCheck-1.7.2-macos-x86_64.zip`
-- `dist/NetCheck-1.7.2-macos-x86_64.zip.sha256`
+- `dist/NetCheck-1.7.3-macos-x86_64.zip`
+- `dist/NetCheck-1.7.3-macos-x86_64.zip.sha256`
 
 Build and signing take place in a temporary local directory. This prevents iCloud and
 other File Provider metadata from invalidating the macOS code signature.
@@ -58,9 +58,9 @@ artifacts, and attaches them to the matching GitHub Release.
 Create and push an annotated version tag only after the `CI` workflow passes on `main`:
 
 ```shell
-git tag -a v1.7.2 -m "NetCheck v1.7.2"
+git tag -a v1.7.3 -m "NetCheck v1.7.3"
 git push origin main
-git push origin v1.7.2
+git push origin v1.7.3
 ```
 
 Before publishing, verify that the release ZIP matches its checksum and that the app

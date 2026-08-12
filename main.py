@@ -1,8 +1,8 @@
 """
-Version: 1.7.2
+Version: 1.7.3
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.2 header proportion refinement release.
+Changelog: Start the NetCheck 1.7.3 logo-width activity gradient release.
 """
 
 from __future__ import annotations
