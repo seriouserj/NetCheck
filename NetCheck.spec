@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.7.4
+# Version: 1.7.5
 # Date: 2026-08-12
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.7.4 expanded multi-tone gradient release.
+# Changelog: Package the NetCheck v1.7.5 aurora activity gradient release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.7.4",
+    version="1.7.5",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.7.4",
-        "CFBundleVersion": "26",
-        "CFBundleGetInfoString": "NetCheck 1.7.4 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.7.5",
+        "CFBundleVersion": "27",
+        "CFBundleGetInfoString": "NetCheck 1.7.5 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

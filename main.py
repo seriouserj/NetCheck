@@ -1,8 +1,8 @@
 """
-Version: 1.7.4
+Version: 1.7.5
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.4 expanded multi-tone gradient release.
+Changelog: Start the NetCheck 1.7.5 aurora activity gradient release.
 """
 
 from __future__ import annotations

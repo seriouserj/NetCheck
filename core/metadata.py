@@ -1,12 +1,12 @@
 """
-Version: 1.7.4
+Version: 1.7.5
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.7.4 with an expanded multi-tone activity gradient.
+Changelog: Publish NetCheck 1.7.5 with an expanded aurora activity gradient.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.7.4"
+APP_VERSION = "1.7.5"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

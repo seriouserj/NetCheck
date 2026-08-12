@@ -1,8 +1,8 @@
 """
-Version: 1.7.4
+Version: 1.7.5
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the expanded multi-tone activity gradient and product wordmark.
+Changelog: Validate the expanded aurora activity gradient and product wordmark.
 """
 
 from __future__ import annotations

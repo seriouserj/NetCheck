@@ -1,8 +1,8 @@
 """
-Version: 1.7.4
+Version: 1.7.5
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Expand the activity gradient with additional NetCheck blue tones.
+Changelog: Add a smooth aurora spectrum to the expanded activity gradient.
 """
 
 from __future__ import annotations
@@ -24,6 +24,11 @@ class ActivityStrip(QWidget):
     LIGHT_CYAN_COLOR = QColor(BRAND_LIGHT_CYAN)
     BLUE_COLOR = QColor(BRAND_BLUE)
     NAVY_COLOR = QColor(BRAND_NAVY)
+    VIOLET_COLOR = QColor("#6f4cff")
+    MAGENTA_COLOR = QColor("#d946ef")
+    CORAL_COLOR = QColor("#ff5f6d")
+    AMBER_COLOR = QColor("#ffcc00")
+    TEAL_COLOR = QColor("#00cfa6")
     GRADIENT_SPAN_PX = 900.0
 
     def __init__(self, parent: QWidget) -> None:
@@ -71,16 +76,19 @@ class ActivityStrip(QWidget):
         transparent = QColor(self.ACCENT_COLOR)
         transparent.setAlpha(0)
         gradient.setColorAt(0.0, transparent)
-        gradient.setColorAt(0.15, self.ACCENT_COLOR)
-        gradient.setColorAt(0.25, self.LIGHT_CYAN_COLOR)
-        gradient.setColorAt(0.36, self.BLUE_COLOR)
-        gradient.setColorAt(0.47, self.NAVY_COLOR)
-        gradient.setColorAt(0.53, self.NAVY_COLOR)
-        gradient.setColorAt(0.64, self.BLUE_COLOR)
-        gradient.setColorAt(0.75, self.LIGHT_CYAN_COLOR)
+        gradient.setColorAt(0.08, self.ACCENT_COLOR)
+        gradient.setColorAt(0.16, self.LIGHT_CYAN_COLOR)
+        gradient.setColorAt(0.26, self.BLUE_COLOR)
+        gradient.setColorAt(0.34, self.NAVY_COLOR)
+        gradient.setColorAt(0.43, self.VIOLET_COLOR)
+        gradient.setColorAt(0.53, self.MAGENTA_COLOR)
+        gradient.setColorAt(0.63, self.CORAL_COLOR)
+        gradient.setColorAt(0.73, self.AMBER_COLOR)
+        gradient.setColorAt(0.83, self.TEAL_COLOR)
+        gradient.setColorAt(0.92, self.ACCENT_COLOR)
         trailing_accent = QColor(self.ACCENT_COLOR)
         trailing_accent.setAlpha(194)
-        gradient.setColorAt(0.85, trailing_accent)
+        gradient.setColorAt(0.96, trailing_accent)
         gradient.setColorAt(1.0, transparent)
         painter.fillRect(self.rect(), gradient)
 
