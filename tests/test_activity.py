@@ -5,8 +5,6 @@ Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Verify the seamless reverse-moving linear activity gradient.
 """
 
-from PySide6.QtWidgets import QApplication
-
 from ui.activity import ActivityTracker
 from ui.brand_header import ActivityStrip
 from ui.theme import BRAND_ACCENT, BRAND_BLUE, BRAND_LIGHT_CYAN, BRAND_NAVY
@@ -26,18 +24,8 @@ def test_activity_strip_uses_canonical_brand_colors() -> None:
 
 
 def test_activity_strip_moves_in_reverse_and_wraps_seamlessly() -> None:
-    application = QApplication.instance() or QApplication([])
-    strip = ActivityStrip(None)
-    strip._position = 0.0
-
-    strip._advance()
-
-    assert strip._position == -3.0
-    strip._position = -899.0
-    strip._advance()
-    assert strip._position == -2.0
-    strip.deleteLater()
-    application.processEvents()
+    assert ActivityStrip._next_position(0.0) == -3.0
+    assert ActivityStrip._next_position(-899.0) == -2.0
 
 
 def test_activity_tracker_stays_busy_until_every_operation_finishes() -> None:

@@ -58,10 +58,18 @@ class ActivityStrip(QWidget):
         return self._timer.isActive()
 
     def _advance(self) -> None:
-        self._position -= self.SPEED_PX
-        if self._position <= -self.GRADIENT_SPAN_PX:
-            self._position += self.GRADIENT_SPAN_PX
+        self._position = self._next_position(self._position)
         self.update()
+
+    @classmethod
+    def _next_position(cls, position: float) -> float:
+        """Move left and wrap at the matching gradient boundary."""
+        next_position = position - cls.SPEED_PX
+        return (
+            next_position + cls.GRADIENT_SPAN_PX
+            if next_position <= -cls.GRADIENT_SPAN_PX
+            else next_position
+        )
 
     def paintEvent(self, event: QPaintEvent) -> None:
         """Paint the divider and, while busy, a seamless repeating linear gradient."""
