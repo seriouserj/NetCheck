@@ -55,7 +55,11 @@ jobs:
         run: python -m compileall -q main.py core ui profiles scripts tests
 
       - name: Run tests
-        run: python -m pytest -q
+        run: python -m pytest -q --junitxml=test-results.xml
+
+      - name: Report test failures
+        if: failure() && hashFiles('test-results.xml') != ''
+        run: python scripts/report_test_failures.py test-results.xml
 
       - name: Smoke-test Qt application
         env:
