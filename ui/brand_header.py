@@ -1,8 +1,8 @@
 """
-Version: 1.7.1
-Date: 2026-08-11
+Version: 1.7.2
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Use the canonical DITIS palette in the animated divider.
+Changelog: Widen the visible activity gradient for a smoother header animation.
 """
 
 from __future__ import annotations
@@ -22,6 +22,7 @@ class ActivityStrip(QWidget):
 
     ACCENT_COLOR = QColor(BRAND_ACCENT)
     NAVY_COLOR = QColor(BRAND_NAVY)
+    GRADIENT_SPAN_RATIO = 0.40
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
@@ -63,7 +64,7 @@ class ActivityStrip(QWidget):
         if not self._busy or self.width() <= 0:
             return
         center = self._position * self.width()
-        span = max(120.0, self.width() * 0.24)
+        span = max(180.0, self.width() * self.GRADIENT_SPAN_RATIO)
         gradient = QLinearGradient(center - span / 2, 0, center + span / 2, 0)
         transparent = QColor(self.ACCENT_COLOR)
         transparent.setAlpha(0)

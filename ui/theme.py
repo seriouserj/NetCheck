@@ -1,8 +1,8 @@
 """
-Version: 1.7.1
-Date: 2026-08-11
+Version: 1.7.2
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Export the canonical DITIS colors for animated brand elements.
+Changelog: Match the NetCheck wordmark height to the two-line author block.
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ def apply_theme(application: QApplication, preference: str = "system") -> None:
         QPushButton[primary="true"] {{ font-weight: 650; }}
         QFrame#brandHeader {{ background: {navy}; border-bottom: 3px solid {accent}; }}
         QLabel#brandLogo {{ background: white; border-radius: 7px; }}
-        QLabel#brandProduct {{ color: white; font-size: 20px; font-weight: 700; }}
+        QLabel#brandProduct {{ color: white; font-size: 26px; font-weight: 700; }}
         QLabel#brandAuthor {{ color: #b8e8fa; font-size: 12px; }}
         QTabWidget#mainTabs, QTabWidget#mainTabs::pane, QTabBar#mainTabBar, QTabBar#mainTabBar::base {{ background: palette(window); border: 0; }}
         QTabWidget#mainTabs::tab-bar {{ alignment: center; }}

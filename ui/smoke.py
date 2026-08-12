@@ -1,8 +1,8 @@
 """
-Version: 1.7.0
-Date: 2026-08-11
+Version: 1.7.2
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the animated header activity divider.
+Changelog: Validate the wider activity gradient and larger product wordmark.
 """
 
 from __future__ import annotations
@@ -126,6 +126,8 @@ def run_smoke_test(application: QApplication) -> int:
     if "QTabWidget#innerTabs::pane" not in application.styleSheet() or "top: 15px" not in application.styleSheet():
         raise RuntimeError("Secondary navigation must have 15 pixels below its tabs.")
     style_sheet = application.styleSheet()
+    if "QLabel#brandProduct { color: white; font-size: 26px" not in style_sheet:
+        raise RuntimeError("NetCheck wordmark must match the two-line author block height.")
     if "QPushButton { color: white" not in style_sheet or "background: #05285a" not in style_sheet:
         raise RuntimeError("Action buttons must use the navy brand surface by default.")
     if "QPushButton:hover { color: white; background: #009fe3" not in style_sheet:

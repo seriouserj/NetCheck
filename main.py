@@ -1,8 +1,8 @@
 """
-Version: 1.7.1
-Date: 2026-08-11
+Version: 1.7.2
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.1 canonical brand-gradient release.
+Changelog: Start the NetCheck 1.7.2 header proportion refinement release.
 """
 
 from __future__ import annotations
