@@ -1,8 +1,8 @@
 """
-Version: 1.7.5
+Version: 1.7.6
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.5 aurora activity gradient release.
+Changelog: Start the NetCheck 1.7.6 layered aurora highlight release.
 """
 
 from __future__ import annotations

@@ -1,8 +1,8 @@
 """
-Version: 1.7.5
+Version: 1.7.6
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the expanded aurora activity gradient and product wordmark.
+Changelog: Validate the layered aurora activity indicator and product wordmark.
 """
 
 from __future__ import annotations

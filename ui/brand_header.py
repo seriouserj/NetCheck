@@ -1,8 +1,8 @@
 """
-Version: 1.7.5
+Version: 1.7.6
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add a smooth aurora spectrum to the expanded activity gradient.
+Changelog: Layer an indigo aurora spectrum with a moving pearl highlight.
 """
 
 from __future__ import annotations
@@ -24,10 +24,12 @@ class ActivityStrip(QWidget):
     LIGHT_CYAN_COLOR = QColor(BRAND_LIGHT_CYAN)
     BLUE_COLOR = QColor(BRAND_BLUE)
     NAVY_COLOR = QColor(BRAND_NAVY)
+    INDIGO_COLOR = QColor("#312e81")
     VIOLET_COLOR = QColor("#6f4cff")
     MAGENTA_COLOR = QColor("#d946ef")
     CORAL_COLOR = QColor("#ff5f6d")
     AMBER_COLOR = QColor("#ffcc00")
+    LIME_COLOR = QColor("#7cff6b")
     TEAL_COLOR = QColor("#00cfa6")
     GRADIENT_SPAN_PX = 900.0
 
@@ -79,18 +81,35 @@ class ActivityStrip(QWidget):
         gradient.setColorAt(0.08, self.ACCENT_COLOR)
         gradient.setColorAt(0.16, self.LIGHT_CYAN_COLOR)
         gradient.setColorAt(0.26, self.BLUE_COLOR)
-        gradient.setColorAt(0.34, self.NAVY_COLOR)
-        gradient.setColorAt(0.43, self.VIOLET_COLOR)
+        gradient.setColorAt(0.33, self.NAVY_COLOR)
+        gradient.setColorAt(0.39, self.INDIGO_COLOR)
+        gradient.setColorAt(0.45, self.VIOLET_COLOR)
         gradient.setColorAt(0.53, self.MAGENTA_COLOR)
         gradient.setColorAt(0.63, self.CORAL_COLOR)
         gradient.setColorAt(0.73, self.AMBER_COLOR)
-        gradient.setColorAt(0.83, self.TEAL_COLOR)
+        gradient.setColorAt(0.79, self.LIME_COLOR)
+        gradient.setColorAt(0.85, self.TEAL_COLOR)
         gradient.setColorAt(0.92, self.ACCENT_COLOR)
         trailing_accent = QColor(self.ACCENT_COLOR)
         trailing_accent.setAlpha(194)
         gradient.setColorAt(0.96, trailing_accent)
         gradient.setColorAt(1.0, transparent)
         painter.fillRect(self.rect(), gradient)
+        self._paint_pearl_highlight(painter, center + span * 0.08)
+
+    def _paint_pearl_highlight(self, painter: QPainter, center: float) -> None:
+        """Overlay a narrow luminous glint without obscuring the spectrum."""
+        half_width = 90.0
+        highlight = QLinearGradient(center - half_width, 0, center + half_width, 0)
+        clear = QColor(255, 255, 255, 0)
+        soft = QColor(255, 255, 255, 55)
+        pearl = QColor(255, 255, 255, 205)
+        highlight.setColorAt(0.0, clear)
+        highlight.setColorAt(0.28, soft)
+        highlight.setColorAt(0.5, pearl)
+        highlight.setColorAt(0.72, soft)
+        highlight.setColorAt(1.0, clear)
+        painter.fillRect(self.rect(), highlight)
 
 
 class BrandHeader(QFrame):
