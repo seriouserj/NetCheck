@@ -1,16 +1,16 @@
 """
-Version: 1.6.7
-Date: 2026-08-11
+Version: 1.7.9
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add accessible copy and export icons to report actions.
+Changelog: Export PDF reports on compact landscape pages.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from PySide6.QtCore import QSize
-from PySide6.QtGui import QPainter, QPdfWriter, QTextDocument
+from PySide6.QtCore import QMarginsF, QSize, QSizeF
+from PySide6.QtGui import QPageLayout, QPageSize, QPainter, QPdfWriter, QTextDocument
 from PySide6.QtSvg import QSvgGenerator
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QMessageBox, QPushButton, QWidget
 
@@ -86,8 +86,19 @@ def _write_pdf(path: Path, title: str, headers: tuple[str, ...], rows: tuple[tup
     writer = QPdfWriter(str(path))
     writer.setTitle(title)
     writer.setCreator("NetCheck")
+    writer.setResolution(150)
+    writer.setPageLayout(
+        QPageLayout(
+            QPageSize(QPageSize.PageSizeId.A4),
+            QPageLayout.Orientation.Landscape,
+            QMarginsF(7.0, 7.0, 7.0, 7.0),
+            QPageLayout.Unit.Millimeter,
+        )
+    )
     document = QTextDocument()
+    document.setDocumentMargin(0.0)
     document.setHtml(report_as_html(title, headers, rows))
+    document.setPageSize(QSizeF(writer.width(), writer.height()))
     document.print_(writer)
 
 

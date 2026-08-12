@@ -1,8 +1,8 @@
 <!--
-Version: 1.7.8
+Version: 1.7.9
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the balanced multicolor Aurora palette in v1.7.8.
+Changelog: Document compact landscape PDF reports in v1.7.9.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.7.8-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.7.8-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.7.9-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.7.9-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,10 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.7.8 highlights
+## Version 1.7.9 highlights
+
+- PDF reports use A4 landscape orientation and compact seven-millimetre margins
+- Wide discovery tables use smaller typography and predictable wrapping so every column fits
 
 - Violet, muted magenta, ruby, and coral accents enrich the animated activity spectrum
 - Brand cyan and blue remain dominant, with adjacent transitions keeping every color harmonious

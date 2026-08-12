@@ -1,8 +1,8 @@
 """
-Version: 1.6.0
-Date: 2026-08-10
+Version: 1.7.9
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Build safe text and HTML representations of tabular reports.
+Changelog: Fit wide report tables cleanly on landscape PDF pages.
 """
 
 from __future__ import annotations
@@ -25,9 +25,11 @@ def report_as_html(title: str, headers: tuple[str, ...], rows: tuple[tuple[str, 
     )
     return (
         "<html><head><meta charset='utf-8'><style>"
-        "body{font-family:-apple-system,Helvetica,Arial,sans-serif;color:#172b4d;}"
-        "h1{font-size:20pt;color:#05285a;}table{border-collapse:collapse;width:100%;}"
-        "th,td{border:1px solid #708090;padding:6px;text-align:left;}"
+        "body{font-family:-apple-system,Helvetica,Arial,sans-serif;color:#172b4d;margin:0;}"
+        "h1{font-size:16pt;color:#05285a;margin:0 0 10px 0;}"
+        "table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:8.5pt;}"
+        "th,td{border:1px solid #708090;padding:4px;text-align:left;vertical-align:top;"
+        "overflow-wrap:anywhere;}"
         "th{background:#05285a;color:white;}tr:nth-child(even){background:#eef6fa;}"
         "</style></head><body>"
         f"<h1>{escape(title)}</h1><table><thead><tr>{heading}</tr></thead><tbody>{body}</tbody></table>"
