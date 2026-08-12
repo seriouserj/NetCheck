@@ -1,8 +1,8 @@
 <!--
-Version: 1.7.3
+Version: 1.7.4
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the logo-width activity gradient in v1.7.3.
+Changelog: Document the expanded multi-tone activity gradient in v1.7.4.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.7.3-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.7.3-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.7.4-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.7.4-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,10 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.7.3 highlights
+## Version 1.7.4 highlights
+
+- The moving gradient is approximately two and a half times wider than the logo
+- Light cyan and medium blue transitions enrich the existing cyan-to-navy animation
 
 - The moving gradient's visible colored region now matches the header logo width
 

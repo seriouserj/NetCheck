@@ -1,8 +1,8 @@
 """
-Version: 1.7.3
+Version: 1.7.4
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Match the visible activity gradient to the header logo width.
+Changelog: Expand the activity gradient with additional NetCheck blue tones.
 """
 
 from __future__ import annotations
@@ -14,15 +14,17 @@ from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
 from core.resources import resource_path
 from ui.activity import activity_tracker
-from ui.theme import BRAND_ACCENT, BRAND_NAVY
+from ui.theme import BRAND_ACCENT, BRAND_BLUE, BRAND_LIGHT_CYAN, BRAND_NAVY
 
 
 class ActivityStrip(QWidget):
     """Render a static cyan divider or an animated moving brand gradient."""
 
     ACCENT_COLOR = QColor(BRAND_ACCENT)
+    LIGHT_CYAN_COLOR = QColor(BRAND_LIGHT_CYAN)
+    BLUE_COLOR = QColor(BRAND_BLUE)
     NAVY_COLOR = QColor(BRAND_NAVY)
-    GRADIENT_SPAN_PX = 360.0
+    GRADIENT_SPAN_PX = 900.0
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
@@ -70,8 +72,12 @@ class ActivityStrip(QWidget):
         transparent.setAlpha(0)
         gradient.setColorAt(0.0, transparent)
         gradient.setColorAt(0.15, self.ACCENT_COLOR)
-        gradient.setColorAt(0.35, self.NAVY_COLOR)
-        gradient.setColorAt(0.65, self.NAVY_COLOR)
+        gradient.setColorAt(0.25, self.LIGHT_CYAN_COLOR)
+        gradient.setColorAt(0.36, self.BLUE_COLOR)
+        gradient.setColorAt(0.47, self.NAVY_COLOR)
+        gradient.setColorAt(0.53, self.NAVY_COLOR)
+        gradient.setColorAt(0.64, self.BLUE_COLOR)
+        gradient.setColorAt(0.75, self.LIGHT_CYAN_COLOR)
         trailing_accent = QColor(self.ACCENT_COLOR)
         trailing_accent.setAlpha(194)
         gradient.setColorAt(0.85, trailing_accent)

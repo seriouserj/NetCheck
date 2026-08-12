@@ -1,8 +1,8 @@
 """
-Version: 1.7.2
+Version: 1.7.4
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Match the NetCheck wordmark height to the two-line author block.
+Changelog: Export the complete blue palette for the expanded activity gradient.
 """
 
 from __future__ import annotations
@@ -14,6 +14,8 @@ from PySide6.QtWidgets import QApplication
 from core.resources import resource_path
 
 BRAND_ACCENT = "#009fe3"
+BRAND_LIGHT_CYAN = "#27b9ee"
+BRAND_BLUE = "#0077c8"
 BRAND_NAVY = "#05285a"
 
 

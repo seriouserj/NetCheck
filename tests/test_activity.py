@@ -1,19 +1,21 @@
 """
-Version: 1.7.3
+Version: 1.7.4
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify canonical colors and the logo-width activity gradient.
+Changelog: Verify the expanded multi-tone NetCheck activity gradient.
 """
 
 from ui.activity import ActivityTracker
 from ui.brand_header import ActivityStrip
-from ui.theme import BRAND_ACCENT, BRAND_NAVY
+from ui.theme import BRAND_ACCENT, BRAND_BLUE, BRAND_LIGHT_CYAN, BRAND_NAVY
 
 
 def test_activity_strip_uses_canonical_brand_colors() -> None:
     assert ActivityStrip.ACCENT_COLOR.name() == BRAND_ACCENT
+    assert ActivityStrip.LIGHT_CYAN_COLOR.name() == BRAND_LIGHT_CYAN
+    assert ActivityStrip.BLUE_COLOR.name() == BRAND_BLUE
     assert ActivityStrip.NAVY_COLOR.name() == BRAND_NAVY
-    assert ActivityStrip.GRADIENT_SPAN_PX == 360.0
+    assert ActivityStrip.GRADIENT_SPAN_PX == 900.0
 
 
 def test_activity_tracker_stays_busy_until_every_operation_finishes() -> None:
