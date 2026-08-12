@@ -1,8 +1,8 @@
 """
-Version: 1.7.7
+Version: 1.7.8
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify the harmonized cool aurora palette.
+Changelog: Verify the balanced multicolor brand aurora palette.
 """
 
 from ui.activity import ActivityTracker
@@ -18,6 +18,9 @@ def test_activity_strip_uses_canonical_brand_colors() -> None:
     assert ActivityStrip.ROYAL_BLUE_COLOR.name() == "#2457d6"
     assert ActivityStrip.INDIGO_COLOR.name() == "#3843a5"
     assert ActivityStrip.VIOLET_COLOR.name() == "#735bc7"
+    assert ActivityStrip.MAGENTA_COLOR.name() == "#b64fa3"
+    assert ActivityStrip.RUBY_COLOR.name() == "#d94c78"
+    assert ActivityStrip.CORAL_COLOR.name() == "#ed6a67"
     assert ActivityStrip.PERIWINKLE_COLOR.name() == "#586fe8"
     assert ActivityStrip.AQUA_COLOR.name() == "#20d5d2"
     assert ActivityStrip.TEAL_COLOR.name() == "#00b7b0"

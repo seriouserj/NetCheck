@@ -1,8 +1,8 @@
 """
-Version: 1.7.7
+Version: 1.7.8
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Harmonize the aurora into a cool brand-led spectrum.
+Changelog: Add balanced violet, magenta, and coral accents to the brand aurora.
 """
 
 from __future__ import annotations
@@ -27,6 +27,9 @@ class ActivityStrip(QWidget):
     ROYAL_BLUE_COLOR = QColor("#2457d6")
     INDIGO_COLOR = QColor("#3843a5")
     VIOLET_COLOR = QColor("#735bc7")
+    MAGENTA_COLOR = QColor("#b64fa3")
+    RUBY_COLOR = QColor("#d94c78")
+    CORAL_COLOR = QColor("#ed6a67")
     PERIWINKLE_COLOR = QColor("#586fe8")
     AQUA_COLOR = QColor("#20d5d2")
     TEAL_COLOR = QColor("#00b7b0")
@@ -77,20 +80,24 @@ class ActivityStrip(QWidget):
         transparent = QColor(self.ACCENT_COLOR)
         transparent.setAlpha(0)
         gradient.setColorAt(0.0, transparent)
-        gradient.setColorAt(0.07, self.ACCENT_COLOR)
-        gradient.setColorAt(0.15, self.LIGHT_CYAN_COLOR)
-        gradient.setColorAt(0.24, self.AQUA_COLOR)
-        gradient.setColorAt(0.33, self.TEAL_COLOR)
-        gradient.setColorAt(0.43, self.BLUE_COLOR)
-        gradient.setColorAt(0.52, self.ROYAL_BLUE_COLOR)
-        gradient.setColorAt(0.61, self.INDIGO_COLOR)
-        gradient.setColorAt(0.69, self.VIOLET_COLOR)
-        gradient.setColorAt(0.77, self.PERIWINKLE_COLOR)
-        gradient.setColorAt(0.85, self.BLUE_COLOR)
-        gradient.setColorAt(0.92, self.ACCENT_COLOR)
+        gradient.setColorAt(0.06, self.ACCENT_COLOR)
+        gradient.setColorAt(0.13, self.LIGHT_CYAN_COLOR)
+        gradient.setColorAt(0.20, self.AQUA_COLOR)
+        gradient.setColorAt(0.27, self.TEAL_COLOR)
+        gradient.setColorAt(0.35, self.BLUE_COLOR)
+        gradient.setColorAt(0.43, self.ROYAL_BLUE_COLOR)
+        gradient.setColorAt(0.50, self.INDIGO_COLOR)
+        gradient.setColorAt(0.57, self.VIOLET_COLOR)
+        gradient.setColorAt(0.64, self.MAGENTA_COLOR)
+        gradient.setColorAt(0.70, self.RUBY_COLOR)
+        gradient.setColorAt(0.76, self.CORAL_COLOR)
+        gradient.setColorAt(0.82, self.VIOLET_COLOR)
+        gradient.setColorAt(0.87, self.PERIWINKLE_COLOR)
+        gradient.setColorAt(0.92, self.BLUE_COLOR)
+        gradient.setColorAt(0.96, self.ACCENT_COLOR)
         trailing_accent = QColor(self.ACCENT_COLOR)
         trailing_accent.setAlpha(194)
-        gradient.setColorAt(0.96, trailing_accent)
+        gradient.setColorAt(0.98, trailing_accent)
         gradient.setColorAt(1.0, transparent)
         painter.fillRect(self.rect(), gradient)
         self._paint_pearl_highlight(painter, center + span * 0.08)

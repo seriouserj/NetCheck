@@ -1,12 +1,12 @@
 """
-Version: 1.7.7
+Version: 1.7.8
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.7.7 with a harmonized aurora activity highlight.
+Changelog: Publish NetCheck 1.7.8 with a balanced multicolor aurora highlight.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.7.7"
+APP_VERSION = "1.7.8"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

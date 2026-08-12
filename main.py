@@ -1,8 +1,8 @@
 """
-Version: 1.7.7
+Version: 1.7.8
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.7 harmonized aurora highlight release.
+Changelog: Start the NetCheck 1.7.8 balanced multicolor aurora release.
 """
 
 from __future__ import annotations

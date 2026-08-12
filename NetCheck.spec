@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.7.7
+# Version: 1.7.8
 # Date: 2026-08-12
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.7.7 harmonized aurora highlight release.
+# Changelog: Package the NetCheck v1.7.8 balanced multicolor aurora release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.7.7",
+    version="1.7.8",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.7.7",
-        "CFBundleVersion": "29",
-        "CFBundleGetInfoString": "NetCheck 1.7.7 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.7.8",
+        "CFBundleVersion": "30",
+        "CFBundleGetInfoString": "NetCheck 1.7.8 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,
