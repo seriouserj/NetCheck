@@ -1,8 +1,8 @@
 """
-Version: 1.7.6
+Version: 1.7.7
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify the layered aurora and pearl-highlight palette.
+Changelog: Verify the harmonized cool aurora palette.
 """
 
 from ui.activity import ActivityTracker
@@ -15,13 +15,12 @@ def test_activity_strip_uses_canonical_brand_colors() -> None:
     assert ActivityStrip.LIGHT_CYAN_COLOR.name() == BRAND_LIGHT_CYAN
     assert ActivityStrip.BLUE_COLOR.name() == BRAND_BLUE
     assert ActivityStrip.NAVY_COLOR.name() == BRAND_NAVY
-    assert ActivityStrip.INDIGO_COLOR.name() == "#312e81"
-    assert ActivityStrip.VIOLET_COLOR.name() == "#6f4cff"
-    assert ActivityStrip.MAGENTA_COLOR.name() == "#d946ef"
-    assert ActivityStrip.CORAL_COLOR.name() == "#ff5f6d"
-    assert ActivityStrip.AMBER_COLOR.name() == "#ffcc00"
-    assert ActivityStrip.LIME_COLOR.name() == "#7cff6b"
-    assert ActivityStrip.TEAL_COLOR.name() == "#00cfa6"
+    assert ActivityStrip.ROYAL_BLUE_COLOR.name() == "#2457d6"
+    assert ActivityStrip.INDIGO_COLOR.name() == "#3843a5"
+    assert ActivityStrip.VIOLET_COLOR.name() == "#735bc7"
+    assert ActivityStrip.PERIWINKLE_COLOR.name() == "#586fe8"
+    assert ActivityStrip.AQUA_COLOR.name() == "#20d5d2"
+    assert ActivityStrip.TEAL_COLOR.name() == "#00b7b0"
     assert ActivityStrip.GRADIENT_SPAN_PX == 900.0
 
 

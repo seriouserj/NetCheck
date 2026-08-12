@@ -1,8 +1,8 @@
 """
-Version: 1.7.6
+Version: 1.7.7
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Layer an indigo aurora spectrum with a moving pearl highlight.
+Changelog: Harmonize the aurora into a cool brand-led spectrum.
 """
 
 from __future__ import annotations
@@ -24,13 +24,12 @@ class ActivityStrip(QWidget):
     LIGHT_CYAN_COLOR = QColor(BRAND_LIGHT_CYAN)
     BLUE_COLOR = QColor(BRAND_BLUE)
     NAVY_COLOR = QColor(BRAND_NAVY)
-    INDIGO_COLOR = QColor("#312e81")
-    VIOLET_COLOR = QColor("#6f4cff")
-    MAGENTA_COLOR = QColor("#d946ef")
-    CORAL_COLOR = QColor("#ff5f6d")
-    AMBER_COLOR = QColor("#ffcc00")
-    LIME_COLOR = QColor("#7cff6b")
-    TEAL_COLOR = QColor("#00cfa6")
+    ROYAL_BLUE_COLOR = QColor("#2457d6")
+    INDIGO_COLOR = QColor("#3843a5")
+    VIOLET_COLOR = QColor("#735bc7")
+    PERIWINKLE_COLOR = QColor("#586fe8")
+    AQUA_COLOR = QColor("#20d5d2")
+    TEAL_COLOR = QColor("#00b7b0")
     GRADIENT_SPAN_PX = 900.0
 
     def __init__(self, parent: QWidget) -> None:
@@ -78,17 +77,16 @@ class ActivityStrip(QWidget):
         transparent = QColor(self.ACCENT_COLOR)
         transparent.setAlpha(0)
         gradient.setColorAt(0.0, transparent)
-        gradient.setColorAt(0.08, self.ACCENT_COLOR)
-        gradient.setColorAt(0.16, self.LIGHT_CYAN_COLOR)
-        gradient.setColorAt(0.26, self.BLUE_COLOR)
-        gradient.setColorAt(0.33, self.NAVY_COLOR)
-        gradient.setColorAt(0.39, self.INDIGO_COLOR)
-        gradient.setColorAt(0.45, self.VIOLET_COLOR)
-        gradient.setColorAt(0.53, self.MAGENTA_COLOR)
-        gradient.setColorAt(0.63, self.CORAL_COLOR)
-        gradient.setColorAt(0.73, self.AMBER_COLOR)
-        gradient.setColorAt(0.79, self.LIME_COLOR)
-        gradient.setColorAt(0.85, self.TEAL_COLOR)
+        gradient.setColorAt(0.07, self.ACCENT_COLOR)
+        gradient.setColorAt(0.15, self.LIGHT_CYAN_COLOR)
+        gradient.setColorAt(0.24, self.AQUA_COLOR)
+        gradient.setColorAt(0.33, self.TEAL_COLOR)
+        gradient.setColorAt(0.43, self.BLUE_COLOR)
+        gradient.setColorAt(0.52, self.ROYAL_BLUE_COLOR)
+        gradient.setColorAt(0.61, self.INDIGO_COLOR)
+        gradient.setColorAt(0.69, self.VIOLET_COLOR)
+        gradient.setColorAt(0.77, self.PERIWINKLE_COLOR)
+        gradient.setColorAt(0.85, self.BLUE_COLOR)
         gradient.setColorAt(0.92, self.ACCENT_COLOR)
         trailing_accent = QColor(self.ACCENT_COLOR)
         trailing_accent.setAlpha(194)
@@ -102,8 +100,8 @@ class ActivityStrip(QWidget):
         half_width = 90.0
         highlight = QLinearGradient(center - half_width, 0, center + half_width, 0)
         clear = QColor(255, 255, 255, 0)
-        soft = QColor(255, 255, 255, 55)
-        pearl = QColor(255, 255, 255, 205)
+        soft = QColor(255, 255, 255, 35)
+        pearl = QColor(255, 255, 255, 125)
         highlight.setColorAt(0.0, clear)
         highlight.setColorAt(0.28, soft)
         highlight.setColorAt(0.5, pearl)

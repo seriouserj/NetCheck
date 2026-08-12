@@ -1,8 +1,8 @@
 """
-Version: 1.7.6
+Version: 1.7.7
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the NetCheck 1.7.6 layered aurora highlight release.
+Changelog: Start the NetCheck 1.7.7 harmonized aurora highlight release.
 """
 
 from __future__ import annotations

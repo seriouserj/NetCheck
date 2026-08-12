@@ -1,8 +1,8 @@
 <!--
-Version: 1.7.6
+Version: 1.7.7
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the layered aurora activity highlight in v1.7.6.
+Changelog: Document the harmonized cool Aurora palette in v1.7.7.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.7.6-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.7.6-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.7.7-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.7.7-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -27,7 +27,11 @@ Release builds are ad-hoc signed until an Apple Developer ID certificate is conf
 On first launch, Control-click NetCheck in Finder, choose **Open**, and confirm the macOS
 security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
-## Version 1.7.6 highlights
+## Version 1.7.7 highlights
+
+- The animated Aurora now follows a harmonious cool spectrum led by NetCheck blue and cyan
+- Aqua, teal, indigo, violet, and periwinkle transitions add depth without rainbow-like contrast
+- The pearl highlight is softer, keeping the animation polished and unobtrusive
 
 - A pearl-white moving highlight adds depth above the broad Aurora spectrum
 - Indigo and lime transitions make the activity strip more expressive without changing the idle design
