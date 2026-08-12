@@ -1,8 +1,8 @@
 """
-Version: 1.0.0
-Date: 2026-08-07
+Version: 1.8.0
+Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Reuse the application bundle smoke validation.
+Changelog: Publish smoke-test exceptions as GitHub Actions annotations.
 """
 
 from __future__ import annotations
@@ -22,7 +22,12 @@ from ui.smoke import run_smoke_test  # noqa: E402
 def main() -> int:
     """Run the shared smoke test against the source checkout."""
     application = QApplication([])
-    return run_smoke_test(application)
+    try:
+        return run_smoke_test(application)
+    except Exception as error:
+        detail = str(error).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(f"::error title=NetCheck UI smoke test::{detail}")
+        raise
 
 
 if __name__ == "__main__":
