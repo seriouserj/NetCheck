@@ -46,6 +46,8 @@ def run_smoke_test(application: QApplication) -> int:
     activity_strip = window.findChild(ActivityStrip)
     if activity_strip is None or activity_strip.height() != 3:
         raise RuntimeError("Brand header must contain a three-pixel activity divider.")
+    QThreadPool.globalInstance().waitForDone(15_000)
+    application.processEvents()
     tracker = activity_tracker()
     was_busy = tracker.busy
     if not was_busy:
