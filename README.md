@@ -2,7 +2,7 @@
 Version: 1.7.9
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document compact landscape PDF reports in v1.7.9.
+Changelog: Document seamless activity animation and landscape PDF reports in v1.7.9.
 -->
 
 # NetCheck
@@ -31,25 +31,11 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 - PDF reports use A4 landscape orientation and compact seven-millimetre margins
 - Wide discovery tables use smaller typography and predictable wrapping so every column fits
+- The selected linear Aurora gradient moves in reverse at a constant speed with seamless repetition
+- Matching start and end colors eliminate visible jumps; no white highlight or transparent edge is used
 
-- Violet, muted magenta, ruby, and coral accents enrich the animated activity spectrum
+- Violet, muted magenta, and ruby accents enrich the animated activity spectrum
 - Brand cyan and blue remain dominant, with adjacent transitions keeping every color harmonious
-
-- The animated Aurora now follows a harmonious cool spectrum led by NetCheck blue and cyan
-- Aqua, teal, indigo, violet, and periwinkle transitions add depth without rainbow-like contrast
-- The pearl highlight is softer, keeping the animation polished and unobtrusive
-
-- A pearl-white moving highlight adds depth above the broad Aurora spectrum
-- Indigo and lime transitions make the activity strip more expressive without changing the idle design
-
-- The activity divider uses a smooth cyan, blue, violet, magenta, coral, amber, and teal spectrum
-
-- The moving gradient is approximately two and a half times wider than the logo
-- Light cyan and medium blue transitions enrich the existing cyan-to-navy animation
-
-- The moving gradient's visible colored region now matches the header logo width
-
-- The visible moving gradient now spans approximately twenty percent of the divider
 - The NetCheck wordmark matches the visual height of the adjacent author block
 
 - The divider animates with the canonical DITIS cyan and navy colors during long-running operations

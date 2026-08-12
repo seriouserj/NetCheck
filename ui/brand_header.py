@@ -1,14 +1,14 @@
 """
-Version: 1.7.8
+Version: 1.7.9
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add balanced violet, magenta, and coral accents to the brand aurora.
+Changelog: Use a seamless reverse-moving linear brand gradient without highlights.
 """
 
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QColor, QLinearGradient, QPainter, QPaintEvent, QPixmap, QResizeEvent
+from PySide6.QtGui import QColor, QGradient, QLinearGradient, QPainter, QPaintEvent, QPixmap, QResizeEvent
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 
 from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
@@ -24,16 +24,12 @@ class ActivityStrip(QWidget):
     LIGHT_CYAN_COLOR = QColor(BRAND_LIGHT_CYAN)
     BLUE_COLOR = QColor(BRAND_BLUE)
     NAVY_COLOR = QColor(BRAND_NAVY)
-    ROYAL_BLUE_COLOR = QColor("#2457d6")
     INDIGO_COLOR = QColor("#3843a5")
     VIOLET_COLOR = QColor("#735bc7")
     MAGENTA_COLOR = QColor("#b64fa3")
     RUBY_COLOR = QColor("#d94c78")
-    CORAL_COLOR = QColor("#ed6a67")
-    PERIWINKLE_COLOR = QColor("#586fe8")
-    AQUA_COLOR = QColor("#20d5d2")
-    TEAL_COLOR = QColor("#00b7b0")
     GRADIENT_SPAN_PX = 900.0
+    SPEED_PX = 3.0
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
@@ -50,7 +46,7 @@ class ActivityStrip(QWidget):
             return
         self._busy = busy
         if busy:
-            self._position = -0.25
+            self._position = 0.0
             self._timer.start()
         else:
             self._timer.stop()
@@ -62,59 +58,36 @@ class ActivityStrip(QWidget):
         return self._timer.isActive()
 
     def _advance(self) -> None:
-        self._position += 0.012
-        if self._position > 1.25:
-            self._position = -0.25
+        self._position -= self.SPEED_PX
+        if self._position <= -self.GRADIENT_SPAN_PX:
+            self._position += self.GRADIENT_SPAN_PX
         self.update()
 
     def paintEvent(self, event: QPaintEvent) -> None:
-        """Paint the divider and, while busy, its moving navy highlight."""
+        """Paint the divider and, while busy, a seamless repeating linear gradient."""
         del event
         painter = QPainter(self)
         painter.fillRect(self.rect(), self.ACCENT_COLOR)
         if not self._busy or self.width() <= 0:
             return
-        center = self._position * self.width()
-        span = min(self.GRADIENT_SPAN_PX, float(self.width()))
-        gradient = QLinearGradient(center - span / 2, 0, center + span / 2, 0)
-        transparent = QColor(self.ACCENT_COLOR)
-        transparent.setAlpha(0)
-        gradient.setColorAt(0.0, transparent)
-        gradient.setColorAt(0.06, self.ACCENT_COLOR)
-        gradient.setColorAt(0.13, self.LIGHT_CYAN_COLOR)
-        gradient.setColorAt(0.20, self.AQUA_COLOR)
-        gradient.setColorAt(0.27, self.TEAL_COLOR)
-        gradient.setColorAt(0.35, self.BLUE_COLOR)
-        gradient.setColorAt(0.43, self.ROYAL_BLUE_COLOR)
-        gradient.setColorAt(0.50, self.INDIGO_COLOR)
-        gradient.setColorAt(0.57, self.VIOLET_COLOR)
-        gradient.setColorAt(0.64, self.MAGENTA_COLOR)
-        gradient.setColorAt(0.70, self.RUBY_COLOR)
-        gradient.setColorAt(0.76, self.CORAL_COLOR)
-        gradient.setColorAt(0.82, self.VIOLET_COLOR)
-        gradient.setColorAt(0.87, self.PERIWINKLE_COLOR)
-        gradient.setColorAt(0.92, self.BLUE_COLOR)
-        gradient.setColorAt(0.96, self.ACCENT_COLOR)
-        trailing_accent = QColor(self.ACCENT_COLOR)
-        trailing_accent.setAlpha(194)
-        gradient.setColorAt(0.98, trailing_accent)
-        gradient.setColorAt(1.0, transparent)
+        gradient = QLinearGradient(
+            self._position,
+            0,
+            self._position + self.GRADIENT_SPAN_PX,
+            0,
+        )
+        gradient.setSpread(QGradient.Spread.RepeatSpread)
+        gradient.setColorAt(0.00, self.ACCENT_COLOR)
+        gradient.setColorAt(0.10, self.LIGHT_CYAN_COLOR)
+        gradient.setColorAt(0.24, self.BLUE_COLOR)
+        gradient.setColorAt(0.38, self.NAVY_COLOR)
+        gradient.setColorAt(0.52, self.INDIGO_COLOR)
+        gradient.setColorAt(0.64, self.VIOLET_COLOR)
+        gradient.setColorAt(0.76, self.MAGENTA_COLOR)
+        gradient.setColorAt(0.86, self.RUBY_COLOR)
+        gradient.setColorAt(0.94, self.BLUE_COLOR)
+        gradient.setColorAt(1.00, self.ACCENT_COLOR)
         painter.fillRect(self.rect(), gradient)
-        self._paint_pearl_highlight(painter, center + span * 0.08)
-
-    def _paint_pearl_highlight(self, painter: QPainter, center: float) -> None:
-        """Overlay a narrow luminous glint without obscuring the spectrum."""
-        half_width = 90.0
-        highlight = QLinearGradient(center - half_width, 0, center + half_width, 0)
-        clear = QColor(255, 255, 255, 0)
-        soft = QColor(255, 255, 255, 35)
-        pearl = QColor(255, 255, 255, 125)
-        highlight.setColorAt(0.0, clear)
-        highlight.setColorAt(0.28, soft)
-        highlight.setColorAt(0.5, pearl)
-        highlight.setColorAt(0.72, soft)
-        highlight.setColorAt(1.0, clear)
-        painter.fillRect(self.rect(), highlight)
 
 
 class BrandHeader(QFrame):
