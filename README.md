@@ -1,8 +1,8 @@
 <!--
-Version: 1.8.0
+Version: 1.8.1
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the first native Windows x86-64 release.
+Changelog: Document full-width A4 landscape PDF reports.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.8.0-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.8.0-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.8.1-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.8.1-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,18 +29,18 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.8.0-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.8.1-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.8.0 highlights
+## Version 1.8.1 highlights
 
 - Native portable Windows x86-64 application with the same Qt interface and branding
 - Windows Ethernet adapter, gateway, DNS, Ping, Tracert, route-monitor, Discovery, Ports, DNS, Wake-on-LAN, SNMP, profiles, and report support
 - Platform-native live command streaming and Windows PowerShell adapter diagnostics
 - VLAN creation/testing and raw LLDP/CDP capture remain disabled on Windows because they require adapter-specific drivers or packet-capture support
 
-- PDF reports use A4 landscape orientation and compact seven-millimetre margins
+- PDF reports use A4 landscape orientation, compact margins, and the full printable width
 - Wide discovery tables use smaller typography and predictable wrapping so every column fits
 - The selected linear Aurora gradient moves in reverse at a constant speed with seamless repetition
 - Matching start and end colors eliminate visible jumps; no white highlight or transparent edge is used

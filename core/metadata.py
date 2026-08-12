@@ -1,12 +1,12 @@
 """
-Version: 1.8.0
+Version: 1.8.1
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Publish the first native Windows x86-64 release.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.8.0"
+APP_VERSION = "1.8.1"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

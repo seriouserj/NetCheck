@@ -1,8 +1,8 @@
 """
-Version: 1.7.9
+Version: 1.8.1
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Export PDF reports on compact landscape pages.
+Changelog: Lay out PDF tables across the complete printable A4 width.
 """
 
 from __future__ import annotations
@@ -97,8 +97,10 @@ def _write_pdf(path: Path, title: str, headers: tuple[str, ...], rows: tuple[tup
     )
     document = QTextDocument()
     document.setDocumentMargin(0.0)
+    document.documentLayout().setPaintDevice(writer)
+    printable_area = writer.pageLayout().paintRectPixels(writer.resolution())
+    document.setPageSize(QSizeF(printable_area.size()))
     document.setHtml(report_as_html(title, headers, rows))
-    document.setPageSize(QSizeF(writer.width(), writer.height()))
     document.print_(writer)
 
 

@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.8.0
+# Version: 1.8.1
 # Date: 2026-08-12
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the NetCheck v1.8.0 macOS Intel release.
+# Changelog: Package the NetCheck v1.8.1 macOS Intel release.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.8.0",
+    version="1.8.1",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.8.0",
-        "CFBundleVersion": "32",
-        "CFBundleGetInfoString": "NetCheck 1.8.0 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleShortVersionString": "1.8.1",
+        "CFBundleVersion": "33",
+        "CFBundleGetInfoString": "NetCheck 1.8.1 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
+Version: 1.8.1
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start the native macOS or Windows NetCheck application.
+Changelog: Ship corrected full-width A4 PDF reports.
 """
 
 from __future__ import annotations

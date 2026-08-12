@@ -1,12 +1,13 @@
 """
-Version: 1.7.9
+Version: 1.8.1
 Date: 2026-08-12
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify landscape PDF report generation.
+Changelog: Verify landscape reports use the printable A4 width.
 """
 
 from pathlib import Path
 
+from PySide6.QtCore import QSize
 from PySide6.QtPdf import QPdfDocument
 
 from ui.report_export import _write_pdf
@@ -25,3 +26,11 @@ def test_pdf_report_uses_landscape_pages(tmp_path: Path) -> None:
     assert destination.stat().st_size > 0
     assert document.pageCount() == 1
     assert page_size.width() > page_size.height()
+    rendered = document.render(0, QSize(1000, 707))
+    occupied_x = [
+        x
+        for y in range(rendered.height())
+        for x in range(rendered.width())
+        if rendered.pixelColor(x, y).value() < 235
+    ]
+    assert max(occupied_x) - min(occupied_x) > 900
