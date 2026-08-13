@@ -1,17 +1,19 @@
 """
-Version: 1.5.0
-Date: 2026-08-10
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify combined LLDP and CDP capture uses one authorization.
+Changelog: Verify the macOS capture path independently of the CI host platform.
 """
 
 from pathlib import Path
 
+import core.neighbor_service as neighbor_service
 from core.command_runner import CommandResult
 from core.neighbor_service import NeighborService
 
 
-def test_neighbor_discovery_uses_one_privileged_worker() -> None:
+def test_neighbor_discovery_uses_one_privileged_worker(monkeypatch) -> None:
+    monkeypatch.setattr(neighbor_service.sys, "platform", "darwin")
     calls: list[tuple[str, ...]] = []
 
     def runner(command: tuple[str, ...], timeout: float) -> CommandResult:

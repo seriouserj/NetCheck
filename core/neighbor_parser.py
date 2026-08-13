@@ -14,7 +14,8 @@ from core.neighbor_models import NetworkNeighbor
 
 def parse_lldp(output: str) -> NetworkNeighbor | None:
     """Parse verbose tcpdump LLDP TLV output."""
-    if "LLDP" not in output.upper():
+    normalized = output.upper()
+    if "LLDP" not in normalized and "LINK LAYER DISCOVERY PROTOCOL" not in normalized:
         return None
     return NetworkNeighbor(
         protocol="LLDP",
