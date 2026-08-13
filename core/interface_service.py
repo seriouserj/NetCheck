@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.1
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Collect physical Ethernet diagnostics on macOS and Windows.
+Changelog: Restore macOS dashboard addresses through ifconfig and scoped-route fallbacks.
 """
 
 from __future__ import annotations
@@ -21,6 +21,7 @@ from core.network_parsers import (
     parse_default_gateway,
     parse_dns_servers,
     parse_hardware_ports,
+    parse_ifconfig_addresses,
     parse_media,
 )
 
@@ -41,7 +42,7 @@ class InterfaceService:
         port_labels = parse_hardware_ports(hardware.stdout)
         addresses = psutil.net_if_addrs()
         statistics = psutil.net_if_stats()
-        route = self._run(("route", "-n", "get", "default"), timeout)
+        route = self._run(("/sbin/route", "-n", "get", "default"), timeout)
         gateway, gateway_interface = parse_default_gateway(route.stdout)
         dns = self._run(("scutil", "--dns"), timeout)
         dns_servers = parse_dns_servers(dns.stdout)
@@ -143,11 +144,28 @@ class InterfaceService:
         internet: str,
         timeout: float,
     ) -> InterfaceDiagnostics:
-        ifconfig = self._run(("ifconfig", name), timeout)
+        ifconfig = self._run(("/sbin/ifconfig", name), timeout)
         speed, duplex, media_active = parse_media(ifconfig.stdout)
-        mac = next((item.address for item in addresses if item.family == psutil.AF_LINK), "")
-        ipv4 = tuple(item.address for item in addresses if item.family == socket.AF_INET)
-        ipv6 = tuple(item.address.split("%", 1)[0] for item in addresses if item.family == socket.AF_INET6)
+        fallback_mac, fallback_ipv4, fallback_ipv6 = parse_ifconfig_addresses(ifconfig.stdout)
+        mac = next((item.address for item in addresses if item.family == psutil.AF_LINK), "") or fallback_mac
+        ipv4 = _merge_addresses(
+            (item.address for item in addresses if item.family == socket.AF_INET),
+            fallback_ipv4,
+        )
+        ipv6 = _merge_addresses(
+            (
+                item.address.split("%", 1)[0]
+                for item in addresses
+                if item.family == socket.AF_INET6
+            ),
+            fallback_ipv6,
+        )
+        if not gateway and ipv4:
+            scoped_route = self._run(
+                ("/sbin/route", "-n", "get", "default", "-ifscope", name),
+                timeout,
+            )
+            gateway, _ = parse_default_gateway(scoped_route.stdout)
         is_up = stats.isup if stats is not None else media_active
         return InterfaceDiagnostics(
             name=name,
@@ -221,3 +239,8 @@ def _is_windows_ethernet_name(name: str) -> bool:
     normalized = name.casefold()
     excluded = ("wi-fi", "wifi", "wireless", "wlan", "bluetooth", "loopback", "tunnel", "vethernet")
     return not any(marker in normalized for marker in excluded)
+
+
+def _merge_addresses(primary: object, fallback: tuple[str, ...]) -> tuple[str, ...]:
+    """Merge address sources while preserving stable display order."""
+    return tuple(dict.fromkeys((*primary, *fallback)))

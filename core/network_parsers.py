@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.9.1
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Exclude Thunderbolt bridges and other virtual ports from Ethernet detection.
+Changelog: Parse MAC, IPv4, and IPv6 addresses directly from macOS ifconfig output.
 """
 
 from __future__ import annotations
@@ -51,6 +51,23 @@ def parse_media(output: str) -> tuple[str, str, bool]:
         speed = f"{speed_match.group(1)} {suffix}"
     duplex = "Full" if "full-duplex" in media.casefold() else "Half" if "half-duplex" in media.casefold() else "Unknown"
     return speed, duplex, active
+
+
+def parse_ifconfig_addresses(output: str) -> tuple[str, tuple[str, ...], tuple[str, ...]]:
+    """Return normalized interface addresses from macOS ifconfig output."""
+    mac_match = re.search(r"^\s*ether\s+([0-9a-f:]{17})\s*$", output, re.MULTILINE | re.IGNORECASE)
+    ipv4 = tuple(
+        dict.fromkeys(
+            re.findall(r"^\s*inet\s+(\d+(?:\.\d+){3})\b", output, re.MULTILINE)
+        )
+    )
+    ipv6 = tuple(
+        dict.fromkeys(
+            address.split("%", 1)[0]
+            for address in re.findall(r"^\s*inet6\s+(\S+)", output, re.MULTILINE)
+        )
+    )
+    return (mac_match.group(1).lower() if mac_match else "", ipv4, ipv6)
 
 
 def parse_default_gateway(output: str) -> tuple[str, str]:

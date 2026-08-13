@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.9.1
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify virtual Thunderbolt bridges are not Ethernet adapters.
+Changelog: Verify macOS ifconfig address fallback parsing.
 """
 
 from core.network_parsers import (
@@ -10,6 +10,7 @@ from core.network_parsers import (
     parse_default_gateway,
     parse_dns_servers,
     parse_hardware_ports,
+    parse_ifconfig_addresses,
     parse_media,
 )
 
@@ -32,6 +33,20 @@ Ethernet Address: 00:11:22:33:44:55"""
 def test_parse_media_and_status() -> None:
     output = "media: autoselect (1000baseT <full-duplex>)\n\tstatus: active"
     assert parse_media(output) == ("1000 Mbps", "Full", True)
+
+
+def test_parse_ifconfig_addresses() -> None:
+    output = """
+en7: flags=8863<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+    ether 00:e0:4c:68:16:c0
+    inet6 fe80::8b8:c628:7390:87bf%en7 prefixlen 64 secured scopeid 0x17
+    inet 192.168.10.103 netmask 0xffffff00 broadcast 192.168.10.255
+"""
+    assert parse_ifconfig_addresses(output) == (
+        "00:e0:4c:68:16:c0",
+        ("192.168.10.103",),
+        ("fe80::8b8:c628:7390:87bf",),
+    )
 
 
 def test_parse_route_and_dns() -> None:
