@@ -1,5 +1,5 @@
 """
-Version: 1.8.2
+Version: 1.8.3
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Validate the layered aurora activity indicator and product wordmark.

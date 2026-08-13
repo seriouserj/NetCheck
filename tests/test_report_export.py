@@ -1,8 +1,8 @@
 """
-Version: 1.8.2
+Version: 1.8.3
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Measure opaque PDF content when verifying printable A4 width.
+Changelog: Verify full-width content inside balanced standard A4 margins.
 """
 
 from pathlib import Path
@@ -34,4 +34,6 @@ def test_pdf_report_uses_landscape_pages(tmp_path: Path) -> None:
         if rendered.pixelColor(x, y).alpha() > 0
         and rendered.pixelColor(x, y).value() < 235
     ]
-    assert max(occupied_x) - min(occupied_x) > 900
+    assert max(occupied_x) - min(occupied_x) > 840
+    assert 35 < min(occupied_x) < 70
+    assert 930 < max(occupied_x) < 965

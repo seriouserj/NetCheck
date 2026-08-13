@@ -1,8 +1,8 @@
 """
-Version: 1.8.2
+Version: 1.8.3
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Render PDF documents directly across the complete printable A4 width.
+Changelog: Use balanced fifteen-millimetre A4 report margins.
 """
 
 from __future__ import annotations
@@ -91,7 +91,7 @@ def _write_pdf(path: Path, title: str, headers: tuple[str, ...], rows: tuple[tup
         QPageLayout(
             QPageSize(QPageSize.PageSizeId.A4),
             QPageLayout.Orientation.Landscape,
-            QMarginsF(7.0, 7.0, 7.0, 7.0),
+            QMarginsF(15.0, 15.0, 15.0, 15.0),
             QPageLayout.Unit.Millimeter,
         )
     )

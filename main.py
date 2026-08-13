@@ -1,8 +1,8 @@
 """
-Version: 1.8.2
+Version: 1.8.3
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Ship directly rendered full-width A4 PDF reports.
+Changelog: Ship balanced PDF margins and title spacing.
 """
 
 from __future__ import annotations

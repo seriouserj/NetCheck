@@ -1,8 +1,8 @@
 """
-Version: 1.8.2
+Version: 1.8.3
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify Qt-compatible full-width report table markup.
+Changelog: Verify Qt-compatible table width and title spacing markup.
 """
 
 from core.tabular_report import report_as_html, report_as_tsv
@@ -22,6 +22,7 @@ def test_report_as_html_escapes_untrusted_scan_values() -> None:
     assert "<script>alert(1)</script>" not in output
     assert "border-collapse:collapse" in output
     assert "<table width='100%' cellspacing='0' cellpadding='0'>" in output
+    assert "<p class='title-gap'>&nbsp;</p>" in output
 
 
 def test_report_as_html_keeps_ip_and_mac_columns_compact() -> None:
