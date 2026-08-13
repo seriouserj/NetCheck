@@ -1,12 +1,12 @@
 """
-Version: 1.8.3
+Version: 1.9.0
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish the first native Windows x86-64 release.
+Changelog: Publish repaired Windows discovery, tools, VLAN, and LLDP capabilities.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.8.3"
+APP_VERSION = "1.9.0"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

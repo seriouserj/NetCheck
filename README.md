@@ -1,8 +1,8 @@
 <!--
-Version: 1.8.3
+Version: 1.9.0
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document balanced A4 margins and report title spacing.
+Changelog: Document repaired Windows diagnostics and capability detection.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.8.3-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.8.3-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.9.0-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.9.0-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,16 +29,17 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.8.3-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.9.0-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.8.3 highlights
+## Version 1.9.0 highlights
 
 - Native portable Windows x86-64 application with the same Qt interface and branding
 - Windows Ethernet adapter, gateway, DNS, Ping, Tracert, route-monitor, Discovery, Ports, DNS, Wake-on-LAN, SNMP, profiles, and report support
 - Platform-native live command streaming and Windows PowerShell adapter diagnostics
-- VLAN creation/testing and raw LLDP/CDP capture remain disabled on Windows because they require adapter-specific drivers or packet-capture support
+- Windows VLAN driver capability inspection and active LLDP/CDP capture through Wireshark TShark with Npcap
+- Hidden Windows background commands, localized Discovery parsing, native DNS lookup, and Enter/Escape controls
 
 - PDF reports use A4 landscape orientation, balanced 15 mm margins, and the full printable width
 - Report titles have a compact visual gap before the table

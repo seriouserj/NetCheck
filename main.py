@@ -1,8 +1,8 @@
 """
-Version: 1.8.3
+Version: 1.9.0
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Ship balanced PDF margins and title spacing.
+Changelog: Ship Windows diagnostics and keyboard-control repairs.
 """
 
 from __future__ import annotations

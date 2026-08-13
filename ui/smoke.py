@@ -1,8 +1,8 @@
 """
-Version: 1.8.3
+Version: 1.9.0
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the layered aurora activity indicator and product wordmark.
+Changelog: Validate active cross-platform navigation and Windows tool construction.
 """
 
 from __future__ import annotations
