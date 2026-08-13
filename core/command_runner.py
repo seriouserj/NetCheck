@@ -1,13 +1,14 @@
 """
-Version: 0.2.0
-Date: 2026-08-06
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add bounded subprocess execution for system diagnostics.
+Changelog: Suppress Windows console windows and tolerate localized command output.
 """
 
 from __future__ import annotations
 
 import subprocess
+import sys
 from dataclasses import dataclass
 from typing import Sequence
 
@@ -29,7 +30,9 @@ def run_command(command: Sequence[str], timeout: float = 5.0) -> CommandResult:
             capture_output=True,
             check=False,
             text=True,
+            errors="replace",
             timeout=timeout,
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
         )
     except (FileNotFoundError, PermissionError, subprocess.TimeoutExpired) as error:
         return CommandResult(127, "", str(error))

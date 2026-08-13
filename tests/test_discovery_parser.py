@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify macOS and Windows discovery parsing.
+Changelog: Verify Russian and Ukrainian Windows ping output.
 """
 
 import pytest
@@ -34,6 +34,8 @@ def test_parse_ping_and_arp_output() -> None:
 def test_parse_windows_ping_and_arp_output() -> None:
     assert parse_ping_latency("Reply from 192.0.2.1: bytes=32 time<1ms TTL=128") == 1.0
     assert parse_ping_latency("Antwort von 192.0.2.1: Bytes=32 Zeit=4ms TTL=128") == 4.0
+    assert parse_ping_latency("Ответ от 192.0.2.1: число байт=32 время=2мс TTL=128") == 2.0
+    assert parse_ping_latency("Відповідь від 192.0.2.1: байт=32 час<1мс TTL=128") == 1.0
     assert parse_arp_mac("  192.0.2.1          0-a-b-c-d-e           dynamic") == "00:0a:0b:0c:0d:0e"
 
 

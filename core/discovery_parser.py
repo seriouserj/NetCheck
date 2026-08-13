@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Parse subnet, reachability, and ARP output from macOS and Windows.
+Changelog: Parse localized Windows millisecond units during host discovery.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ def parse_scan_network(value: str, maximum_hosts: int = 1024) -> ipaddress.IPv4N
 def parse_ping_latency(output: str) -> float | None:
     """Extract a millisecond round-trip time from localized ping output."""
     match = re.search(
-        r"(?:time|zeit|время|час)[=<]\s*([0-9]+(?:[.,][0-9]+)?)\s*ms",
+        r"(?:time|zeit|время|час)[=<]\s*([0-9]+(?:[.,][0-9]+)?)\s*(?:ms|мс)",
         output,
         re.IGNORECASE,
     )

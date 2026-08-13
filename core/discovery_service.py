@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Discover hosts with native macOS or Windows network commands.
+Changelog: Accept successful localized Windows ping replies during discovery.
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ class DiscoveryService:
     def _probe(self, address: str, timeout: float) -> DiscoveredHost | None:
         ping = self._run(ping_once_command(address, timeout), timeout + 1.0)
         latency = parse_ping_latency(ping.stdout)
-        if ping.return_code != 0 or latency is None:
+        if ping.return_code != 0 or (latency is None and not is_windows()):
             return None
         arp = self._run(arp_lookup_command(address), 2.0)
         mac_address = parse_arp_mac(arp.stdout)
@@ -58,7 +58,7 @@ class DiscoveryService:
             ip_address=address,
             mac_address=mac_address or "—",
             vendor=self._vendors.resolve(mac_address),
-            latency_ms=latency,
+            latency_ms=latency if latency is not None else 0.0,
             netbios_info=netbios.display_name,
         )
 
