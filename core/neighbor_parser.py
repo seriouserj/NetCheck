@@ -20,7 +20,10 @@ def parse_lldp(output: str) -> NetworkNeighbor | None:
     return NetworkNeighbor(
         protocol="LLDP",
         system_name=_match(output, r"(?:System Name TLV[^:]*|System Name)\s*:\s*([^\n]+)"),
-        port_id=_match(output, r"(?:Port ID TLV[^:]*|Port ID)\s*:\s*(?:[^:]+:\s*)?([^\n]+)"),
+        port_id=_match(
+            output,
+            r"(?:Port ID TLV[^:\n]*|Port ID)\s*:\s*(?:[^:\n]+:\s*)?([^\n]+)",
+        ),
         platform=_match(output, r"(?:System Description TLV[^:]*|System Description)\s*:\s*([^\n]+)"),
         management_address=_match(output, r"Management Address TLV[^\n]*\n(?:.*\n)*?\s*(?:IPv4|Address)\s*:\s*([0-9a-fA-F:.]+)"),
         native_vlan=_match(output, r"(?:Port VLAN ID|PVID)[^:]*:\s*(\d+)"),
