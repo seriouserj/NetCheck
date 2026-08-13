@@ -1,8 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.9.0
+# Version: 1.9.1
 # Date: 2026-08-13
 # Author: Serhii Dralo <dralo@ditis.group>
-# Changelog: Package the stable macOS application alongside Windows v1.9.0.
+# Changelog: Package restored macOS dashboard address reporting.
 
 from pathlib import Path
 
@@ -66,12 +66,12 @@ app = BUNDLE(
     name="NetCheck.app",
     icon=str(project_root / "icons" / "netcheck-1024.png"),
     bundle_identifier="com.tubbetec.netcheck",
-    version="1.9.0",
+    version="1.9.1",
     info_plist={
         "CFBundleDisplayName": "NetCheck",
-        "CFBundleShortVersionString": "1.9.0",
+        "CFBundleShortVersionString": "1.9.1",
         "CFBundleVersion": "35",
-        "CFBundleGetInfoString": "NetCheck 1.9.0 — Serhii Dralo <dralo@ditis.group>",
+        "CFBundleGetInfoString": "NetCheck 1.9.1 — Serhii Dralo <dralo@ditis.group>",
         "NSHumanReadableCopyright": "Copyright © 2026 Serhii Dralo. All rights reserved.",
         "LSMinimumSystemVersion": "13.0",
         "NSHighResolutionCapable": True,

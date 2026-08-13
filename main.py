@@ -1,8 +1,8 @@
 """
-Version: 1.9.0
+Version: 1.9.1
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Ship Windows diagnostics and keyboard-control repairs.
+Changelog: Ship the macOS dashboard address fallback repair.
 """
 
 from __future__ import annotations

@@ -1,12 +1,12 @@
 """
-Version: 1.9.0
+Version: 1.9.1
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish repaired Windows discovery, tools, VLAN, and LLDP capabilities.
+Changelog: Restore macOS dashboard IP address and gateway reporting.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.9.0"
+APP_VERSION = "1.9.1"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

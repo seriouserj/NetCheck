@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.9.0
+# Version: 1.9.1
 # Date: 2026-08-13
 # Author: Serhii Dralo <dralo@ditis.group>
 # Changelog: Package repaired Windows network diagnostics and keyboard controls.

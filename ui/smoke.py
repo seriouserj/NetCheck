@@ -1,5 +1,5 @@
 """
-Version: 1.9.0
+Version: 1.9.1
 Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Validate active cross-platform navigation and Windows tool construction.
