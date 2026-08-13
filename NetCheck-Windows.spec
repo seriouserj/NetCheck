@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Version: 1.8.1
-# Date: 2026-08-12
+# Version: 1.8.2
+# Date: 2026-08-13
 # Author: Serhii Dralo <dralo@ditis.group>
 # Changelog: Package the native NetCheck Windows x86-64 application.
 

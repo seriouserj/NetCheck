@@ -1,8 +1,8 @@
 <!--
-Version: 1.8.1
-Date: 2026-08-12
+Version: 1.8.2
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document full-width A4 landscape PDF reports.
+Changelog: Document directly rendered full-width A4 landscape PDF reports.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.8.1-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.8.1-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.8.2-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.8.2-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,11 +29,11 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.8.1-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.8.2-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.8.1 highlights
+## Version 1.8.2 highlights
 
 - Native portable Windows x86-64 application with the same Qt interface and branding
 - Windows Ethernet adapter, gateway, DNS, Ping, Tracert, route-monitor, Discovery, Ports, DNS, Wake-on-LAN, SNMP, profiles, and report support

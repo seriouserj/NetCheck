@@ -1,15 +1,15 @@
 """
-Version: 1.8.1
-Date: 2026-08-12
+Version: 1.8.2
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Lay out PDF tables across the complete printable A4 width.
+Changelog: Render PDF documents directly across the complete printable A4 width.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from PySide6.QtCore import QMarginsF, QSize, QSizeF
+from PySide6.QtCore import QMarginsF, QRectF, QSize
 from PySide6.QtGui import QPageLayout, QPageSize, QPainter, QPdfWriter, QTextDocument
 from PySide6.QtSvg import QSvgGenerator
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QMessageBox, QPushButton, QWidget
@@ -98,10 +98,22 @@ def _write_pdf(path: Path, title: str, headers: tuple[str, ...], rows: tuple[tup
     document = QTextDocument()
     document.setDocumentMargin(0.0)
     document.documentLayout().setPaintDevice(writer)
-    printable_area = writer.pageLayout().paintRectPixels(writer.resolution())
-    document.setPageSize(QSizeF(printable_area.size()))
     document.setHtml(report_as_html(title, headers, rows))
-    document.print_(writer)
+    page_width = float(writer.width())
+    page_height = float(writer.height())
+    document.setTextWidth(page_width)
+    document_height = document.documentLayout().documentSize().height()
+    page_count = max(1, int((document_height + page_height - 1) // page_height))
+    painter = QPainter(writer)
+    for page in range(page_count):
+        if page:
+            writer.newPage()
+        painter.save()
+        painter.setClipRect(QRectF(0.0, 0.0, page_width, page_height))
+        painter.translate(0.0, -page * page_height)
+        document.drawContents(painter)
+        painter.restore()
+    painter.end()
 
 
 def _write_svg(path: Path, title: str, headers: tuple[str, ...], rows: tuple[tuple[str, ...], ...]) -> None:

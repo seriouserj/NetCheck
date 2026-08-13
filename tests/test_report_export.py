@@ -1,8 +1,8 @@
 """
-Version: 1.8.1
-Date: 2026-08-12
+Version: 1.8.2
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify landscape reports use the printable A4 width.
+Changelog: Measure opaque PDF content when verifying printable A4 width.
 """
 
 from pathlib import Path
@@ -31,6 +31,7 @@ def test_pdf_report_uses_landscape_pages(tmp_path: Path) -> None:
         x
         for y in range(rendered.height())
         for x in range(rendered.width())
-        if rendered.pixelColor(x, y).value() < 235
+        if rendered.pixelColor(x, y).alpha() > 0
+        and rendered.pixelColor(x, y).value() < 235
     ]
     assert max(occupied_x) - min(occupied_x) > 900
