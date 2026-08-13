@@ -1,8 +1,8 @@
 """
-Version: 1.7.9
-Date: 2026-08-12
+Version: 1.8.2
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify safe reports and non-wrapping network identifiers.
+Changelog: Verify Qt-compatible full-width report table markup.
 """
 
 from core.tabular_report import report_as_html, report_as_tsv
@@ -21,6 +21,7 @@ def test_report_as_html_escapes_untrusted_scan_values() -> None:
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in output
     assert "<script>alert(1)</script>" not in output
     assert "border-collapse:collapse" in output
+    assert "<table width='100%' cellspacing='0' cellpadding='0'>" in output
 
 
 def test_report_as_html_keeps_ip_and_mac_columns_compact() -> None:

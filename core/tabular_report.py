@@ -1,8 +1,8 @@
 """
-Version: 1.7.9
-Date: 2026-08-12
+Version: 1.8.2
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Fit wide report tables cleanly on landscape PDF pages.
+Changelog: Declare table width with Qt-supported rich-text HTML attributes.
 """
 
 from __future__ import annotations
@@ -41,7 +41,8 @@ def report_as_html(title: str, headers: tuple[str, ...], rows: tuple[tuple[str, 
         ".network-identifier{white-space:nowrap;width:1%;}"
         "th{background:#05285a;color:white;}tr:nth-child(even){background:#eef6fa;}"
         "</style></head><body>"
-        f"<h1>{escape(title)}</h1><table><thead><tr>{heading}</tr></thead><tbody>{body}</tbody></table>"
+        f"<h1>{escape(title)}</h1><table width='100%' cellspacing='0' cellpadding='0'>"
+        f"<thead><tr>{heading}</tr></thead><tbody>{body}</tbody></table>"
         "</body></html>"
     )
 
