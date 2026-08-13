@@ -1,8 +1,8 @@
 """
-Version: 1.7.0
-Date: 2026-08-11
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish route monitor lifetime to the global activity indicator.
+Changelog: Start monitoring with Enter and stop with Escape.
 """
 
 from __future__ import annotations
@@ -11,7 +11,8 @@ from collections.abc import Callable
 from threading import Event
 from typing import Any
 
-from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal, Slot
+from PySide6.QtCore import Qt, QObject, QRunnable, QThreadPool, Signal, Slot
+from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QCheckBox,
@@ -77,6 +78,7 @@ class RouteMonitorPanel(QWidget):
         form = centered_form(grow_fields=True)
         self._target = QLineEdit()
         self._target.setPlaceholderText(tr("hostname or IP address"))
+        self._target.returnPressed.connect(self._run)
         self._cycles = QSpinBox()
         self._cycles.setRange(1, 1000)
         self._cycles.setValue(10)
@@ -98,6 +100,9 @@ class RouteMonitorPanel(QWidget):
         self._stop = QPushButton(tr("Stop"))
         self._stop.setEnabled(False)
         self._stop.clicked.connect(self._cancel)
+        stop_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Escape), self)
+        stop_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        stop_shortcut.activated.connect(self._cancel)
         controls.addWidget(self._status)
         controls.addStretch()
         controls.addWidget(self._stop)

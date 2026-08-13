@@ -1,8 +1,8 @@
 """
-Version: 1.6.7
-Date: 2026-08-11
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add compact icons to scan and report actions.
+Changelog: Start subnet discovery when Enter is pressed.
 """
 
 from __future__ import annotations
@@ -50,6 +50,7 @@ class DiscoveryTab(QWidget):
         self._subnet = QLineEdit(detect_default_subnet())
         self._subnet.setPlaceholderText(FALLBACK_SUBNET)
         self._subnet.textEdited.connect(lambda: setattr(self, "_subnet_was_edited", True))
+        self._subnet.returnPressed.connect(self._start_scan)
         self._scan = QPushButton(tr("Scan"))
         self._scan.setObjectName("scanButton")
         self._scan.setProperty("primary", True)

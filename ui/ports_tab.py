@@ -1,8 +1,8 @@
 """
-Version: 1.6.3
-Date: 2026-08-10
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center port scanner form labels while preserving wide inputs.
+Changelog: Start a port scan with Enter from either input field.
 """
 
 from __future__ import annotations
@@ -45,9 +45,11 @@ class PortsTab(QWidget):
         self._target = QLineEdit()
         self._target.setMinimumWidth(640)
         self._target.setPlaceholderText("hostname or IP address")
+        self._target.returnPressed.connect(self._start_scan)
         self._ports = QLineEdit("22, 53, 80, 443")
         self._ports.setMinimumWidth(640)
         self._ports.setPlaceholderText("22, 80, 443, 8000-8100")
+        self._ports.returnPressed.connect(self._start_scan)
         form.addRow(tr("Target"), self._target)
         form.addRow(tr("TCP ports"), self._ports)
         controls = QHBoxLayout()

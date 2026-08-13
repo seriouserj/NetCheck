@@ -1,15 +1,16 @@
 """
-Version: 1.6.3
-Date: 2026-08-10
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center Ping form labels while preserving wide target input.
+Changelog: Start with Enter and stop with Escape.
 """
 
 from __future__ import annotations
 
 from threading import Event
 
-from PySide6.QtCore import QThreadPool
+from PySide6.QtCore import Qt, QThreadPool
+from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -39,6 +40,7 @@ class PingPanel(QWidget):
         form = centered_form(grow_fields=True)
         self._targets = QLineEdit()
         self._targets.setPlaceholderText(tr("hostnames or IP addresses, separated by commas"))
+        self._targets.returnPressed.connect(self._run)
         self._packet_size = QSpinBox()
         self._packet_size.setRange(0, 65507)
         self._packet_size.setValue(56)
@@ -56,6 +58,9 @@ class PingPanel(QWidget):
         self._stop = QPushButton(tr("Stop"))
         self._stop.setEnabled(False)
         self._stop.clicked.connect(self._cancel)
+        stop_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Escape), self)
+        stop_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        stop_shortcut.activated.connect(self._cancel)
         buttons.addWidget(self._status)
         buttons.addStretch()
         buttons.addWidget(self._stop)

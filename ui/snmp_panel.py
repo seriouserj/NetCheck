@@ -1,8 +1,8 @@
 """
-Version: 1.6.3
-Date: 2026-08-06
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center SNMP form labels relative to fixed-height inputs.
+Changelog: Run an SNMP GET request with Enter from form fields.
 """
 
 from __future__ import annotations
@@ -39,6 +39,9 @@ class SnmpPanel(QWidget):
         self._community = QLineEdit()
         self._community.setEchoMode(QLineEdit.EchoMode.Password)
         self._oid = QLineEdit("1.3.6.1.2.1.1.1.0")
+        self._target.returnPressed.connect(lambda: self._run(False))
+        self._community.returnPressed.connect(lambda: self._run(False))
+        self._oid.returnPressed.connect(lambda: self._run(False))
         form.addRow(tr("Target"), self._target)
         form.addRow(tr("Community"), self._community)
         form.addRow(tr("Numeric OID"), self._oid)

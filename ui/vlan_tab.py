@@ -1,8 +1,8 @@
 """
-Version: 1.6.3
-Date: 2026-08-07
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Center VLAN form labels relative to fixed-height controls.
+Changelog: Start VLAN tests with Enter from the VLAN ID field.
 """
 
 from __future__ import annotations
@@ -65,6 +65,7 @@ class VlanTab(QWidget):
         interface_row.addWidget(self._interface_refresh)
         self._vlans = QLineEdit()
         self._vlans.setPlaceholderText(tr("Examples: 20, 30-35, 100"))
+        self._vlans.returnPressed.connect(self._start_tests)
         form.addRow(tr("Interface"), interface_row)
         form.addRow(tr("VLAN IDs"), self._vlans)
         controls = QHBoxLayout()

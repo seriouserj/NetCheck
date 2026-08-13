@@ -1,16 +1,18 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Mark raw LLDP/CDP capture unavailable on Windows.
+Changelog: Start tools with Enter and stop streaming tools with Escape.
 """
 
 from __future__ import annotations
 
 import sys
 from collections.abc import Callable
+from threading import Event
 
 from PySide6.QtCore import Qt, QThreadPool
+from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -53,6 +55,7 @@ class CommandPanel(QWidget):
         self._action = action
         self._streaming = streaming
         self._task: BackgroundTask | StreamingTask | None = None
+        self._stop_event: Event | None = None
         layout = QVBoxLayout(self)
         controls = QHBoxLayout()
         self.input = QLineEdit()
@@ -62,6 +65,10 @@ class CommandPanel(QWidget):
         self.button.setMinimumWidth(120)
         self.button.setMaximumWidth(180)
         self.button.clicked.connect(self.run)
+        self.input.returnPressed.connect(self.run)
+        stop_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Escape), self)
+        stop_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        stop_shortcut.activated.connect(self.cancel)
         if label:
             controls.addWidget(QLabel(label))
             controls.addWidget(self.input, 1)
@@ -77,11 +84,14 @@ class CommandPanel(QWidget):
         layout.addWidget(self.output)
 
     def run(self) -> None:
+        if not self.button.isEnabled():
+            return
         self.button.setEnabled(False)
         value = self.input.text()
         if self._streaming:
             self.output.clear()
-            task = StreamingTask(lambda emit: self._action(value, emit))
+            self._stop_event = Event()
+            task = StreamingTask(lambda emit: self._action(value, emit, self._stop_event))
             task.signals.output.connect(self._append_output)
             task.signals.completed.connect(lambda result: self._finish_stream(str(result)))
             task.signals.failed.connect(self._fail_stream)
@@ -94,6 +104,11 @@ class CommandPanel(QWidget):
         self._task.signals.failed.connect(lambda error: self._finish(f"Error: {error}"))
         QThreadPool.globalInstance().start(self._task)
 
+    def cancel(self) -> None:
+        """Request cancellation of the active streaming operation."""
+        if self._stop_event is not None:
+            self._stop_event.set()
+
     def _append_output(self, line: str) -> None:
         self.output.appendPlainText(line)
 
@@ -101,11 +116,13 @@ class CommandPanel(QWidget):
         if self.output.document().isEmpty():
             self.output.setPlainText(output)
         self.button.setEnabled(True)
+        self._stop_event = None
         self._task = None
 
     def _fail_stream(self, error: str) -> None:
         self.output.appendPlainText(f"Error: {error}")
         self.button.setEnabled(True)
+        self._stop_event = None
         self._task = None
 
     def _finish(self, output: str) -> None:
@@ -130,6 +147,8 @@ class DnsPanel(QWidget):
         form.addRow(tr("Record type"), self.kind)
         form.addRow(tr("DNS server"), self.server)
         self.command = CommandPanel("", "", lambda _: dns_lookup(self.name.text(), self.kind.currentText(), self.server.text()))
+        self.name.returnPressed.connect(self.command.run)
+        self.server.returnPressed.connect(self.command.run)
         layout.addLayout(form)
         layout.addWidget(self.command)
 
@@ -152,6 +171,8 @@ class WolPanel(QWidget):
         button.setMinimumWidth(160)
         button.setMaximumWidth(220)
         button.clicked.connect(self._send)
+        self.mac.returnPressed.connect(self._send)
+        self.broadcast.returnPressed.connect(self._send)
         button_row = QHBoxLayout()
         button_row.addStretch()
         button_row.addWidget(button)
@@ -186,7 +207,11 @@ class ToolsTab(QWidget):
             CommandPanel(
                 tr("Target"),
                 tr("hostname or IP address"),
-                lambda target, emit: traceroute(target, output_callback=emit),
+                lambda target, emit, stop: traceroute(
+                    target,
+                    output_callback=emit,
+                    cancel_event=stop,
+                ),
                 streaming=True,
             ),
             tr("Traceroute"),

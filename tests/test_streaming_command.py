@@ -82,7 +82,12 @@ def test_streaming_command_drains_large_terminal_output() -> None:
 def test_traceroute_uses_one_short_probe_per_hop() -> None:
     calls: list[tuple[tuple[str, ...], float]] = []
 
-    def runner(command: tuple[str, ...], timeout: float, callback: object) -> CommandResult:
+    def runner(
+        command: tuple[str, ...],
+        timeout: float,
+        callback: object,
+        cancel_event: object,
+    ) -> CommandResult:
         calls.append((command, timeout))
         return CommandResult(0, "1  192.0.2.1  1.0 ms", "")
 
