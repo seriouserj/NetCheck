@@ -1,14 +1,15 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Close temporary capture output before cross-platform worker access.
+Changelog: Capture Windows LLDP/CDP traffic through TShark and Npcap.
 """
 
 from __future__ import annotations
 
 import os
 import re
+import shutil
 import stat
 import subprocess
 import sys
@@ -39,6 +40,8 @@ class NeighborService:
         """Return passive link-layer neighbors without transmitting probes."""
         if not interface.strip():
             raise ValueError("Select an interface for neighbor discovery.")
+        if sys.platform == "win32":
+            return self._discover_windows(interface, timeout)
         if self._run(("which", "tcpdump"), 2.0).return_code != 0:
             raise RuntimeError("tcpdump is required for LLDP/CDP discovery.")
         with tempfile.NamedTemporaryFile(
@@ -60,6 +63,38 @@ class NeighborService:
             if neighbor is not None:
                 neighbors.append(neighbor)
         return neighbors
+
+    def _discover_windows(self, interface: str, timeout: float) -> list[NetworkNeighbor]:
+        """Capture directly connected advertisements with Windows packet capture."""
+        tshark = shutil.which("tshark")
+        if not tshark:
+            raise RuntimeError(
+                "Install Wireshark with TShark and Npcap to capture LLDP/CDP on Windows."
+            )
+        interfaces = self._run((tshark, "-D"), 10.0)
+        capture_id = parse_tshark_interface_id(interfaces.stdout, interface)
+        if not capture_id:
+            raise RuntimeError(f"TShark cannot match the Windows interface: {interface}")
+        result = self._run(
+            (
+                tshark,
+                "-i",
+                capture_id,
+                "-a",
+                f"duration:{max(2, min(30, int(timeout)))}",
+                "-f",
+                "ether proto 0x88cc or ether dst 01:00:0c:cc:cc:cc",
+                "-V",
+            ),
+            timeout + 10.0,
+        )
+        if result.return_code not in (0, 124):
+            raise RuntimeError(result.stderr or result.stdout or "Windows packet capture failed.")
+        return [
+            neighbor
+            for parser in (parse_lldp, parse_cdp)
+            if (neighbor := parser(result.stdout)) is not None
+        ]
 
     @staticmethod
     def _worker_command(interface: str, timeout: float, output_path: str) -> tuple[str, ...]:
@@ -130,3 +165,13 @@ def run_neighbor_worker(arguments: list[str]) -> int:
             stdout, stderr = process.communicate()
     output_path.write_text("\n".join(part for part in (stdout, stderr) if part), encoding="utf-8")
     return 0
+
+
+def parse_tshark_interface_id(output: str, interface: str) -> str:
+    """Match a TShark capture interface number by its Windows display name."""
+    wanted = interface.strip().casefold()
+    for line in output.splitlines():
+        match = re.match(r"\s*(\d+)\.\s+.*(?:\((.+)\))\s*$", line)
+        if match and wanted in match.group(2).casefold():
+            return match.group(1)
+    return ""

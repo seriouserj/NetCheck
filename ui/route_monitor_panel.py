@@ -11,7 +11,7 @@ from collections.abc import Callable
 from threading import Event
 from typing import Any
 
-from PySide6.QtCore import Qt, QObject, QRunnable, QThreadPool, Signal, Slot
+from PySide6.QtCore import QObject, QRunnable, Qt, QThreadPool, Signal, Slot
 from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QAbstractItemView,

@@ -1,11 +1,13 @@
 """
-Version: 1.5.0
-Date: 2026-08-10
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain single-prompt combined LLDP and CDP capture.
+Changelog: Expose Windows LLDP/CDP capture when TShark and Npcap are installed.
 """
 
 from __future__ import annotations
+
+import sys
 
 import psutil
 from PySide6.QtCore import QThreadPool
@@ -38,12 +40,22 @@ class NeighborsPanel(QWidget):
         controls = QHBoxLayout()
         controls.addWidget(QLabel(tr("Interface")))
         self._interface = QComboBox()
-        self._interface.addItems(sorted(name for name in psutil.net_if_addrs() if name.startswith(("en", "vlan"))))
+        names = (
+            [name for name in psutil.net_if_addrs() if name.startswith(("en", "vlan"))]
+            if sys.platform != "win32"
+            else [name for name in psutil.net_if_addrs() if "loopback" not in name.casefold()]
+        )
+        self._interface.addItems(sorted(names))
         self._start = QPushButton(tr("Listen for neighbors"))
         self._start.clicked.connect(self._discover)
         controls.addWidget(self._interface, 1)
         controls.addWidget(self._start)
-        self._status = QLabel(tr("One macOS authorization captures LLDP and CDP together."))
+        status = (
+            "Windows capture uses Wireshark TShark and Npcap."
+            if sys.platform == "win32"
+            else tr("One macOS authorization captures LLDP and CDP together.")
+        )
+        self._status = QLabel(status)
         self._status.setObjectName("mutedLabel")
         self._table = HoverRowTableWidget(0, 7)
         self._table.setHorizontalHeaderLabels(tuple(tr(item) for item in ("Protocol", "System", "Port", "Platform", "Management IP", "Native VLAN", "Capabilities")))

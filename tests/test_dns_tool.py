@@ -5,8 +5,8 @@ Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Verify platform-native DNS lookup command selection.
 """
 
-from core.command_runner import CommandResult
 from core import dns_tool
+from core.command_runner import CommandResult
 
 
 def test_windows_dns_lookup_uses_nslookup(monkeypatch) -> None:

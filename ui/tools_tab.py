@@ -7,7 +7,6 @@ Changelog: Start tools with Enter and stop streaming tools with Escape.
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Callable
 from threading import Event
 
@@ -219,12 +218,6 @@ class ToolsTab(QWidget):
         tabs.addTab(RouteMonitorPanel(), tr("Route Monitor"))
         tabs.addTab(DnsPanel(), tr("DNS Lookup"))
         tabs.addTab(WolPanel(), tr("Wake-on-LAN"))
-        neighbor_index = tabs.addTab(NeighborsPanel(), "LLDP/CDP")
-        if sys.platform == "win32":
-            tabs.setTabEnabled(neighbor_index, False)
-            tabs.setTabToolTip(
-                neighbor_index,
-                tr("LLDP/CDP capture requires macOS packet capture support."),
-            )
+        tabs.addTab(NeighborsPanel(), "LLDP/CDP")
         tabs.addTab(SnmpPanel(), "SNMP")
         layout.addWidget(tabs)

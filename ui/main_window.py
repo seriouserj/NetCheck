@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.0
+Date: 2026-08-13
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Mark macOS-only VLAN diagnostics unavailable on Windows.
+Changelog: Open an active Windows VLAN driver capability page.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from ui.settings_tab import SettingsTab
 from ui.tab_navigation import center_tab_group
 from ui.tools_tab import ToolsTab
 from ui.vlan_tab import VlanTab
+from ui.windows_vlan_tab import WindowsVlanTab
 
 
 class MainWindow(QMainWindow):
@@ -48,10 +49,7 @@ class MainWindow(QMainWindow):
         tabs.tabBar().setObjectName("mainTabBar")
         center_tab_group(tabs)
         tabs.addTab(DashboardTab(), tr("Dashboard"))
-        vlan_index = tabs.addTab(VlanTab(), "VLAN")
-        if sys.platform == "win32":
-            tabs.setTabEnabled(vlan_index, False)
-            tabs.setTabToolTip(vlan_index, tr("VLAN testing requires macOS."))
+        tabs.addTab(WindowsVlanTab() if sys.platform == "win32" else VlanTab(), "VLAN")
         tabs.addTab(DiscoveryTab(), tr("Discovery"))
         tabs.addTab(PortsTab(), tr("Ports"))
         tabs.addTab(ToolsTab(), tr("Tools"))
