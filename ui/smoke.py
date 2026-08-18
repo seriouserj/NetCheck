@@ -1,8 +1,8 @@
 """
-Version: 1.9.1
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate active cross-platform navigation and Windows tool construction.
+Changelog: Validate the release 1.9.2 application interface.
 """
 
 from __future__ import annotations

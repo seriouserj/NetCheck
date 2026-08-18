@@ -1,8 +1,8 @@
 """
-Version: 1.9.1
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Restore macOS dashboard addresses through ifconfig and scoped-route fallbacks.
+Changelog: Include restored macOS dashboard addressing in release 1.9.2.
 """
 
 from __future__ import annotations

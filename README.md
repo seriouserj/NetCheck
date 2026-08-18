@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.1
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document repaired Windows diagnostics and capability detection.
+Changelog: Document passive capture and LLDP/CDP parsing repairs.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.9.1-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.9.1-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.9.2-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.9.2-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,11 +29,16 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.9.1-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.9.2-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.9.1 highlights
+## Version 1.9.2 highlights
+
+- Passive VLAN and LLDP/CDP capture first uses existing BPF access without an administrator dialog
+- Authorization fallback is shown only when macOS denies access to its packet-capture devices
+- Every captured LLDP/CDP advertisement is parsed instead of retaining only one per protocol
+- CDP system, port, and platform fields exclude tcpdump TLV length metadata
 
 - Native portable Windows x86-64 application with the same Qt interface and branding
 - Windows Ethernet adapter, gateway, DNS, Ping, Tracert, route-monitor, Discovery, Ports, DNS, Wake-on-LAN, SNMP, profiles, and report support

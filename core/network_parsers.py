@@ -1,8 +1,8 @@
 """
-Version: 1.9.1
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Parse MAC, IPv4, and IPv6 addresses directly from macOS ifconfig output.
+Changelog: Include the repaired macOS interface parsers in release 1.9.2.
 """
 
 from __future__ import annotations

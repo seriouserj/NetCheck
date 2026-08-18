@@ -1,8 +1,8 @@
 <!--
-Version: 1.1.0
-Date: 2026-08-07
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document localization, single-prompt VLAN tests, and product branding.
+Changelog: Explain active VLAN and passive packet-capture authorization behavior.
 -->
 
 # NetCheck
@@ -63,9 +63,12 @@ with official branding from [DITIS Group](https://ditis.group).
 
 ## macOS permissions
 
-Temporary VLAN creation and passive LLDP/CDP capture use the standard macOS
-administrator authorization dialog. NetCheck never stores administrator credentials or
-SNMP community strings. Temporary VLAN interfaces are removed even when a test fails.
+Temporary VLAN creation uses the standard macOS administrator authorization dialog.
+Passive VLAN and LLDP/CDP capture first uses the current user's BPF access and asks for
+authorization only when macOS denies access to the capture device. NetCheck never stores
+administrator credentials or SNMP community strings. Temporary VLAN interfaces are
+removed even when a test fails. LLDP and CDP report directly connected layer-2 neighbors;
+routers, firewalls, and switches farther along an IP route do not forward these frames.
 
 Only scan networks and devices you are authorized to test.
 

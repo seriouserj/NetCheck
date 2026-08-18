@@ -1,12 +1,12 @@
 """
-Version: 1.9.1
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Restore macOS dashboard IP address and gateway reporting.
+Changelog: Release passive capture authorization and neighbor parsing repairs.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.9.1"
+APP_VERSION = "1.9.2"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"
