@@ -78,7 +78,7 @@ def _packet_sections(output: str) -> list[str]:
     protocol_starts = [
         match.start()
         for match in re.finditer(
-            r"(?im)^(?=\S[^\n]*(?:\bLLDP\b|\bCDP(?:v?\d+)?\b|Cisco Discovery Protocol))",
+            r"(?im)^(?=\S)(?=[^\n]*(?:\bLLDP\b|\bCDP(?:\s+v?\d+|v?\d+)?\b|Cisco Discovery Protocol))",
             output,
         )
     ]

@@ -53,3 +53,14 @@ def test_parse_multiple_cdp_neighbors() -> None:
     neighbors = parse_neighbors(output)
 
     assert [neighbor.system_name for neighbor in neighbors] == ["switch-a", "switch-b"]
+
+
+def test_parse_combined_lldp_and_spaced_cdp_version() -> None:
+    output = (
+        "LLDP, System Name TLV (5), length 7: switch1\n"
+        "Port ID TLV (2), length 5: Interface Name: Gi1/0/1\n"
+        "CDP v2, Device-ID (0x01), length: 'core-sw'\n"
+        "Port-ID (0x03), length: 'Gi0/24'"
+    )
+
+    assert [neighbor.protocol for neighbor in parse_neighbors(output)] == ["LLDP", "CDP"]
