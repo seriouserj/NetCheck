@@ -1,8 +1,8 @@
 """
-Version: 1.2.0
-Date: 2026-08-07
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify passive VLAN parsing and single authorized worker execution.
+Changelog: Verify unprivileged passive capture and authorization fallback.
 """
 
 from pathlib import Path
@@ -30,8 +30,21 @@ def test_discovery_uses_one_privileged_worker() -> None:
         Path(command[-1]).write_text("[192,162,192]", encoding="utf-8")
         return CommandResult(0, "", "")
 
-    result = VlanDiscoveryService(privileged).discover("en7", 2.0)
+    def capture(command, timeout, output_callback, cancel_event) -> CommandResult:
+        return CommandResult(1, "", "tcpdump: /dev/bpf0: Permission denied")
+
+    result = VlanDiscoveryService(privileged, capture).discover("en7", 2.0)
 
     assert result == [162, 192]
     assert len(calls) == 1
     assert "--vlan-discovery-worker" in calls[0]
+
+
+def test_discovery_avoids_authorization_when_bpf_is_accessible() -> None:
+    def privileged(command: tuple[str, ...], timeout: float) -> CommandResult:
+        raise AssertionError("Privilege fallback must not run")
+
+    def capture(command, timeout, output_callback, cancel_event) -> CommandResult:
+        return CommandResult(124, "12:00:00 aa > bb, vlan 20, IPv4", "timed out")
+
+    assert VlanDiscoveryService(privileged, capture).discover("en7", 2.0) == [20]

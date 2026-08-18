@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Close temporary capture output before cross-platform worker access.
+Changelog: Avoid authorization when macOS already permits passive BPF capture.
 """
 
 from __future__ import annotations
@@ -14,26 +14,42 @@ import stat
 import subprocess
 import sys
 import tempfile
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 from core.command_runner import CommandResult
+from core.packet_capture import capture_requires_privileges
 from core.privileged_runner import run_privileged
+from core.streaming_command import run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float], CommandResult]
+CaptureRunner = Callable[[Sequence[str], float, object | None, object | None], CommandResult]
 
 
 class VlanDiscoveryService:
     """Observe tagged frames without actively configuring every VLAN ID."""
 
-    def __init__(self, privileged_runner: Runner = run_privileged) -> None:
+    def __init__(
+        self,
+        privileged_runner: Runner = run_privileged,
+        capture_runner: CaptureRunner = run_streaming_command,
+    ) -> None:
         self._run_privileged = privileged_runner
+        self._capture = capture_runner
 
     def discover(self, interface: str, duration: float = 8.0) -> list[int]:
         """Return VLAN IDs observed on an Ethernet interface during a short capture."""
-        with tempfile.NamedTemporaryFile(
-            prefix="netcheck-vlan-discovery-", suffix=".json", delete=False
-        ) as output:
+        capture = self._capture(
+            ("/usr/sbin/tcpdump", "-l", "-nn", "-e", "-i", interface, "vlan"),
+            duration,
+            None,
+            None,
+        )
+        if not capture_requires_privileges(capture):
+            if capture.return_code not in (0, 124):
+                raise RuntimeError(capture.stderr or capture.stdout or "VLAN discovery capture failed")
+            return parse_observed_vlan_ids(capture.stdout)
+        with tempfile.NamedTemporaryFile(prefix="netcheck-vlan-discovery-", suffix=".json", delete=False) as output:
             output_path = Path(output.name)
         try:
             command = self._worker_command(interface, duration, str(output_path))

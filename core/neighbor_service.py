@@ -1,8 +1,8 @@
 """
-Version: 1.9.0
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Capture Windows LLDP/CDP traffic through TShark and Npcap.
+Changelog: Prefer unprivileged macOS capture and return every advertised neighbor.
 """
 
 from __future__ import annotations
@@ -14,27 +14,32 @@ import stat
 import subprocess
 import sys
 import tempfile
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 from core.command_runner import CommandResult, run_command
 from core.neighbor_models import NetworkNeighbor
-from core.neighbor_parser import parse_cdp, parse_lldp
+from core.neighbor_parser import parse_neighbors
+from core.packet_capture import capture_requires_privileges
 from core.privileged_runner import run_privileged
+from core.streaming_command import run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float], CommandResult]
+CaptureRunner = Callable[[Sequence[str], float, object | None, object | None], CommandResult]
 
 
 class NeighborService:
-    """Capture one LLDP and CDP advertisement on a selected interface."""
+    """Capture LLDP and CDP advertisements on a selected interface."""
 
     def __init__(
         self,
         runner: Runner = run_command,
         privileged_runner: Runner = run_privileged,
+        capture_runner: CaptureRunner = run_streaming_command,
     ) -> None:
         self._run = runner
         self._run_privileged = privileged_runner
+        self._capture = capture_runner
 
     def discover(self, interface: str, timeout: float = 15.0) -> list[NetworkNeighbor]:
         """Return passive link-layer neighbors without transmitting probes."""
@@ -44,9 +49,12 @@ class NeighborService:
             return self._discover_windows(interface, timeout)
         if self._run(("which", "tcpdump"), 2.0).return_code != 0:
             raise RuntimeError("tcpdump is required for LLDP/CDP discovery.")
-        with tempfile.NamedTemporaryFile(
-            prefix="netcheck-neighbors-", suffix=".txt", delete=False
-        ) as output:
+        capture_result = self._capture(self._capture_command(interface), timeout, None, None)
+        if not capture_requires_privileges(capture_result):
+            if capture_result.return_code not in (0, 124):
+                raise RuntimeError(capture_result.stderr or capture_result.stdout or "Neighbor capture failed.")
+            return parse_neighbors(capture_result.stdout)
+        with tempfile.NamedTemporaryFile(prefix="netcheck-neighbors-", suffix=".txt", delete=False) as output:
             output_path = Path(output.name)
         try:
             command = self._worker_command(interface, timeout, str(output_path))
@@ -57,20 +65,13 @@ class NeighborService:
             capture = output_path.read_text(encoding="utf-8", errors="replace")
         finally:
             output_path.unlink(missing_ok=True)
-        neighbors: list[NetworkNeighbor] = []
-        for parser in (parse_lldp, parse_cdp):
-            neighbor = parser(capture)
-            if neighbor is not None:
-                neighbors.append(neighbor)
-        return neighbors
+        return parse_neighbors(capture)
 
     def _discover_windows(self, interface: str, timeout: float) -> list[NetworkNeighbor]:
         """Capture directly connected advertisements with Windows packet capture."""
         tshark = shutil.which("tshark")
         if not tshark:
-            raise RuntimeError(
-                "Install Wireshark with TShark and Npcap to capture LLDP/CDP on Windows."
-            )
+            raise RuntimeError("Install Wireshark with TShark and Npcap to capture LLDP/CDP on Windows.")
         interfaces = self._run((tshark, "-D"), 10.0)
         capture_id = parse_tshark_interface_id(interfaces.stdout, interface)
         if not capture_id:
@@ -90,11 +91,22 @@ class NeighborService:
         )
         if result.return_code not in (0, 124):
             raise RuntimeError(result.stderr or result.stdout or "Windows packet capture failed.")
-        return [
-            neighbor
-            for parser in (parse_lldp, parse_cdp)
-            if (neighbor := parser(result.stdout)) is not None
-        ]
+        return parse_neighbors(result.stdout)
+
+    @staticmethod
+    def _capture_command(interface: str) -> tuple[str, ...]:
+        return (
+            "/usr/sbin/tcpdump",
+            "-l",
+            "-nn",
+            "-vv",
+            "-e",
+            "-s",
+            "0",
+            "-i",
+            interface,
+            "(ether proto 0x88cc) or (ether dst 01:00:0c:cc:cc:cc)",
+        )
 
     @staticmethod
     def _worker_command(interface: str, timeout: float, output_path: str) -> tuple[str, ...]:

@@ -1,8 +1,8 @@
 """
-Version: 1.9.0
-Date: 2026-08-13
+Version: 1.9.2
+Date: 2026-08-18
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify the macOS capture path independently of the CI host platform.
+Changelog: Verify unprivileged capture and permission-only authorization fallback.
 """
 
 from pathlib import Path
@@ -30,8 +30,32 @@ def test_neighbor_discovery_uses_one_privileged_worker(monkeypatch) -> None:
         )
         return CommandResult(0, "", "")
 
-    neighbors = NeighborService(runner, privileged).discover("en7", 2.0)
+    def capture(command, timeout, output_callback, cancel_event) -> CommandResult:
+        return CommandResult(1, "", "tcpdump: /dev/bpf0: Permission denied")
+
+    neighbors = NeighborService(runner, privileged, capture).discover("en7", 2.0)
 
     assert [item.protocol for item in neighbors] == ["LLDP", "CDP"]
     assert len(calls) == 1
     assert "--neighbor-worker" in calls[0]
+
+
+def test_neighbor_discovery_avoids_authorization_when_bpf_is_accessible(monkeypatch) -> None:
+    monkeypatch.setattr(neighbor_service.sys, "platform", "darwin")
+
+    def runner(command: tuple[str, ...], timeout: float) -> CommandResult:
+        return CommandResult(0, "/usr/sbin/tcpdump", "")
+
+    def privileged(command: tuple[str, ...], timeout: float) -> CommandResult:
+        raise AssertionError("Privilege fallback must not run")
+
+    def capture(command, timeout, output_callback, cancel_event) -> CommandResult:
+        return CommandResult(
+            124,
+            "CDPv2, Device-ID (0x01), length: 9 bytes: edge-sw-1",
+            "Command timed out after 2.0 seconds.",
+        )
+
+    neighbors = NeighborService(runner, privileged, capture).discover("en7", 2.0)
+
+    assert [neighbor.system_name for neighbor in neighbors] == ["edge-sw-1"]
