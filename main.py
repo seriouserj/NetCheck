@@ -1,8 +1,8 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Ship improved passive VLAN and multi-neighbor LLDP/CDP capture.
+Changelog: Ship repaired macOS interface inventory and neighbor listening.
 """
 
 from __future__ import annotations

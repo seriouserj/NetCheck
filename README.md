@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document passive capture and LLDP/CDP parsing repairs.
+Changelog: Document macOS interface inventory and neighbor interval repairs.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.9.2-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.9.2-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.9.3-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.9.3-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,11 +29,17 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.9.2-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.9.3-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.9.2 highlights
+## Version 1.9.3 highlights
+
+- Dashboard lists every active physical macOS interface, including Wi-Fi and USB Ethernet
+- Configured VPN tunnel interfaces appear when they have a usable tunnel address
+- Service-only bridge, AWDL, and link-local tunnel interfaces remain hidden
+- LLDP/CDP capture covers a full 65-second CDP advertisement interval
+- A localized countdown makes the passive neighbor-listening period explicit
 
 - Passive VLAN and LLDP/CDP capture first uses existing BPF access without an administrator dialog
 - Authorization fallback is shown only when macOS denies access to its packet-capture devices

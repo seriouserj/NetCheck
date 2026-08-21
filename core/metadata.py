@@ -1,12 +1,12 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release passive capture authorization and neighbor parsing repairs.
+Changelog: Release macOS interface inventory and LLDP/CDP interval repairs.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.9.2"
+APP_VERSION = "1.9.3"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

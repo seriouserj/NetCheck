@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain active VLAN and passive packet-capture authorization behavior.
+Changelog: Explain macOS physical/VPN inventory and complete CDP capture intervals.
 -->
 
 # NetCheck
@@ -51,6 +51,11 @@ For reproducible builds, artifact naming, signing, and release automation, see t
 - Passive LLDP and CDP neighbor discovery
 - Read-only SNMP v2c GET and WALK operations
 - Runtime English, German, Russian, and Ukrainian localization
+
+The Dashboard includes active physical macOS interfaces and configured VPN tunnels with
+a usable tunnel address. Disconnected WireGuard profiles have no macOS interface to
+inspect and appear after the tunnel is connected. LLDP/CDP capture listens for 65 seconds
+to cover the common 60-second CDP advertisement interval.
 
 An entire VLAN list or range runs inside one privileged worker and therefore requests
 macOS administrator authorization once per test batch. Temporary interfaces are still
