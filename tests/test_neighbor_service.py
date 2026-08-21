@@ -1,15 +1,15 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify unprivileged capture and permission-only authorization fallback.
+Changelog: Verify the complete default CDP capture interval.
 """
 
 from pathlib import Path
 
 import core.neighbor_service as neighbor_service
 from core.command_runner import CommandResult
-from core.neighbor_service import NeighborService
+from core.neighbor_service import DEFAULT_NEIGHBOR_TIMEOUT, NeighborService
 
 
 def test_neighbor_discovery_uses_one_privileged_worker(monkeypatch) -> None:
@@ -59,3 +59,19 @@ def test_neighbor_discovery_avoids_authorization_when_bpf_is_accessible(monkeypa
     neighbors = NeighborService(runner, privileged, capture).discover("en7", 2.0)
 
     assert [neighbor.system_name for neighbor in neighbors] == ["edge-sw-1"]
+
+
+def test_neighbor_discovery_uses_complete_cdp_interval(monkeypatch) -> None:
+    monkeypatch.setattr(neighbor_service.sys, "platform", "darwin")
+    observed: list[float] = []
+
+    def runner(command: tuple[str, ...], timeout: float) -> CommandResult:
+        return CommandResult(0, "/usr/sbin/tcpdump", "")
+
+    def capture(command, timeout, output_callback, cancel_event) -> CommandResult:
+        observed.append(timeout)
+        return CommandResult(124, "", "timed out")
+
+    assert NeighborService(runner, capture_runner=capture).discover("en0") == []
+    assert observed == [DEFAULT_NEIGHBOR_TIMEOUT]
+    assert DEFAULT_NEIGHBOR_TIMEOUT >= 65.0

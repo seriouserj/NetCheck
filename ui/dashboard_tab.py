@@ -1,8 +1,8 @@
 """
-Version: 1.1.0
-Date: 2026-08-06
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize Dashboard controls, values, and status messages.
+Changelog: Present physical and active VPN interfaces without false tunnel diagnostics.
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ from ui.hover_table import HoverRowTableWidget
 
 
 class DashboardTab(QWidget):
-    """Display a live summary of local wired network interfaces."""
+    """Display a live summary of local physical and VPN network interfaces."""
 
     HEADERS = ("Interface", "Status", "Speed", "Duplex", "MAC", "IPv4", "IPv6", "Gateway", "DNS", "Internet")
 
@@ -77,7 +77,7 @@ class DashboardTab(QWidget):
         if self._active_task is not None:
             return
         self._refresh.setEnabled(False)
-        self._status.setText(tr("Scanning Ethernet adapters…"))
+        self._status.setText(tr("Scanning network interfaces…"))
         task = BackgroundTask(self._service.collect)
         task.signals.completed.connect(self._display_results)
         task.signals.failed.connect(self._display_error)
@@ -93,8 +93,13 @@ class DashboardTab(QWidget):
                 self._populate_row(row_index, interface)
         self._table.resizeColumnsToContents()
         self._table.setSortingEnabled(True)
-        self._status.setText(tr("{count} Ethernet adapter(s)", count=len(rows)))
-        typed_rows = [item for item in rows if isinstance(item, InterfaceDiagnostics)]
+        self._status.setText(tr("{count} network interface(s)", count=len(rows)))
+        typed_rows = [
+            item
+            for item in rows
+            if isinstance(item, InterfaceDiagnostics)
+            and not item.name.startswith(("utun", "wg"))
+        ]
         self._diagnostics.set_findings(self._diagnostic_engine.analyze_interfaces(typed_rows))
         self._finish_refresh()
 

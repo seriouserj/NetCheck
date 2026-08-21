@@ -1,8 +1,8 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Prefer unprivileged macOS capture and return every advertised neighbor.
+Changelog: Listen through a complete standard CDP advertisement interval.
 """
 
 from __future__ import annotations
@@ -26,6 +26,7 @@ from core.streaming_command import run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float], CommandResult]
 CaptureRunner = Callable[[Sequence[str], float, object | None, object | None], CommandResult]
+DEFAULT_NEIGHBOR_TIMEOUT = 65.0
 
 
 class NeighborService:
@@ -41,7 +42,7 @@ class NeighborService:
         self._run_privileged = privileged_runner
         self._capture = capture_runner
 
-    def discover(self, interface: str, timeout: float = 15.0) -> list[NetworkNeighbor]:
+    def discover(self, interface: str, timeout: float = DEFAULT_NEIGHBOR_TIMEOUT) -> list[NetworkNeighbor]:
         """Return passive link-layer neighbors without transmitting probes."""
         if not interface.strip():
             raise ValueError("Select an interface for neighbor discovery.")
@@ -125,7 +126,7 @@ def run_neighbor_worker(arguments: list[str]) -> int:
     output_path = Path(output_text)
     try:
         output_status = output_path.lstat()
-        timeout = min(30.0, max(2.0, float(timeout_text)))
+        timeout = min(90.0, max(2.0, float(timeout_text)))
     except (OSError, ValueError):
         return 64
     if not stat.S_ISREG(output_status.st_mode) or output_path.is_symlink():

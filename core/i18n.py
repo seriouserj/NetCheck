@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize Windows platform capability messages.
+Changelog: Localize network-interface inventory and neighbor-listening progress.
 """
 
 from __future__ import annotations
@@ -59,6 +59,8 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Ready": "Bereit",
         "Scanning Ethernet adapters…": "Ethernet-Adapter werden geprüft…",
         "{count} Ethernet adapter(s)": "{count} Ethernet-Adapter",
+        "Scanning network interfaces…": "Netzwerkschnittstellen werden geprüft…",
+        "{count} network interface(s)": "{count} Netzwerkschnittstelle(n)",
         "Smart Diagnostics": "Intelligente Diagnose",
         "Severity": "Schweregrad",
         "Finding": "Befund",
@@ -193,7 +195,9 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Listen for neighbors": "Nachbarn erkennen",
         "One macOS authorization captures LLDP and CDP together.": "Eine macOS-Autorisierung erfasst LLDP und CDP gemeinsam.",
         "Listening for LLDP and CDP advertisements…": "LLDP- und CDP-Ankündigungen werden empfangen…",
+        "Listening for LLDP and CDP advertisements: {seconds} s remaining…": "LLDP- und CDP-Ankündigungen werden empfangen: noch {seconds} s…",
         "Found {count} neighbor advertisement(s).": "{count} Nachbarankündigung(en) gefunden.",
+        "No LLDP/CDP advertisements received from the directly connected port.": "Keine LLDP/CDP-Ankündigungen vom direkt verbundenen Port empfangen.",
         "Querying SNMP agent…": "SNMP-Agent wird abgefragt…",
         "Received {count} SNMP value(s).": "{count} SNMP-Wert(e) empfangen.",
         "New profile": "Neues Profil",
@@ -250,6 +254,8 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Ready": "Готово",
         "Scanning Ethernet adapters…": "Проверка Ethernet-адаптеров…",
         "{count} Ethernet adapter(s)": "Ethernet-адаптеров: {count}",
+        "Scanning network interfaces…": "Проверка сетевых интерфейсов…",
+        "{count} network interface(s)": "Сетевых интерфейсов: {count}",
         "Smart Diagnostics": "Умная диагностика",
         "Severity": "Уровень",
         "Finding": "Проблема",
@@ -384,7 +390,9 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Listen for neighbors": "Поиск соседей",
         "One macOS authorization captures LLDP and CDP together.": "Одна авторизация macOS запускает общий захват LLDP и CDP.",
         "Listening for LLDP and CDP advertisements…": "Ожидание объявлений LLDP и CDP…",
+        "Listening for LLDP and CDP advertisements: {seconds} s remaining…": "Ожидание объявлений LLDP и CDP: осталось {seconds} с…",
         "Found {count} neighbor advertisement(s).": "Найдено объявлений соседей: {count}.",
+        "No LLDP/CDP advertisements received from the directly connected port.": "С напрямую подключённого порта не получено объявлений LLDP/CDP.",
         "Querying SNMP agent…": "Запрос к SNMP-агенту…",
         "Received {count} SNMP value(s).": "Получено значений SNMP: {count}.",
         "New profile": "Новый профиль",
@@ -441,6 +449,8 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Ready": "Готово",
         "Scanning Ethernet adapters…": "Перевірка Ethernet-адаптерів…",
         "{count} Ethernet adapter(s)": "Ethernet-адаптерів: {count}",
+        "Scanning network interfaces…": "Перевірка мережевих інтерфейсів…",
+        "{count} network interface(s)": "Мережевих інтерфейсів: {count}",
         "Smart Diagnostics": "Розумна діагностика",
         "Severity": "Рівень",
         "Finding": "Проблема",
@@ -575,7 +585,9 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Listen for neighbors": "Пошук сусідів",
         "One macOS authorization captures LLDP and CDP together.": "Одна авторизація macOS запускає спільне захоплення LLDP і CDP.",
         "Listening for LLDP and CDP advertisements…": "Очікування оголошень LLDP і CDP…",
+        "Listening for LLDP and CDP advertisements: {seconds} s remaining…": "Очікування оголошень LLDP і CDP: залишилося {seconds} с…",
         "Found {count} neighbor advertisement(s).": "Знайдено оголошень сусідів: {count}.",
+        "No LLDP/CDP advertisements received from the directly connected port.": "З безпосередньо підключеного порту не отримано оголошень LLDP/CDP.",
         "Querying SNMP agent…": "Запит до SNMP-агента…",
         "Received {count} SNMP value(s).": "Отримано значень SNMP: {count}.",
         "New profile": "Новий профіль",

@@ -1,13 +1,15 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.3
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Include restored macOS dashboard addressing in release 1.9.2.
+Changelog: Display active physical interfaces and configured macOS VPN tunnels.
 """
 
 from __future__ import annotations
 
+import ipaddress
 import json
+import re
 import socket
 import sys
 from collections.abc import Callable
@@ -48,9 +50,7 @@ class InterfaceService:
         dns_servers = parse_dns_servers(dns.stdout)
         internet = self._probe_internet(timeout)
 
-        devices = [name for name, label in port_labels.items() if is_ethernet_port(label)]
-        if not devices and not port_labels:
-            devices = [name for name in addresses if name.startswith("en") and name != "en0"]
+        devices = _select_macos_devices(port_labels, addresses)
 
         return [
             self._diagnose_device(
@@ -166,10 +166,11 @@ class InterfaceService:
                 timeout,
             )
             gateway, _ = parse_default_gateway(scoped_route.stdout)
+        is_tunnel = name.startswith(("utun", "wg"))
         is_up = stats.isup if stats is not None else media_active
         return InterfaceDiagnostics(
             name=name,
-            status="Connected" if is_up and media_active else "Disconnected",
+            status="Connected" if is_up and (media_active or is_tunnel) else "Disconnected",
             speed=speed,
             duplex=duplex,
             mac=mac or "—",
@@ -244,3 +245,39 @@ def _is_windows_ethernet_name(name: str) -> bool:
 def _merge_addresses(primary: object, fallback: tuple[str, ...]) -> tuple[str, ...]:
     """Merge address sources while preserving stable display order."""
     return tuple(dict.fromkeys((*primary, *fallback)))
+
+
+def _select_macos_devices(
+    port_labels: dict[str, str],
+    addresses: dict[str, list[psutil._common.snicaddr]],
+) -> list[str]:
+    """Select physical network ports and configured third-party VPN tunnels."""
+    devices = {
+        name
+        for name, label in port_labels.items()
+        if is_ethernet_port(label)
+    }
+    for name, interface_addresses in addresses.items():
+        has_configured_ip = any(
+            _is_configured_ip(item.address)
+            for item in interface_addresses
+            if item.family in (socket.AF_INET, socket.AF_INET6)
+        )
+        if has_configured_ip and name.startswith(("en", "utun", "wg")):
+            devices.add(name)
+    return sorted(devices, key=_interface_sort_key)
+
+
+def _is_configured_ip(address: str) -> bool:
+    try:
+        parsed = ipaddress.ip_address(address.split("%", 1)[0])
+    except ValueError:
+        return False
+    return not (parsed.is_link_local or parsed.is_loopback or parsed.is_unspecified)
+
+
+def _interface_sort_key(name: str) -> tuple[int, int, str]:
+    match = re.fullmatch(r"([A-Za-z]+)(\d+)", name)
+    prefix, number = (match.group(1), int(match.group(2))) if match else (name, 0)
+    category = 0 if prefix == "en" else 1
+    return category, number, name.casefold()
