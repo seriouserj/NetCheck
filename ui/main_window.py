@@ -1,8 +1,8 @@
 """
-Version: 1.9.0
-Date: 2026-08-13
+Version: 1.10.0
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Open an active Windows VLAN driver capability page.
+Changelog: Name the application container for reliable light and dark surfaces.
 """
 
 from __future__ import annotations
@@ -57,6 +57,7 @@ class MainWindow(QMainWindow):
         settings.settings_saved.connect(lambda _: QTimer.singleShot(0, self._build_tabs))
         tabs.addTab(settings, tr("Settings"))
         container = QWidget()
+        container.setObjectName("appContainer")
         layout = QVBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(15)
