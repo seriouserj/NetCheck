@@ -1,8 +1,8 @@
 """
-Version: 1.9.9
+Version: 1.10.0
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release the faster high-contrast activity gradient.
+Changelog: Release accessible Dark Mode surfaces across the complete interface.
 """
 
 from __future__ import annotations

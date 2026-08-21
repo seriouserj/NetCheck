@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.9
+Version: 1.10.0
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document the faster high-contrast activity gradient.
+Changelog: Document accessible Dark Mode surfaces across the interface.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.9.9-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.9.9-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.10.0-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.10.0-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,11 +29,15 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.9.9-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.10.0-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.9.9 highlights
+## Version 1.10.0 highlights
+
+- Dark Mode uses explicit dark surfaces for every primary and nested tab
+- Table headers, corner cells, groups, inputs, and scrollbars retain accessible contrast
+- White text can no longer be combined with a light native macOS table-header background
 
 - The activity gradient moves 30 percent faster during long-running operations
 - A contrasting teal segment replaces the former navy segment that blended into the header

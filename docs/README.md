@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.9
+Version: 1.10.0
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain the refined activity-gradient animation.
+Changelog: Explain accessible Dark Mode component surfaces.
 -->
 
 # NetCheck
@@ -27,6 +27,10 @@ python3 main.py
 
 The application uses native Qt 6 widgets through PySide6 and follows the active macOS
 light or dark appearance.
+
+Dark Mode uses explicit Qt surfaces for application containers, tab panes, tables,
+headers, diagnostic groups, inputs, and scrollbars. This avoids native macOS controls
+retaining a light background while the application palette supplies white text.
 
 The header divider animates during background operations. Its seamless linear gradient
 moves at the refined 30-percent-faster rate and uses a contrasting teal segment instead
