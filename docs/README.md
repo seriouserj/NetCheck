@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.6
+Version: 1.9.7
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain shared VLAN and LLDP/CDP authorization.
+Changelog: Explain progressive network-discovery reporting.
 -->
 
 # NetCheck
@@ -42,7 +42,7 @@ For reproducible builds, artifact naming, signing, and release automation, see t
 
 - Ethernet dashboard with link, speed, duplex, addressing, routes, DNS, and connectivity
 - Temporary VLAN testing for IDs and ranges from 1 through 4094
-- Concurrent IPv4 discovery with hostname, MAC vendor, and latency
+- Concurrent IPv4 discovery with immediate per-host results, hostname, MAC vendor, and latency
 - Concurrent TCP connect scanner with Open, Closed, and Filtered states
 - Ping, traceroute, DNS lookup, and Wake-on-LAN tools
 - Persistent timeouts, preferred DNS, default interface, and theme settings
@@ -59,6 +59,10 @@ the same readable identity while retaining the required BSD device name. Disconn
 WireGuard profiles have no macOS interface to inspect and appear after the tunnel is
 connected. LLDP/CDP capture listens for 65 seconds to cover the common 60-second CDP
 advertisement interval.
+
+Discovery publishes each responsive host to the table as soon as its probe completes.
+The live counter updates throughout the scan, and final results are sorted numerically by
+IPv4 address without delaying the visibility of faster responses.
 
 The first protected VLAN or LLDP/CDP action starts a restricted privileged worker and
 requests macOS administrator authorization once. Further VLAN test batches, passive VLAN

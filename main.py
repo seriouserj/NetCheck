@@ -1,8 +1,8 @@
 """
-Version: 1.9.6
+Version: 1.9.7
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release shared session authorization for VLAN and LLDP/CDP.
+Changelog: Release progressive network-discovery results.
 """
 
 from __future__ import annotations
