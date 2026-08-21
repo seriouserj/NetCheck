@@ -1,8 +1,8 @@
 """
-Version: 1.7.9
-Date: 2026-08-12
+Version: 1.9.9
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Use a seamless reverse-moving linear brand gradient without highlights.
+Changelog: Increase activity speed and replace the navy segment with contrasting teal.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget
 from core.metadata import APP_NAME, AUTHOR_EMAIL, AUTHOR_NAME
 from core.resources import resource_path
 from ui.activity import activity_tracker
-from ui.theme import BRAND_ACCENT, BRAND_BLUE, BRAND_LIGHT_CYAN, BRAND_NAVY
+from ui.theme import BRAND_ACCENT, BRAND_BLUE, BRAND_LIGHT_CYAN
 
 
 class ActivityStrip(QWidget):
@@ -23,13 +23,13 @@ class ActivityStrip(QWidget):
     ACCENT_COLOR = QColor(BRAND_ACCENT)
     LIGHT_CYAN_COLOR = QColor(BRAND_LIGHT_CYAN)
     BLUE_COLOR = QColor(BRAND_BLUE)
-    NAVY_COLOR = QColor(BRAND_NAVY)
+    TEAL_COLOR = QColor("#20bfa9")
     INDIGO_COLOR = QColor("#3843a5")
     VIOLET_COLOR = QColor("#735bc7")
     MAGENTA_COLOR = QColor("#b64fa3")
     RUBY_COLOR = QColor("#d94c78")
     GRADIENT_SPAN_PX = 900.0
-    SPEED_PX = 3.0
+    SPEED_PX = 3.9
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
@@ -88,7 +88,7 @@ class ActivityStrip(QWidget):
         gradient.setColorAt(0.00, self.ACCENT_COLOR)
         gradient.setColorAt(0.10, self.LIGHT_CYAN_COLOR)
         gradient.setColorAt(0.24, self.BLUE_COLOR)
-        gradient.setColorAt(0.38, self.NAVY_COLOR)
+        gradient.setColorAt(0.38, self.TEAL_COLOR)
         gradient.setColorAt(0.52, self.INDIGO_COLOR)
         gradient.setColorAt(0.64, self.VIOLET_COLOR)
         gradient.setColorAt(0.76, self.MAGENTA_COLOR)
