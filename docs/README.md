@@ -1,5 +1,5 @@
 <!--
-Version: 1.9.7
+Version: 1.9.8
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
 Changelog: Explain progressive network-discovery reporting.
