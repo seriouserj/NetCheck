@@ -1,12 +1,12 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release macOS interface inventory and LLDP/CDP interval repairs.
+Changelog: Publish NetCheck 1.9.4 interface identity improvements.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.9.3"
+APP_VERSION = "1.9.4"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"

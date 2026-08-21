@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain macOS physical/VPN inventory and complete CDP capture intervals.
+Changelog: Explain macOS LAN, Wi-Fi, and VPN interface labels.
 -->
 
 # NetCheck
@@ -53,9 +53,12 @@ For reproducible builds, artifact naming, signing, and release automation, see t
 - Runtime English, German, Russian, and Ukrainian localization
 
 The Dashboard includes active physical macOS interfaces and configured VPN tunnels with
-a usable tunnel address. Disconnected WireGuard profiles have no macOS interface to
-inspect and appear after the tunnel is connected. LLDP/CDP capture listens for 65 seconds
-to cover the common 60-second CDP advertisement interval.
+a usable tunnel address. It labels LAN, Wi-Fi, and VPN interfaces using macOS hardware
+metadata with an AirPort system-profile fallback. The LLDP/CDP and VLAN selectors show
+the same readable identity while retaining the required BSD device name. Disconnected
+WireGuard profiles have no macOS interface to inspect and appear after the tunnel is
+connected. LLDP/CDP capture listens for 65 seconds to cover the common 60-second CDP
+advertisement interval.
 
 An entire VLAN list or range runs inside one privileged worker and therefore requests
 macOS administrator authorization once per test batch. Temporary interfaces are still

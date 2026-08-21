@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Ship repaired macOS interface inventory and neighbor listening.
+Changelog: Release human-readable LAN, Wi-Fi, and VPN interface identities.
 """
 
 from __future__ import annotations
