@@ -20,6 +20,11 @@ def main() -> int:
     if "--version" in sys.argv:
         print(APP_VERSION)
         return 0
+    if "--privileged-session-worker" in sys.argv:
+        from core.privileged_session import run_privileged_session_worker
+
+        index = sys.argv.index("--privileged-session-worker")
+        return run_privileged_session_worker(sys.argv[index + 1 :])
     if "--vlan-worker" in sys.argv:
         from core.vlan_worker import run_vlan_worker
 

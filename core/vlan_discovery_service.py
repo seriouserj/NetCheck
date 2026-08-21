@@ -1,8 +1,8 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.5
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Avoid authorization when macOS already permits passive BPF capture.
+Changelog: Reuse the app-session VLAN authorization when BPF access is denied.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from pathlib import Path
 
 from core.command_runner import CommandResult
 from core.packet_capture import capture_requires_privileges
-from core.privileged_runner import run_privileged
+from core.privileged_session import run_session_privileged
 from core.streaming_command import run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float], CommandResult]
@@ -31,7 +31,7 @@ class VlanDiscoveryService:
 
     def __init__(
         self,
-        privileged_runner: Runner = run_privileged,
+        privileged_runner: Runner = run_session_privileged,
         capture_runner: CaptureRunner = run_streaming_command,
     ) -> None:
         self._run_privileged = privileged_runner

@@ -1,8 +1,8 @@
 """
-Version: 1.8.0
-Date: 2026-08-12
+Version: 1.9.5
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Close temporary worker output before cross-platform access.
+Changelog: Reuse one macOS authorization for VLAN batches in the app session.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ from uuid import uuid4
 
 from core.command_runner import CommandResult, run_command
 from core.network_parsers import parse_default_gateway
-from core.privileged_runner import run_privileged
+from core.privileged_session import run_session_privileged
 from core.vlan_models import CheckState, VlanTestResult
 
 Runner = Callable[[tuple[str, ...], float], CommandResult]
@@ -30,7 +30,11 @@ ProgressCallback = Callable[[VlanTestResult], None]
 class VlanService:
     """Create, test, and always remove temporary macOS VLAN interfaces."""
 
-    def __init__(self, runner: Runner = run_command, privileged_runner: Runner = run_privileged) -> None:
+    def __init__(
+        self,
+        runner: Runner = run_command,
+        privileged_runner: Runner = run_session_privileged,
+    ) -> None:
         self._run = runner
         self._run_privileged = privileged_runner
 
