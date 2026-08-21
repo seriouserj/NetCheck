@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.5
+Version: 1.9.6
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document reusable VLAN authorization for one app session.
+Changelog: Document shared VLAN and LLDP/CDP session authorization.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.9.5-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.9.5-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.9.6-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.9.6-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,11 +29,15 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.9.5-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.9.6-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.9.5 highlights
+## Version 1.9.6 highlights
+
+- VLAN and LLDP/CDP share the same restricted privileged worker during an app session
+- Starting either protected feature authorizes both without a second password dialog
+- The shared worker still rejects arbitrary executables and non-network NetCheck modes
 
 - The first protected VLAN action starts one restricted privileged worker for the app session
 - Further VLAN tests and passive VLAN discovery reuse that authorization without new dialogs

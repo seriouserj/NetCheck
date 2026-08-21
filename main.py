@@ -1,8 +1,8 @@
 """
-Version: 1.9.5
+Version: 1.9.6
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release reusable app-session authorization for VLAN operations.
+Changelog: Release shared session authorization for VLAN and LLDP/CDP.
 """
 
 from __future__ import annotations
