@@ -1,8 +1,8 @@
 """
-Version: 1.9.0
-Date: 2026-08-13
+Version: 1.9.4
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Start VLAN tests with Enter from the VLAN ID field.
+Changelog: Distinguish LAN and Wi-Fi while preserving raw VLAN interface names.
 """
 
 from __future__ import annotations
@@ -35,6 +35,7 @@ from ui.async_task import BackgroundTask
 from ui.diagnostics_widget import DiagnosticsWidget
 from ui.form_layout import centered_form
 from ui.hover_table import HoverRowTableWidget
+from ui.interface_selector import populate_interface_selector, selected_interface_name
 
 
 class VlanTab(QWidget):
@@ -99,16 +100,13 @@ class VlanTab(QWidget):
 
     def _refresh_interfaces(self) -> None:
         """Keep the selector synchronized with adapters connected after launch."""
-        selected = self._parent.currentText() if hasattr(self, "_parent") else ""
+        selected = selected_interface_name(self._parent) if hasattr(self, "_parent") else ""
         names = sorted(name for name in psutil.net_if_addrs() if name.startswith("en"))
         if hasattr(self, "_parent"):
-            existing = [self._parent.itemText(index) for index in range(self._parent.count())]
-            if existing == names:
+            existing = [str(self._parent.itemData(index)) for index in range(self._parent.count())]
+            if set(existing) == set(names):
                 return
-            self._parent.clear()
-            self._parent.addItems(names)
-            index = self._parent.findText(selected)
-            self._parent.setCurrentIndex(index if index >= 0 else max(0, len(names) - 1))
+            populate_interface_selector(self._parent, names, selected)
 
     def _start_tests(self) -> None:
         try:
@@ -116,7 +114,7 @@ class VlanTab(QWidget):
         except ValueError as error:
             QMessageBox.warning(self, tr("Invalid VLAN IDs"), str(error))
             return
-        parent = self._parent.currentText()
+        parent = selected_interface_name(self._parent)
         if not parent:
             QMessageBox.warning(self, tr("No interface"), tr("Connect or select an Ethernet interface."))
             return
@@ -138,7 +136,7 @@ class VlanTab(QWidget):
         QThreadPool.globalInstance().start(self._task)
 
     def _start_discovery(self) -> None:
-        parent = self._parent.currentText()
+        parent = selected_interface_name(self._parent)
         if not parent:
             QMessageBox.warning(self, tr("No interface"), tr("Connect or select an Ethernet interface."))
             return

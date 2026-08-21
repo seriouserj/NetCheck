@@ -1,8 +1,8 @@
 """
-Version: 0.2.0
-Date: 2026-08-06
+Version: 1.9.4
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Add immutable Ethernet interface diagnostics model.
+Changelog: Describe the hardware role of every network interface.
 """
 
 from __future__ import annotations
@@ -24,3 +24,14 @@ class InterfaceDiagnostics:
     gateway: str
     dns_servers: tuple[str, ...]
     internet: str
+    interface_type: str = "Network"
+    hardware_port: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class InterfaceChoice:
+    """Stable system name and human-readable hardware identity for a selector."""
+
+    name: str
+    interface_type: str
+    hardware_port: str = ""

@@ -1,8 +1,8 @@
 """
-Version: 1.9.1
-Date: 2026-08-13
+Version: 1.9.4
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify macOS ifconfig address fallback parsing.
+Changelog: Verify macOS address and Wi-Fi identity parsers.
 """
 
 from core.network_parsers import (
@@ -12,6 +12,7 @@ from core.network_parsers import (
     parse_hardware_ports,
     parse_ifconfig_addresses,
     parse_media,
+    parse_wifi_interfaces,
 )
 
 
@@ -33,6 +34,13 @@ Ethernet Address: 00:11:22:33:44:55"""
 def test_parse_media_and_status() -> None:
     output = "media: autoselect (1000baseT <full-duplex>)\n\tstatus: active"
     assert parse_media(output) == ("1000 Mbps", "Full", True)
+
+
+def test_parse_wifi_interfaces() -> None:
+    output = '{"SPAirPortDataType":[{"spairport_airport_interfaces":[{"_name":"en1"}]}]}'
+
+    assert parse_wifi_interfaces(output) == {"en1"}
+    assert parse_wifi_interfaces("not json") == set()
 
 
 def test_parse_ifconfig_addresses() -> None:

@@ -1,14 +1,19 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify macOS physical-interface and configured-tunnel selection.
+Changelog: Verify macOS interface selection and human-readable hardware roles.
 """
 
 import socket
 from types import SimpleNamespace
 
-from core.interface_service import _parse_windows_snapshot, _select_macos_devices
+from core.command_runner import CommandResult
+from core.interface_service import (
+    _parse_windows_snapshot,
+    _select_macos_devices,
+    collect_interface_choices,
+)
 
 
 def test_parse_windows_network_snapshot() -> None:
@@ -44,3 +49,29 @@ def test_selects_active_physical_interfaces_and_configured_tunnel() -> None:
     )
 
     assert devices == ["en0", "en1", "en2", "utun3"]
+
+
+def test_describes_macos_lan_wifi_and_vpn_interfaces(monkeypatch) -> None:
+    monkeypatch.setattr("core.interface_service.sys.platform", "darwin")
+    output = """Hardware Port: Ethernet
+Device: en0
+Ethernet Address: 00:11:22:33:44:55
+
+Hardware Port: Wi-Fi
+Device: en1
+Ethernet Address: 00:11:22:33:44:66"""
+
+    def runner(command: tuple[str, ...], timeout: float) -> CommandResult:
+        if command == ("networksetup", "-listallhardwareports"):
+            assert timeout == 3.0
+            return CommandResult(0, output, "")
+        assert command == ("/usr/sbin/system_profiler", "SPAirPortDataType", "-json")
+        return CommandResult(0, "{}", "")
+
+    choices = collect_interface_choices(["utun3", "en1", "en0"], command_runner=runner)
+
+    assert [(item.name, item.interface_type, item.hardware_port) for item in choices] == [
+        ("en0", "LAN", "Ethernet"),
+        ("en1", "Wi-Fi", "Wi-Fi"),
+        ("utun3", "VPN", ""),
+    ]

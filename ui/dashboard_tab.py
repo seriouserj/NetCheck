@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Present physical and active VPN interfaces without false tunnel diagnostics.
+Changelog: Label every interface as LAN, Wi-Fi, VPN, or another network type.
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ from ui.hover_table import HoverRowTableWidget
 class DashboardTab(QWidget):
     """Display a live summary of local physical and VPN network interfaces."""
 
-    HEADERS = ("Interface", "Status", "Speed", "Duplex", "MAC", "IPv4", "IPv6", "Gateway", "DNS", "Internet")
+    HEADERS = ("Interface", "Type", "Status", "Speed", "Duplex", "MAC", "IPv4", "IPv6", "Gateway", "DNS", "Internet")
 
     def __init__(self, service: InterfaceService | None = None) -> None:
         super().__init__()
@@ -106,6 +106,7 @@ class DashboardTab(QWidget):
     def _populate_row(self, row: int, interface: InterfaceDiagnostics) -> None:
         values = (
             interface.name,
+            self._interface_type_text(interface),
             tr(interface.status),
             interface.speed,
             interface.duplex,
@@ -120,6 +121,13 @@ class DashboardTab(QWidget):
             item = QTableWidgetItem(value)
             item.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
             self._table.setItem(row, column, item)
+
+    @staticmethod
+    def _interface_type_text(interface: InterfaceDiagnostics) -> str:
+        kind = tr(interface.interface_type)
+        if interface.hardware_port and interface.hardware_port.casefold() != kind.casefold():
+            return f"{interface.hardware_port} ({kind})"
+        return kind
 
     def _display_error(self, message: str) -> None:
         self._status.setText(f"Refresh failed: {message}")

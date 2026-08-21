@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize network-interface inventory and neighbor-listening progress.
+Changelog: Localize network-interface type labels.
 """
 
 from __future__ import annotations
@@ -50,6 +50,11 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "VLAN testing requires macOS.": "VLAN-Tests erfordern macOS.",
         "LLDP/CDP capture requires macOS packet capture support.": "LLDP/CDP-Erfassung erfordert die macOS-Paketerfassung.",
         "Interface": "Schnittstelle",
+        "Type": "Typ",
+        "LAN": "LAN",
+        "Wi-Fi": "WLAN",
+        "VPN": "VPN",
+        "Network": "Netzwerk",
         "Status": "Status",
         "Speed": "Geschwindigkeit",
         "Duplex": "Duplex",
@@ -245,6 +250,11 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "VLAN testing requires macOS.": "Тестирование VLAN требует macOS.",
         "LLDP/CDP capture requires macOS packet capture support.": "Захват LLDP/CDP требует поддержки захвата пакетов macOS.",
         "Interface": "Интерфейс",
+        "Type": "Тип",
+        "LAN": "LAN",
+        "Wi-Fi": "Wi-Fi",
+        "VPN": "VPN",
+        "Network": "Сеть",
         "Status": "Состояние",
         "Speed": "Скорость",
         "Duplex": "Дуплекс",
@@ -440,6 +450,11 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "VLAN testing requires macOS.": "Тестування VLAN потребує macOS.",
         "LLDP/CDP capture requires macOS packet capture support.": "Захоплення LLDP/CDP потребує підтримки захоплення пакетів macOS.",
         "Interface": "Інтерфейс",
+        "Type": "Тип",
+        "LAN": "LAN",
+        "Wi-Fi": "Wi-Fi",
+        "VPN": "VPN",
+        "Network": "Мережа",
         "Status": "Стан",
         "Speed": "Швидкість",
         "Duplex": "Дуплекс",

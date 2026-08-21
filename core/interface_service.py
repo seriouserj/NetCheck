@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Display active physical interfaces and configured macOS VPN tunnels.
+Changelog: Identify LAN, Wi-Fi, and VPN interfaces by their macOS hardware ports.
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from collections.abc import Callable
 import psutil
 
 from core.command_runner import CommandResult, run_command
-from core.interface_models import InterfaceDiagnostics
+from core.interface_models import InterfaceChoice, InterfaceDiagnostics
 from core.network_parsers import (
     is_ethernet_port,
     parse_default_gateway,
@@ -25,6 +25,7 @@ from core.network_parsers import (
     parse_hardware_ports,
     parse_ifconfig_addresses,
     parse_media,
+    parse_wifi_interfaces,
 )
 
 CommandRunner = Callable[[tuple[str, ...], float], CommandResult]
@@ -42,6 +43,7 @@ class InterfaceService:
             return self._collect_windows(timeout)
         hardware = self._run(("networksetup", "-listallhardwareports"), timeout)
         port_labels = parse_hardware_ports(hardware.stdout)
+        wifi_devices = _collect_wifi_devices(self._run, timeout)
         addresses = psutil.net_if_addrs()
         statistics = psutil.net_if_stats()
         route = self._run(("/sbin/route", "-n", "get", "default"), timeout)
@@ -61,6 +63,8 @@ class InterfaceService:
                 dns_servers,
                 internet,
                 timeout,
+                _interface_type(device, port_labels.get(device, ""), wifi_devices),
+                _hardware_port_label(device, port_labels, wifi_devices),
             )
             for device in sorted(set(devices))
         ]
@@ -130,6 +134,8 @@ class InterfaceService:
                     gateway=gateway or "—",
                     dns_servers=dns_servers,
                     internet=internet if gateway else "Not routed",
+                    interface_type=_windows_interface_type(name),
+                    hardware_port=name,
                 )
             )
         return sorted(diagnostics, key=lambda item: item.name.casefold())
@@ -143,6 +149,8 @@ class InterfaceService:
         dns_servers: tuple[str, ...],
         internet: str,
         timeout: float,
+        interface_type: str,
+        hardware_port: str,
     ) -> InterfaceDiagnostics:
         ifconfig = self._run(("/sbin/ifconfig", name), timeout)
         speed, duplex, media_active = parse_media(ifconfig.stdout)
@@ -179,6 +187,8 @@ class InterfaceService:
             gateway=gateway or "—",
             dns_servers=dns_servers,
             internet=internet if gateway else "Not routed",
+            interface_type=interface_type,
+            hardware_port=hardware_port,
         )
 
     @staticmethod
@@ -240,6 +250,81 @@ def _is_windows_ethernet_name(name: str) -> bool:
     normalized = name.casefold()
     excluded = ("wi-fi", "wifi", "wireless", "wlan", "bluetooth", "loopback", "tunnel", "vethernet")
     return not any(marker in normalized for marker in excluded)
+
+
+def collect_interface_choices(
+    names: list[str] | tuple[str, ...],
+    timeout: float = 3.0,
+    command_runner: CommandRunner = run_command,
+) -> list[InterfaceChoice]:
+    """Describe system interface names for user-facing selectors."""
+    if sys.platform == "win32":
+        return [
+            InterfaceChoice(name, _windows_interface_type(name), name)
+            for name in sorted(set(names), key=str.casefold)
+        ]
+    hardware = command_runner(("networksetup", "-listallhardwareports"), timeout)
+    port_labels = parse_hardware_ports(hardware.stdout)
+    wifi_devices = _collect_wifi_devices(command_runner, timeout)
+    return [
+        InterfaceChoice(
+            name=name,
+            interface_type=_interface_type(name, port_labels.get(name, ""), wifi_devices),
+            hardware_port=_hardware_port_label(name, port_labels, wifi_devices),
+        )
+        for name in sorted(set(names), key=_interface_sort_key)
+    ]
+
+
+def _interface_type(
+    name: str,
+    hardware_port: str,
+    wifi_devices: set[str] | None = None,
+) -> str:
+    normalized = hardware_port.casefold()
+    if name.startswith(("utun", "wg")):
+        return "VPN"
+    if name in (wifi_devices or set()) or any(
+        marker in normalized for marker in ("wi-fi", "wifi", "wireless", "wlan")
+    ):
+        return "Wi-Fi"
+    if is_ethernet_port(hardware_port) or name.startswith("en"):
+        return "LAN"
+    return "Network"
+
+
+def _hardware_port_label(
+    name: str,
+    port_labels: dict[str, str],
+    wifi_devices: set[str],
+) -> str:
+    if name in port_labels:
+        return port_labels[name]
+    if name in wifi_devices:
+        return "Wi-Fi"
+    if name.startswith("en"):
+        return "Ethernet"
+    return ""
+
+
+def _collect_wifi_devices(
+    command_runner: CommandRunner,
+    timeout: float,
+) -> set[str]:
+    profile = command_runner(
+        ("/usr/sbin/system_profiler", "SPAirPortDataType", "-json"),
+        max(5.0, timeout * 2.0),
+    )
+    return parse_wifi_interfaces(profile.stdout)
+
+
+def _windows_interface_type(name: str) -> str:
+    normalized = name.casefold()
+    if any(marker in normalized for marker in ("wi-fi", "wifi", "wireless", "wlan")):
+        return "Wi-Fi"
+    if any(marker in normalized for marker in ("wireguard", "vpn", "tunnel")):
+        return "VPN"
+    return "LAN" if _is_windows_ethernet_name(name) else "Network"
 
 
 def _merge_addresses(primary: object, fallback: tuple[str, ...]) -> tuple[str, ...]:

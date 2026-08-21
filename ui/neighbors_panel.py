@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.4
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Show a countdown while listening through a full CDP interval.
+Changelog: Distinguish LAN and Wi-Fi in the LLDP/CDP interface selector.
 """
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ from core.neighbor_models import NetworkNeighbor
 from core.neighbor_service import DEFAULT_NEIGHBOR_TIMEOUT, NeighborService
 from ui.async_task import BackgroundTask
 from ui.hover_table import HoverRowTableWidget
+from ui.interface_selector import populate_interface_selector, selected_interface_name
 
 
 class NeighborsPanel(QWidget):
@@ -49,7 +50,7 @@ class NeighborsPanel(QWidget):
             if sys.platform != "win32"
             else [name for name in psutil.net_if_addrs() if "loopback" not in name.casefold()]
         )
-        self._interface.addItems(sorted(names))
+        populate_interface_selector(self._interface, sorted(names))
         self._start = QPushButton(tr("Listen for neighbors"))
         self._start.clicked.connect(self._discover)
         controls.addWidget(self._interface, 1)
@@ -74,7 +75,7 @@ class NeighborsPanel(QWidget):
         self._remaining_seconds = int(DEFAULT_NEIGHBOR_TIMEOUT)
         self._update_countdown()
         self._countdown.start()
-        interface = self._interface.currentText()
+        interface = selected_interface_name(self._interface)
         self._task = BackgroundTask(lambda: self._service.discover(interface))
         self._task.signals.completed.connect(self._show)
         self._task.signals.failed.connect(lambda error: self._finish(f"Discovery failed: {error}"))

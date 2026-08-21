@@ -1,13 +1,14 @@
 """
-Version: 1.9.2
-Date: 2026-08-18
+Version: 1.9.4
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Include the repaired macOS interface parsers in release 1.9.2.
+Changelog: Parse Wi-Fi device identities from the macOS system profile.
 """
 
 from __future__ import annotations
 
 import ipaddress
+import json
 import re
 
 _HARDWARE_PORT_PATTERN = re.compile(
@@ -22,6 +23,22 @@ def parse_hardware_ports(output: str) -> dict[str, str]:
         match.group("device"): match.group("port").strip()
         for match in _HARDWARE_PORT_PATTERN.finditer(output)
     }
+
+
+def parse_wifi_interfaces(output: str) -> set[str]:
+    """Return Wi-Fi BSD device names from a system_profiler JSON snapshot."""
+    try:
+        payload = json.loads(output)
+    except (json.JSONDecodeError, TypeError):
+        return set()
+    devices: set[str] = set()
+    for section in payload.get("SPAirPortDataType", []):
+        if not isinstance(section, dict):
+            continue
+        for interface in section.get("spairport_airport_interfaces", []):
+            if isinstance(interface, dict) and interface.get("_name"):
+                devices.add(str(interface["_name"]))
+    return devices
 
 
 def is_ethernet_port(label: str) -> bool:
