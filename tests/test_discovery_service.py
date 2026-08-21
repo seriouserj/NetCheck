@@ -1,8 +1,8 @@
 """
-Version: 1.9.7
+Version: 1.9.8
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify that discovery reports responsive hosts as probes complete.
+Changelog: Deterministically verify progressive discovery publication order.
 """
 
 from __future__ import annotations
@@ -16,14 +16,12 @@ from core.discovery_service import DiscoveryService
 
 def test_scan_reports_each_host_before_returning_sorted_results(monkeypatch) -> None:
     service = DiscoveryService()
-    fast_probe_completed = Event()
+    release_slow_probe = Event()
 
     def probe(address: str, timeout: float) -> DiscoveredHost:
         del timeout
         if address.endswith(".1"):
-            assert fast_probe_completed.wait(1.0)
-        else:
-            fast_probe_completed.set()
+            assert release_slow_probe.wait(1.0)
         return DiscoveredHost(
             hostname="host",
             ip_address=address,
@@ -35,9 +33,14 @@ def test_scan_reports_each_host_before_returning_sorted_results(monkeypatch) -> 
     monkeypatch.setattr(service, "_probe", probe)
     published: list[DiscoveredHost] = []
 
+    def publish(host: DiscoveredHost) -> None:
+        published.append(host)
+        if host.ip_address.endswith(".2"):
+            release_slow_probe.set()
+
     results = service.scan(
         ipaddress.ip_network("192.0.2.0/30"),
-        progress=published.append,
+        progress=publish,
     )
 
     assert [host.ip_address for host in published] == ["192.0.2.2", "192.0.2.1"]
