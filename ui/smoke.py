@@ -1,8 +1,8 @@
 """
-Version: 1.9.4
+Version: 1.9.5
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Validate the release 1.9.4 application interface.
+Changelog: Validate the release 1.9.5 application interface.
 """
 
 from __future__ import annotations

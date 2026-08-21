@@ -1,8 +1,8 @@
 """
-Version: 1.9.4
+Version: 1.9.5
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release human-readable LAN, Wi-Fi, and VPN interface identities.
+Changelog: Release reusable app-session authorization for VLAN operations.
 """
 
 from __future__ import annotations

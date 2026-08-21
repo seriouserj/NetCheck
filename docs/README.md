@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.4
+Version: 1.9.5
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain macOS LAN, Wi-Fi, and VPN interface labels.
+Changelog: Explain session-wide macOS VLAN authorization.
 -->
 
 # NetCheck
@@ -60,9 +60,11 @@ WireGuard profiles have no macOS interface to inspect and appear after the tunne
 connected. LLDP/CDP capture listens for 65 seconds to cover the common 60-second CDP
 advertisement interval.
 
-An entire VLAN list or range runs inside one privileged worker and therefore requests
-macOS administrator authorization once per test batch. Temporary interfaces are still
-removed after each VLAN, including failure paths.
+The first protected VLAN action starts a restricted privileged worker and requests macOS
+administrator authorization once. Further VLAN test batches and passive VLAN discovery
+reuse that worker until NetCheck closes or the worker has been idle for 15 minutes.
+It accepts only NetCheck VLAN worker commands. Temporary interfaces are still removed
+after each VLAN, including failure paths.
 
 ## Author
 

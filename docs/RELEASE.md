@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.4
+Version: 1.9.5
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document release 1.9.4 artifact names.
+Changelog: Document release 1.9.5 artifact names.
 -->
 
 # macOS and Windows release guide
@@ -25,8 +25,8 @@ scripts/build_macos.sh
 The build validates the Python version, creates `dist/NetCheck.app`, signs and verifies
 the bundle, runs a headless UI smoke test, and creates these release files:
 
-- `dist/NetCheck-1.9.4-macos-x86_64.zip`
-- `dist/NetCheck-1.9.4-macos-x86_64.zip.sha256`
+- `dist/NetCheck-1.9.5-macos-x86_64.zip`
+- `dist/NetCheck-1.9.5-macos-x86_64.zip.sha256`
 
 ## Build Windows locally
 
@@ -42,8 +42,8 @@ python -m pip install -r requirements.txt -r requirements-dev.txt
 
 The script creates and verifies:
 
-- `dist/NetCheck-1.9.4-windows-x86_64.zip`
-- `dist/NetCheck-1.9.4-windows-x86_64.zip.sha256`
+- `dist/NetCheck-1.9.5-windows-x86_64.zip`
+- `dist/NetCheck-1.9.5-windows-x86_64.zip.sha256`
 
 Build and signing take place in a temporary local directory. This prevents iCloud and
 other File Provider metadata from invalidating the macOS code signature.
@@ -75,9 +75,9 @@ artifact sets and attaches them to one matching GitHub Release.
 Create and push an annotated version tag only after the `CI` workflow passes on `main`:
 
 ```shell
-git tag -a v1.9.4 -m "NetCheck v1.9.4"
+git tag -a v1.9.5 -m "NetCheck v1.9.5"
 git push origin main
-git push origin v1.9.4
+git push origin v1.9.5
 ```
 
 Before publishing, verify that the release ZIP matches its checksum and that the app

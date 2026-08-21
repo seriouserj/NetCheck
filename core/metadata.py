@@ -1,12 +1,12 @@
 """
-Version: 1.9.4
+Version: 1.9.5
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Publish NetCheck 1.9.4 interface identity improvements.
+Changelog: Publish NetCheck 1.9.5 VLAN authorization session.
 """
 
 APP_NAME = "NetCheck"
-APP_VERSION = "1.9.4"
+APP_VERSION = "1.9.5"
 ORGANIZATION_NAME = "DITIS Group"
 AUTHOR_NAME = "Serhii Dralo"
 AUTHOR_EMAIL = "dralo@ditis.group"
