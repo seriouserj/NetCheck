@@ -1,8 +1,8 @@
 """
-Version: 1.9.4
+Version: 1.9.7
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Localize network-interface type labels.
+Changelog: Localize progressive network-discovery status.
 """
 
 from __future__ import annotations
@@ -192,6 +192,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Connect or select an Ethernet interface.": "Verbinden oder wählen Sie eine Ethernet-Schnittstelle.",
         "Enter a target hostname or IP address.": "Geben Sie einen Hostnamen oder eine IP-Adresse ein.",
         "Scanning {count} possible host(s)…": "{count} mögliche Hosts werden gescannt…",
+        "Found {found} responsive host(s); scanning {total} possible host(s)…": "{found} erreichbare Hosts gefunden; {total} mögliche Hosts werden gescannt…",
         "Found {count} responsive host(s)": "{count} erreichbare Hosts gefunden",
         "Scanning {count} TCP port(s)…": "{count} TCP-Ports werden gescannt…",
         "{address}: {open_count} open of {count} scanned": "{address}: {open_count} von {count} Ports offen",
@@ -392,6 +393,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Connect or select an Ethernet interface.": "Подключите или выберите Ethernet-интерфейс.",
         "Enter a target hostname or IP address.": "Введите имя хоста или IP-адрес.",
         "Scanning {count} possible host(s)…": "Сканирование возможных хостов: {count}…",
+        "Found {found} responsive host(s); scanning {total} possible host(s)…": "Найдено активных хостов: {found}; продолжается сканирование {total} возможных хостов…",
         "Found {count} responsive host(s)": "Найдено активных хостов: {count}",
         "Scanning {count} TCP port(s)…": "Сканирование TCP-портов: {count}…",
         "{address}: {open_count} open of {count} scanned": "{address}: открыто {open_count} из {count}",
@@ -592,6 +594,7 @@ _TRANSLATIONS: dict[AppLanguage, dict[str, str]] = {
         "Connect or select an Ethernet interface.": "Підключіть або виберіть Ethernet-інтерфейс.",
         "Enter a target hostname or IP address.": "Введіть ім'я хоста або IP-адресу.",
         "Scanning {count} possible host(s)…": "Сканування можливих хостів: {count}…",
+        "Found {found} responsive host(s); scanning {total} possible host(s)…": "Знайдено активних хостів: {found}; триває сканування {total} можливих хостів…",
         "Found {count} responsive host(s)": "Знайдено активних хостів: {count}",
         "Scanning {count} TCP port(s)…": "Сканування TCP-портів: {count}…",
         "{address}: {open_count} open of {count} scanned": "{address}: відкрито {open_count} з {count}",

@@ -1,8 +1,8 @@
 """
-Version: 1.9.0
-Date: 2026-08-13
+Version: 1.9.7
+Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Accept successful localized Windows ping replies during discovery.
+Changelog: Publish responsive hosts immediately while a network scan is running.
 """
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ from __future__ import annotations
 import ipaddress
 import socket
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from core.command_runner import CommandResult, run_command
 from core.discovery_models import DiscoveredHost
@@ -21,6 +21,7 @@ from core.vendor_lookup import VendorLookup
 
 CommandRunner = Callable[[tuple[str, ...], float], CommandResult]
 NetBiosResolver = Callable[[str, float], NetBiosInfo]
+ProgressCallback = Callable[[DiscoveredHost], None]
 
 
 class DiscoveryService:
@@ -36,12 +37,27 @@ class DiscoveryService:
         self._run = command_runner
         self._netbios = netbios_resolver
 
-    def scan(self, network: ipaddress.IPv4Network, timeout: float = 1.0) -> list[DiscoveredHost]:
-        """Scan a validated IPv4 network and return hosts in address order."""
+    def scan(
+        self,
+        network: ipaddress.IPv4Network,
+        timeout: float = 1.0,
+        progress: ProgressCallback | None = None,
+    ) -> list[DiscoveredHost]:
+        """Scan an IPv4 network, reporting each host as soon as its probe finishes."""
         workers = min(64, max(1, network.num_addresses - 2))
+        hosts: list[DiscoveredHost] = []
         with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="netcheck-discovery") as executor:
-            results = executor.map(lambda address: self._probe(str(address), timeout), network.hosts())
-        hosts = [host for host in results if host is not None]
+            futures = {
+                executor.submit(self._probe, str(address), timeout): address
+                for address in network.hosts()
+            }
+            for future in as_completed(futures):
+                host = future.result()
+                if host is None:
+                    continue
+                hosts.append(host)
+                if progress is not None:
+                    progress(host)
         return sorted(hosts, key=lambda host: ipaddress.ip_address(host.ip_address))
 
     def _probe(self, address: str, timeout: float) -> DiscoveredHost | None:
