@@ -1,8 +1,8 @@
 """
-Version: 1.9.8
+Version: 1.9.9
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Release progressive discovery with deterministic cross-platform validation.
+Changelog: Release the faster high-contrast activity gradient.
 """
 
 from __future__ import annotations

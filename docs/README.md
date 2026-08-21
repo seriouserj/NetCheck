@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.8
+Version: 1.9.9
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Explain progressive network-discovery reporting.
+Changelog: Explain the refined activity-gradient animation.
 -->
 
 # NetCheck
@@ -27,6 +27,10 @@ python3 main.py
 
 The application uses native Qt 6 widgets through PySide6 and follows the active macOS
 light or dark appearance.
+
+The header divider animates during background operations. Its seamless linear gradient
+moves at the refined 30-percent-faster rate and uses a contrasting teal segment instead
+of header navy, keeping activity visible without changing the application geometry.
 
 ## Packaged application
 

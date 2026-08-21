@@ -1,8 +1,8 @@
 <!--
-Version: 1.9.8
+Version: 1.9.9
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Document progressive network-discovery results.
+Changelog: Document the faster high-contrast activity gradient.
 -->
 
 # NetCheck
@@ -18,8 +18,8 @@ Download the latest Intel macOS ZIP and its SHA-256 file from
 extract `NetCheck.app`, and move it to `Applications`:
 
 ```shell
-shasum -a 256 -c NetCheck-1.9.8-macos-x86_64.zip.sha256
-ditto -x -k NetCheck-1.9.8-macos-x86_64.zip .
+shasum -a 256 -c NetCheck-1.9.9-macos-x86_64.zip.sha256
+ditto -x -k NetCheck-1.9.9-macos-x86_64.zip .
 mv NetCheck.app /Applications/
 ```
 
@@ -29,11 +29,15 @@ security prompt. See [the release guide](docs/RELEASE.md) for signing details.
 
 ## Install the Windows application
 
-Download `NetCheck-1.9.8-windows-x86_64.zip`, verify the accompanying SHA-256
+Download `NetCheck-1.9.9-windows-x86_64.zip`, verify the accompanying SHA-256
 file, extract the complete directory, and start `NetCheck.exe`. The portable
 package contains Python, PySide6, and all runtime dependencies.
 
-## Version 1.9.8 highlights
+## Version 1.9.9 highlights
+
+- The activity gradient moves 30 percent faster during long-running operations
+- A contrasting teal segment replaces the former navy segment that blended into the header
+- The gradient remains linear, smooth, and seamlessly repeating
 
 - Responsive hosts appear in the Discovery table immediately while the scan continues
 - The live status reports the number of hosts found across the selected subnet
