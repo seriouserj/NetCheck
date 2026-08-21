@@ -1,8 +1,8 @@
 """
-Version: 1.9.5
+Version: 1.9.6
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Reuse one macOS authorization for all VLAN actions in an app session.
+Changelog: Share one macOS authorization between VLAN and LLDP/CDP operations.
 """
 
 from __future__ import annotations
@@ -24,11 +24,15 @@ from core.command_runner import CommandResult, run_command
 
 _MAX_MESSAGE_BYTES = 8 * 1024 * 1024
 _BROKER_IDLE_SECONDS = 15 * 60
-_ALLOWED_WORKERS = {"--vlan-worker", "--vlan-discovery-worker"}
+_ALLOWED_WORKERS = {
+    "--vlan-worker",
+    "--vlan-discovery-worker",
+    "--neighbor-worker",
+}
 
 
-class PrivilegedVlanSession:
-    """Own a short-lived root broker restricted to NetCheck VLAN workers."""
+class PrivilegedNetworkSession:
+    """Own a short-lived root broker restricted to approved NetCheck workers."""
 
     def __init__(self) -> None:
         self._lock = threading.RLock()
@@ -37,12 +41,12 @@ class PrivilegedVlanSession:
         self._token = ""
 
     def run(self, command: Sequence[str], timeout: float = 60.0) -> CommandResult:
-        """Execute an approved VLAN worker, authorizing only the first request."""
+        """Execute an approved network worker, authorizing only the first request."""
         normalized = tuple(str(item) for item in command)
         if sys.platform != "darwin" or os.geteuid() == 0:
             return run_command(normalized, timeout)
         if not _command_is_allowed(normalized):
-            return CommandResult(77, "", "The privileged session rejected this command.")
+            return CommandResult(77, "", "The privileged network session rejected this command.")
         with self._lock:
             startup = self._ensure_started()
             if startup is not None:
@@ -53,7 +57,7 @@ class PrivilegedVlanSession:
             )
             if response is None:
                 self._reset()
-                return CommandResult(70, "", "The privileged VLAN session stopped unexpectedly.")
+                return CommandResult(70, "", "The privileged network session stopped unexpectedly.")
             return _command_result_from_payload(response)
 
     def close(self) -> None:
@@ -67,7 +71,7 @@ class PrivilegedVlanSession:
         if self._socket_path and self._socket_path.exists():
             return None
         self._reset()
-        directory = Path(tempfile.mkdtemp(prefix="nc-vlan-root-", dir="/tmp"))
+        directory = Path(tempfile.mkdtemp(prefix="nc-network-root-", dir="/tmp"))
         directory.chmod(0o700)
         self._directory = directory
         self._socket_path = directory / "broker.sock"
@@ -87,7 +91,7 @@ class PrivilegedVlanSession:
                 return None
             time.sleep(0.05)
         self._reset()
-        return CommandResult(70, "", "The privileged VLAN session did not start.")
+        return CommandResult(70, "", "The privileged network session did not start.")
 
     def _request(self, payload: dict[str, object], timeout: float) -> dict[str, object] | None:
         if self._socket_path is None:
@@ -118,19 +122,19 @@ class PrivilegedVlanSession:
                 pass
 
 
-_SESSION = PrivilegedVlanSession()
+_SESSION = PrivilegedNetworkSession()
 atexit.register(_SESSION.close)
 
 
 def run_session_privileged(
     command: Sequence[str], timeout: float = 60.0
 ) -> CommandResult:
-    """Run a VLAN worker through the reusable session authorization."""
+    """Run an approved worker through the reusable session authorization."""
     return _SESSION.run(command, timeout)
 
 
 def run_privileged_session_worker(arguments: list[str]) -> int:
-    """Serve approved VLAN worker requests as a time-limited root process."""
+    """Serve approved network worker requests as a time-limited root process."""
     if len(arguments) != 3 or sys.platform != "darwin" or os.geteuid() != 0:
         return 77
     socket_text, token, uid_text = arguments

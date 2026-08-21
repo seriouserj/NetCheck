@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.6
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Listen through a complete standard CDP advertisement interval.
+Changelog: Reuse the app-session authorization for LLDP/CDP capture.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from core.command_runner import CommandResult, run_command
 from core.neighbor_models import NetworkNeighbor
 from core.neighbor_parser import parse_neighbors
 from core.packet_capture import capture_requires_privileges
-from core.privileged_runner import run_privileged
+from core.privileged_session import run_session_privileged
 from core.streaming_command import run_streaming_command
 
 Runner = Callable[[tuple[str, ...], float], CommandResult]
@@ -35,7 +35,7 @@ class NeighborService:
     def __init__(
         self,
         runner: Runner = run_command,
-        privileged_runner: Runner = run_privileged,
+        privileged_runner: Runner = run_session_privileged,
         capture_runner: CaptureRunner = run_streaming_command,
     ) -> None:
         self._run = runner

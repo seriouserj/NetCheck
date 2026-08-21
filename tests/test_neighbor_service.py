@@ -1,8 +1,8 @@
 """
-Version: 1.9.3
+Version: 1.9.6
 Date: 2026-08-21
 Author: Serhii Dralo <dralo@ditis.group>
-Changelog: Verify the complete default CDP capture interval.
+Changelog: Verify complete CDP capture and reusable authorization integration.
 """
 
 from pathlib import Path
